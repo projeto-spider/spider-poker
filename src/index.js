@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import App from './App';
 import store from './store/';
+import 'flexboxgrid/dist/flexboxgrid.min.css';
 import './index.css';
 
 // Needed for material-ui

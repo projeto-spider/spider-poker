@@ -4,3 +4,14 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
+.content {
+  padding: 78px 10px 10px;
+}
+
+@media (min-width: 981px) {
+  .content {
+    margin-left: 280px;
+    margin-right: 280px;
+  }
+}
+
