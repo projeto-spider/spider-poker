@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import LeftNav from './components/LeftNav';
 import Navbar from './components/Navbar';
-import Story from './components/Story';
+import VisibleStories from './containers/VisibleStories';
 import CardsInGame from './components/CardsInGame';
 
 class App extends Component {
@@ -12,7 +12,7 @@ class App extends Component {
         <section>
           <Navbar />
           <section className="content">
-            <Story />
+            <VisibleStories />
             <CardsInGame />
           </section>
           <LeftNav />
