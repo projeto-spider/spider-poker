@@ -4,6 +4,7 @@ import LeftNav from './components/LeftNav';
 import Navbar from './components/Navbar';
 import VisibleStories from './containers/VisibleStories';
 import CardsInGame from './components/CardsInGame';
+import ManipulateStory from './containers/ManipulateStory';
 
 class App extends Component {
   render() {
@@ -16,6 +17,7 @@ class App extends Component {
             <CardsInGame />
           </section>
           <LeftNav />
+        <ManipulateStory />
         </section>
       </MuiThemeProvider>
     );
