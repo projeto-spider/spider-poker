@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import LeftNav from './containers/LeftNav';
-import Navbar from './containers/Navbar';
-import Story from './containers/Story';
-import CardsInGame from './containers/CardsInGame';
+import LeftNav from './components/LeftNav';
+import Navbar from './components/Navbar';
+import Story from './components/Story';
+import CardsInGame from './components/CardsInGame';
 
 class App extends Component {
   render() {
