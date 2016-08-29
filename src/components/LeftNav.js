@@ -15,7 +15,7 @@ export default function LeftNav() {
   const style = docked ? {marginTop: '65px'} : {marginTop: '0'};
 
   return (
-    <Drawer containerClassName="LeftNav" docked={docked} open={true} containerStyle={style}>
+    <Drawer containerClassName="LeftNav" docked={docked} open={false} containerStyle={style}>
       <List>
         <Subheader>Usuários</Subheader>
         <ListItem

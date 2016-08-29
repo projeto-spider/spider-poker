@@ -1,14 +1,18 @@
-import {MANIPULATE_STORY, EDIT_STORY} from './stories';
+import {MANIPULATE_STORY, EDIT_STORY, REMOVE_STORY} from './stories';
 
 const INITIAL_STATE = {
   currentStory: 1,
   storyModal: {
     open: false,
     story: -1
-  }
+  },
+  confirmingRemoveStory: -1
 };
 
 const CLOSE_STORY_MODAL = 'app/config/CLOSE_STORY_MODAL';
+const SELECT_STORY = 'app/config/SELECT_STORY';
+const CONFIRM_REMOVE_STORY = 'app/config/CONFIRM_REMOVE_STORY';
+const CLOSE_CONFIRM_REMOVE_STORY_MODAL = 'app/config/CLOSE_CONFIRM_REMOVE_STORY_MODAL';
 
 export default function configReducer(state = INITIAL_STATE, action) {
   switch(action.type) {
@@ -29,6 +33,32 @@ export default function configReducer(state = INITIAL_STATE, action) {
       };
     }
 
+    case SELECT_STORY: {
+      const id = action.payload;
+
+      return {
+        ...state,
+        currentStory: id
+      };
+    }
+
+    case CONFIRM_REMOVE_STORY: {
+      const id = action.payload;
+
+      return {
+        ...state,
+        confirmingRemoveStory: id
+      };
+    }
+
+    case REMOVE_STORY:
+    case CLOSE_CONFIRM_REMOVE_STORY_MODAL: {
+      return {
+        ...state,
+        confirmingRemoveStory: -1
+      };
+    }
+
     default: {
       return state;
     }
@@ -38,6 +68,26 @@ export default function configReducer(state = INITIAL_STATE, action) {
 export function closeStoryModal() {
   return {
     type: CLOSE_STORY_MODAL,
+  };
+}
+
+export function selectStory(id) {
+  return {
+    type: SELECT_STORY,
+    payload: id
+  };
+}
+
+export function confirmRemoveStory(id) {
+  return {
+    type: CONFIRM_REMOVE_STORY,
+    payload: id
+  };
+}
+
+export function closeConfirmRemoveStoryModal() {
+  return {
+    type: CLOSE_CONFIRM_REMOVE_STORY_MODAL
   };
 }
 

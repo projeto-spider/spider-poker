@@ -30,9 +30,9 @@ const INITIAL_STATE = [{
   position: 4
 }];
 
-const ADD_STORY = 'app/stories/ADD_STORY';
 export const MANIPULATE_STORY = 'app/stories/MANIPULATE_STORY';
 export const EDIT_STORY = 'app/stories/EDIT_STORY';
+export const REMOVE_STORY = 'app/stories/REMOVE_STORY';
 
 export default function storiesReducer(state = INITIAL_STATE, action) {
   switch(action.type) {
@@ -40,39 +40,25 @@ export default function storiesReducer(state = INITIAL_STATE, action) {
       return orderStories(state);
     }
 
-    case ADD_STORY: {
-      const newStory = {
-        ...action.payload,
+    case MANIPULATE_STORY: {
+      const {payload} = action;
+
+      const story = payload.id !== -1 ? payload : {
+        ...payload,
         average: 0,
         card: [],
         flipped: false,
-        id: idGenerator++
+        id: idGenerator++,
       };
-
-      const stories = state.map(story => {
-        if (story.position >= newStory.position) {
-          story.position++;
-        }
-
-        return story;
-      });
-
-      stories.push(newStory);
-
-      return orderStories(stories);
-    }
-
-    case MANIPULATE_STORY: {
-      const story = action.payload;
 
       const storiesBefore = state
         .filter(
-          s => s.position <= story.position && s.id != story.id
+          s => s.position < story.position && s.id !== story.id
         );
 
       const storiesAfter = state
         .filter(
-          s => s.position > story.position && s.id != story.id
+          s => s.position >= story.position && s.id !== story.id
         )
         .map(s => ({
           ...s,
@@ -86,17 +72,18 @@ export default function storiesReducer(state = INITIAL_STATE, action) {
       ]);
     }
 
+    case REMOVE_STORY: {
+      const id = action.payload;
+
+      return orderStories(
+        state.filter(s => s.id !== id)
+      );
+    }
+
     default: {
       return state;
     }
   }
-}
-
-export function addStory(story) {
-  return {
-    type: ADD_STORY,
-    payload: story
-  };
 }
 
 export function manipulateStory(story) {
@@ -109,6 +96,13 @@ export function manipulateStory(story) {
 export function editStory(id) {
   return {
     type: EDIT_STORY,
+    payload: id
+  };
+}
+
+export function removeStory(id) {
+  return {
+    type: REMOVE_STORY,
     payload: id
   };
 }

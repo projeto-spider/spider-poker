@@ -14,11 +14,7 @@ export default class StoryDialog extends Component {
   }
 
   componentWillMount() {
-    this.setState({
-      id: -1,
-      description: '',
-      position: -1
-    });
+    this.setState(this.emptyModel);
   }
 
   componentWillReceiveProps({story}) {
@@ -28,6 +24,8 @@ export default class StoryDialog extends Component {
       this.setState({
         id, description, position
       });
+    } else {
+      this.setState(this.emptyModel);
     }
   }
 
@@ -46,6 +44,14 @@ export default class StoryDialog extends Component {
 
   handleSubmit() {
     this.props.manipulateStory(this.state);
+  }
+
+  get emptyModel() {
+    return {
+      id: -1,
+      description: '',
+      position: 0
+    };
   }
 
   render() {
