@@ -1,10 +1,10 @@
-import {MANIPULATE_STORY} from './stories';
+import {MANIPULATE_STORY, EDIT_STORY} from './stories';
 
 const INITIAL_STATE = {
   currentStory: 1,
   storyModal: {
-    open: true,
-    story: 0
+    open: false,
+    story: -1
   }
 };
 
@@ -17,6 +17,15 @@ export default function configReducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         storyModal: {open: false, story: -1}
+      };
+    }
+
+    case EDIT_STORY: {
+      const id = action.payload;
+
+      return {
+        ...state,
+        storyModal: {open: true, story: id}
       };
     }
 

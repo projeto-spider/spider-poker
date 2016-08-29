@@ -14,13 +14,21 @@ export default class StoryDialog extends Component {
   }
 
   componentWillMount() {
-    const story = this.props.story || {
+    this.setState({
       id: -1,
       description: '',
       position: -1
-    };
+    });
+  }
 
-    this.setState(story);
+  componentWillReceiveProps({story}) {
+    if (story) {
+      const {id, description, position} = story;
+
+      this.setState({
+        id, description, position
+      });
+    }
   }
 
   onChangeDescription(e) {
@@ -45,15 +53,12 @@ export default class StoryDialog extends Component {
       <Dialog
         title={this.dialogTitle}
         actions={this.actions}
-        modal={false}
         open={this.props.open}
         onRequestClose={this.props.close}
       >
-        <form onSubmit={() => false} method="GET">
-          <TextField name="description" hintText="Descrição" value={this.state.description} onChange={this.onChangeDescription} />
-          <br />
-          <TextField name="position" hintText="Posição (padrão = 0)" value={this.state.position} onChange={this.onChangePosition} />
-        </form>
+        <TextField name="description" hintText="Descrição" value={this.state.description} onChange={this.onChangeDescription} />
+        <br />
+        <TextField name="position" hintText="Posição (padrão = 0)" value={this.state.position} onChange={this.onChangePosition} />
       </Dialog>
     );
   }

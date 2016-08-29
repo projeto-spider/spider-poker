@@ -32,6 +32,7 @@ const INITIAL_STATE = [{
 
 const ADD_STORY = 'app/stories/ADD_STORY';
 export const MANIPULATE_STORY = 'app/stories/MANIPULATE_STORY';
+export const EDIT_STORY = 'app/stories/EDIT_STORY';
 
 export default function storiesReducer(state = INITIAL_STATE, action) {
   switch(action.type) {
@@ -63,13 +64,26 @@ export default function storiesReducer(state = INITIAL_STATE, action) {
 
     case MANIPULATE_STORY: {
       const story = action.payload;
-      const index = state.findIndex(s => s.id === story.id);
 
-      return [
-        ...state.slice(0, index),
+      const storiesBefore = state
+        .filter(
+          s => s.position <= story.position && s.id != story.id
+        );
+
+      const storiesAfter = state
+        .filter(
+          s => s.position > story.position && s.id != story.id
+        )
+        .map(s => ({
+          ...s,
+          position: s.position + 1}
+        ));
+
+      return orderStories([
+        ...storiesBefore,
         story,
-        ...state.slice(index + 1)
-      ];
+        ...storiesAfter
+      ]);
     }
 
     default: {
@@ -92,8 +106,30 @@ export function manipulateStory(story) {
   };
 }
 
+export function editStory(id) {
+  return {
+    type: EDIT_STORY,
+    payload: id
+  };
+}
+
 /* Helper */
 function orderStories(stories) {
-  return stories.sort((a, b) => a.position - b.position);
+  const sorted = stories.sort((a, b) => a.position - b.position);
+
+  let currentPosition = 1;
+  const numbersOk = stories.reduce(
+    (acc, story) => story.position === currentPosition++ ? acc : false
+  );
+
+  if (numbersOk) {
+    return sorted;
+  }
+
+  let position = 1;
+  return sorted.map(story => ({
+    ...story,
+    position: position++
+  }));
 }
 
