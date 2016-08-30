@@ -6,13 +6,16 @@ const INITIAL_STATE = {
     open: false,
     story: -1
   },
-  confirmingRemoveStory: -1
+  confirmingRemoveStory: -1,
+  importDialogOpen: true
 };
 
 const CLOSE_STORY_MODAL = 'app/config/CLOSE_STORY_MODAL';
 const SELECT_STORY = 'app/config/SELECT_STORY';
 const CONFIRM_REMOVE_STORY = 'app/config/CONFIRM_REMOVE_STORY';
 const CLOSE_CONFIRM_REMOVE_STORY_MODAL = 'app/config/CLOSE_CONFIRM_REMOVE_STORY_MODAL';
+const OPEN_IMPORT_DIALOG = 'app/config/OPEN_IMPORT_DIALOG';
+const CLOSE_IMPORT_DIALOG = 'app/config/CLOSE_IMPORT_DIALOG';
 
 export default function configReducer(state = INITIAL_STATE, action) {
   switch(action.type) {
@@ -59,6 +62,20 @@ export default function configReducer(state = INITIAL_STATE, action) {
       };
     }
 
+    case OPEN_IMPORT_DIALOG: {
+      return {
+        ...state,
+        importDialogOpen: true
+      };
+    }
+
+    case CLOSE_IMPORT_DIALOG: {
+      return {
+        ...state,
+        importDialogOpen: false
+      };
+    }
+
     default: {
       return state;
     }
@@ -88,6 +105,18 @@ export function confirmRemoveStory(id) {
 export function closeConfirmRemoveStoryModal() {
   return {
     type: CLOSE_CONFIRM_REMOVE_STORY_MODAL
+  };
+}
+
+export function openImportDialog() {
+  return {
+    type: OPEN_IMPORT_DIALOG
+  };
+}
+
+export function closeImportDialog() {
+  return {
+    type: CLOSE_IMPORT_DIALOG
   };
 }
 

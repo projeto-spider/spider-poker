@@ -12,7 +12,8 @@
     "eslint-plugin-react": "^6.1.2",
     "react-scripts": "0.2.1",
     "redux-form": "^6.0.1",
-    "redux-form-material-ui": "^4.0.1"
+    "redux-form-material-ui": "^4.0.1",
+    "trello": "^0.5.1"
   },
   "dependencies": {
     "flexboxgrid": "^6.3.1",
