@@ -62,9 +62,9 @@ export default class StoryDialog extends Component {
         open={this.props.open}
         onRequestClose={this.props.close}
       >
-        <TextField name="description" hintText="Descrição" value={this.state.description} onChange={this.onChangeDescription} />
+        <TextField name="description" value={this.state.description} onChange={this.onChangeDescription} fullWidth floatingLabelText="Descrição" />
         <br />
-        <TextField name="position" hintText="Posição (padrão = 0)" value={this.state.position} onChange={this.onChangePosition} />
+        <TextField name="position" value={this.state.position} onChange={this.onChangePosition} floatingLabelText="Posição" />
       </Dialog>
     );
   }

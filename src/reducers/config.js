@@ -7,7 +7,7 @@ const INITIAL_STATE = {
     story: -1
   },
   confirmingRemoveStory: -1,
-  importDialogOpen: true
+  importDialogOpen: false
 };
 
 const CLOSE_STORY_MODAL = 'app/config/CLOSE_STORY_MODAL';
