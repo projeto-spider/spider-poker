@@ -1,4 +1,5 @@
 import {createStore, compose} from 'redux';
+import {fromJS} from 'immutable';
 import rootReducer from './root-reducer';
 
 const enhancers = compose(
@@ -6,7 +7,7 @@ const enhancers = compose(
 );
 
 const store = createStore(
-    rootReducer, {}, enhancers
+    rootReducer, fromJS({}), enhancers
 );
 
 export default store;

@@ -4,8 +4,8 @@ import {closeConfirmRemoveStoryModal} from '../reducers/config';
 import {removeStory} from '../reducers/stories';
 
 const mapStateToProps = state => ({
-  open: state.config.confirmingRemoveStory !== -1,
-  id: state.config.confirmingRemoveStory
+  open: state.getIn(['config', 'confirmingRemoveStory']) !== -1,
+  id: state.getIn(['config', 'confirmingRemoveStory'])
 });
 
 const mapDispatchToProps = dispatch => ({

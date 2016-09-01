@@ -1,6 +1,8 @@
+import {List, fromJS} from 'immutable';
+
 let idGenerator = 0;
 
-const INITIAL_STATE = [{
+const INITIAL_STATE = fromJS([{
   average: 0,
   description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
   cards: [],
@@ -28,7 +30,7 @@ const INITIAL_STATE = [{
   flipped: false,
   id: idGenerator++,
   position: 4
-}];
+}]);
 
 export const MANIPULATE_STORY = 'app/stories/MANIPULATE_STORY';
 export const EDIT_STORY = 'app/stories/EDIT_STORY';
@@ -53,30 +55,29 @@ export default function storiesReducer(state = INITIAL_STATE, action) {
 
       const storiesBefore = state
         .filter(
-          s => s.position < story.position && s.id !== story.id
+          s => s.get('position') < story.position && s.get('id') !== story.id
         );
 
       const storiesAfter = state
         .filter(
-          s => s.position >= story.position && s.id !== story.id
-        )
-        .map(s => ({
-          ...s,
-          position: s.position + 1}
-        ));
+          s => s.get('position') >= story.position && s.get('id') !== story.id
+        );
 
-      return orderStories([
-        ...storiesBefore,
-        story,
-        ...storiesAfter
-      ]);
+      // eslint-disable-next-line
+      return orderStories(List().concat(
+        storiesBefore,
+        fromJS([story]),
+        storiesAfter
+      ));
     }
 
     case REMOVE_STORY: {
       const id = action.payload;
 
       return orderStories(
-        state.filter(s => s.id !== id)
+        state.filterNot(
+          story => story.get('id') === id
+        )
       );
     }
 
@@ -109,11 +110,11 @@ export function removeStory(id) {
 
 /* Helper */
 function orderStories(stories) {
-  const sorted = stories.sort((a, b) => a.position - b.position);
+  const sorted = stories.sort((a, b) => a.get('position') - b.get('position'));
 
   let currentPosition = 1;
   const numbersOk = stories.reduce(
-    (acc, story) => story.position === currentPosition++ ? acc : false
+    (acc, story) => story.get('position') === currentPosition++ ? acc : false
   );
 
   if (numbersOk) {
@@ -121,9 +122,6 @@ function orderStories(stories) {
   }
 
   let position = 1;
-  return sorted.map(story => ({
-    ...story,
-    position: position++
-  }));
+  return sorted.map(story => story.update('position', pos => position++));
 }
 

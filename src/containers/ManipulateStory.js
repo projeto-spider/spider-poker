@@ -3,12 +3,16 @@ import StoryDialog from '../components/StoryDialog';
 import {closeStoryModal} from '../reducers/config';
 import {addStory, manipulateStory} from '../reducers/stories';
 
-const mapStateToProps = state => ({
-  open: state.config.storyModal.open,
-  story: state.stories.filter(
-    story => story.id === state.config.storyModal.story
-  ).pop()
-});
+const mapStateToProps = state => {
+  const story = state.get('stories').filter(
+    story => story.get('id') === state.getIn(['config', 'storyModal', 'story'])
+  ).last();
+
+  return {
+    open: state.getIn(['config', 'storyModal', 'open']),
+    story: story ? story.toJS() : {}
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   addStory(story) {
