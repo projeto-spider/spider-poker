@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from './Card';
 
-import './CardsInGame.css';
+import '../styles/CardsInGame.css';
 
 export default function CardsInGame() {
   return (

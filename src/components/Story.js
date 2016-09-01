@@ -3,7 +3,7 @@ import {Card, CardHeader} from 'material-ui/Card';
 import Avatar from 'material-ui/Avatar';
 import AvailableStoryActions from '../containers/AvailableStoryActions';
 
-import './Story.css';
+import '../styles/Story.css';
 
 export default function Story({id, position, current, description}) {
   return (

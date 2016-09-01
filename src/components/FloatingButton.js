@@ -2,7 +2,7 @@ import React from 'react';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 
-import './FloatingButton.css';
+import '../styles/FloatingButton.css';
 
 export default function FloatingButton({addStory}) {
   return (

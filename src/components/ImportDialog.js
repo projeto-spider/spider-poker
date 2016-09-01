@@ -4,7 +4,7 @@ import FlatButton from 'material-ui/FlatButton';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import ImportTrello from './ImportTrello';
 
-import './ImportDialog.css';
+import '../styles/ImportDialog.css';
 
 export default class ImportDialog extends Component {
   render() {

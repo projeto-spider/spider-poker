@@ -1,6 +1,6 @@
 import React from 'react';
 import {Card as MaterialCard, CardHeader, CardText} from 'material-ui/Card';
-import './Card.css';
+import '../styles/Card.css';
 
 export default function Card({username, avatar}) {
   return (

@@ -8,7 +8,7 @@ import {green500, grey500} from 'material-ui/styles/colors';
 import Done from 'material-ui/svg-icons/action/done';
 import Restore from 'material-ui/svg-icons/action/restore';
 
-import './LeftNav.css';
+import '../styles/LeftNav.css';
 
 export default function LeftNav() {
   const docked =  window.innerWidth >= 980;
