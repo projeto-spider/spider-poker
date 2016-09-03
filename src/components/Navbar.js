@@ -10,7 +10,6 @@ import '../styles/Navbar.css';
 const Navbar = ({openImportDialog}) => (
   <AppBar
     title="Planning Poker"
-    iconClassNameRight="muidocs-icon-navigation-expand-more"
     className='Navbar'
     iconElementRight={
       <IconMenu
