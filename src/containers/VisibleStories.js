@@ -2,8 +2,8 @@ import {connect} from 'react-redux';
 import StoryList from '../components/StoryList';
 
 const mapStateToProps = state => ({
-  stories: state.get('stories').toJS(),
-  currentStory: state.get('config').get('currentStory')
+  stories: state.getIn(['stories', 'list']).toJS(),
+  currentStory: state.getIn(['stories', 'current'])
 });
 
 const VisibleStories = connect(

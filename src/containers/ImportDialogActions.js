@@ -4,7 +4,7 @@ import {closeImportDialog} from '../reducers/config';
 import {manipulateStory} from '../reducers/stories';
 
 const mapStateToProps = state => ({
-  open: state.getIn(['config', 'importDialogOpen'])
+  open: state.getIn(['config', 'dialogs', 'import'])
 });
 
 const mapDispatchToProps = dispatch => ({

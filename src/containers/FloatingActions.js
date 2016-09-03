@@ -1,13 +1,13 @@
 import {connect} from 'react-redux';
 import FloatingButton from '../components/FloatingButton';
-import {editStory} from '../reducers/stories';
+import {edit} from '../reducers/stories';
 
 const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
   addStory() {
-    dispatch(editStory(-1));
+    dispatch(edit(-1));
   }
 });
 

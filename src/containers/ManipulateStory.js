@@ -1,25 +1,28 @@
 import {connect} from 'react-redux';
 import StoryDialog from '../components/StoryDialog';
-import {closeStoryModal} from '../reducers/config';
-import {addStory, manipulateStory} from '../reducers/stories';
+import {add, manipulate, closeStoryModal} from '../reducers/stories';
 
 const mapStateToProps = state => {
-  const story = state.get('stories').filter(
-    story => story.get('id') === state.getIn(['config', 'storyModal', 'story'])
+  const modal = state
+    .getIn(['stories', 'dialogs', 'manipulate']);
+  const current = modal.get('story');
+
+  const story = state.getIn(['stories', 'list']).filter(
+    story => story.get('id') === current
   ).last();
 
   return {
-    open: state.getIn(['config', 'storyModal', 'open']),
+    open: modal.get('open'),
     story: story ? story.toJS() : {}
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   addStory(story) {
-    dispatch(addStory(story));
+    dispatch(add(story));
   },
   manipulateStory(story) {
-    dispatch(manipulateStory(story));
+    dispatch(manipulate(story));
   },
   close() {
     dispatch(closeStoryModal());

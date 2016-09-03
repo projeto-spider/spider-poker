@@ -1,45 +1,96 @@
-import {List, fromJS} from 'immutable';
+import {fromJS} from 'immutable';
 
-let idGenerator = 0;
+const INITIAL_STATE = fromJS({
+  current: -1,
+  dialogs: {
+    manipulate: {open: false, story: -1},
+    remove: -1
+  },
+  list: []
+});
 
-const INITIAL_STATE = fromJS([]);
-
-export const MANIPULATE_STORY = 'app/stories/MANIPULATE_STORY';
-export const EDIT_STORY = 'app/stories/EDIT_STORY';
-export const REMOVE_STORY = 'app/stories/REMOVE_STORY';
+const MANIPULATE_STORY = 'app/stories/MANIPULATE_STORY';
+const EDIT_STORY = 'app/stories/EDIT_STORY';
+const REMOVE_STORY = 'app/stories/REMOVE_STORY';
+const CLOSE_STORY_MODAL = 'app/stories/CLOSE_STORY_MODAL';
+const CLOSE_REMOVE_MODAL = 'app/stories/CLOSE_REMOVE_MODAL';
+const SELECT_STORY = 'app/stories/SELECT_STORY';
+const CONFIRM_REMOVE_STORY = 'app/stories/CONFIRM_REMOVE_STORY';
 
 export default function storiesReducer(state = INITIAL_STATE, action) {
   switch(action.type) {
     case '@@INIT': {
-      return order(state);
+      return state.update('list', list => order(list));
     }
 
     case MANIPULATE_STORY: {
       const {payload} = action;
 
       const isUpdating = payload.id !== -1;
+      const newState = state
+        .setIn(['dialogs', 'manipulate'], fromJS({
+          open: false,
+          story: -1
+        }));
 
       if (isUpdating) {
-        return updateStory(state, payload);
+        return newState
+          .update('list', list => updateStory(list, payload));
       }
 
-      return addStory(state, {
-        ...payload,
-        average: 0,
-        card: [],
-        flipped: false,
-        id: Date.now(),
-      });
+      return newState
+        .update('list', list => addStory(list, {
+          ...payload,
+          average: 0,
+          card: [],
+          flipped: false,
+          id: Date.now(),
+        }));
+    }
+
+    case CLOSE_STORY_MODAL: {
+      return state
+        .setIn(['dialogs', 'manipulate'], fromJS({
+          open: false,
+          story: -1
+        }));
+    }
+
+    case CONFIRM_REMOVE_STORY: {
+      const id = action.payload;
+
+      return state.setIn(['dialogs', 'remove'], id);
     }
 
     case REMOVE_STORY: {
       const id = action.payload;
 
-      return order(
-        state.filterNot(
-          story => story.get('id') === id
-        )
-      );
+      return state
+        .setIn(['dialogs', 'remove'], -1)
+        .update('list', list => order(
+          list.filterNot(story => story.get('id') === id)
+        ));
+    }
+
+    case CLOSE_REMOVE_MODAL: {
+      return state
+        .setIn(['dialogs', 'remove'], -1);
+    }
+
+    case EDIT_STORY: {
+      const id = action.payload;
+
+      return state
+        .setIn(['dialogs', 'manipulate'], fromJS({
+          open: true,
+          story: id
+        }));
+    }
+
+    case SELECT_STORY: {
+      const id = action.payload;
+
+      return state.set('current', id);
     }
 
     default: {
@@ -48,24 +99,50 @@ export default function storiesReducer(state = INITIAL_STATE, action) {
   }
 }
 
-export function manipulateStory(story) {
+export function manipulate(story) {
   return {
     type: MANIPULATE_STORY,
     payload: story
   };
 }
 
-export function editStory(id) {
+export function edit(id) {
   return {
     type: EDIT_STORY,
     payload: id
   };
 }
 
-export function removeStory(id) {
+export function remove(id) {
   return {
     type: REMOVE_STORY,
     payload: id
+  };
+}
+
+export function select(id) {
+  return {
+    type: SELECT_STORY,
+    payload: id
+  };
+}
+
+export function confirmRemove(id) {
+  return {
+    type: CONFIRM_REMOVE_STORY,
+    payload: id
+  };
+}
+
+export function closeStoryModal() {
+  return {
+    type: CLOSE_STORY_MODAL
+  };
+}
+
+export function closeRemoveModal() {
+  return {
+    type: CLOSE_REMOVE_MODAL
   };
 }
 

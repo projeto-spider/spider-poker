@@ -1,19 +1,22 @@
 import {connect} from 'react-redux';
 import RemoveStoryDialog from '../components/RemoveStoryDialog';
-import {closeConfirmRemoveStoryModal} from '../reducers/config';
-import {removeStory} from '../reducers/stories';
+import {remove, closeRemoveModal} from '../reducers/stories';
 
-const mapStateToProps = state => ({
-  open: state.getIn(['config', 'confirmingRemoveStory']) !== -1,
-  id: state.getIn(['config', 'confirmingRemoveStory'])
-});
+const mapStateToProps = state => {
+  const id = state.getIn(['stories', 'dialogs', 'remove']);
+
+  return {
+    open: id !== -1,
+    id
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   cancel() {
-    dispatch(closeConfirmRemoveStoryModal());
+    dispatch(closeRemoveModal());
   },
   removeStory(id) {
-    dispatch(removeStory(id));
+    dispatch(remove(id));
   }
 });
 
