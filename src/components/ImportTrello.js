@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import {List, ListItem} from 'material-ui/List';
+import CircularProgress from 'material-ui/CircularProgress';
+import Beenhere from 'material-ui/svg-icons/maps/beenhere';
 
 const trello = window.Trello;
 
@@ -21,6 +23,7 @@ export default class ImportTrello extends Component {
 
   get startState() {
     return {
+      loading: false,
       authorized: false,
       boards: [],
       lists: [],
@@ -29,6 +32,8 @@ export default class ImportTrello extends Component {
   }
 
   authorize() {
+    this.setState({loading: true});
+
     trello.authorize({
       type: 'popup',
       name: 'Planning Poker',
@@ -37,7 +42,7 @@ export default class ImportTrello extends Component {
       },
       expiration: 'never',
       success: () => {
-        this.setState({authorized: true});
+        this.setState({authorized: true, loading: false});
         this.loadBoards();
       },
       error: () => {
@@ -47,14 +52,18 @@ export default class ImportTrello extends Component {
   }
 
   loadBoards() {
-    trello.get('/members/me/boards', data => {
-      this.setState({boards: data});
+    this.setState({loading: true});
+
+    trello.get('/members/me/boards', boards => {
+      this.setState({boards, loading: false});
     }, error => console.log(error));
   }
 
   loadLists(boardId) {
+    this.setState({loading: true});
+
     trello.get(`/boards/${boardId}/lists`, {cards: 'all'}, lists => {
-      this.setState({lists});
+      this.setState({lists, loading: false});
     }, error => console.log(error));
   }
 
@@ -74,6 +83,10 @@ export default class ImportTrello extends Component {
   }
 
   render() {
+    if (this.state.loading) {
+      return this.loadingView;
+    }
+
     if (!this.state.authorized) {
       return this.nonAuthorizedView;
     }
@@ -85,11 +98,29 @@ export default class ImportTrello extends Component {
     return this.selectBoardView;
   }
 
+  get loadingView() {
+    const style = {
+      textAlign: 'center'
+    };
+
+    return (
+      <div style={style}>
+        <CircularProgress innerStyle={style} />
+      </div>
+    );
+  }
+
   get nonAuthorizedView() {
+    const style = {
+      width: '100%'
+    };
+
     return (
       <FlatButton
         label="Autorizar aplicação"
         onTouchTap={this.authorize}
+        icon={<Beenhere />}
+        style={style}
       />
     );
   }
