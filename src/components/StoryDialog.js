@@ -10,6 +10,7 @@ export default class StoryDialog extends Component {
 
     this.onChangeDescription = this.onChangeDescription.bind(this);
     this.onChangePosition = this.onChangePosition.bind(this);
+    this.onKeyPress = this.onKeyPress.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -42,6 +43,12 @@ export default class StoryDialog extends Component {
     });
   }
 
+  onKeyPress(e) {
+    if (e.key === 'Enter') {
+      this.handleSubmit();
+    }
+  }
+
   handleSubmit() {
     this.props.manipulateStory(this.state);
   }
@@ -62,9 +69,11 @@ export default class StoryDialog extends Component {
         open={this.props.open}
         onRequestClose={this.props.close}
       >
-        <TextField name="description" value={this.state.description} onChange={this.onChangeDescription} fullWidth floatingLabelText="Descrição" />
-        <br />
-        <TextField name="position" value={this.state.position} onChange={this.onChangePosition} floatingLabelText="Posição" />
+        <div onKeyPress={this.onKeyPress}>
+          <TextField name="description" defaultValue={this.state.description} onChange={this.onChangeDescription} fullWidth floatingLabelText="Descrição" />
+          <br />
+          <TextField name="position" defaultValue={this.state.position} onChange={this.onChangePosition} floatingLabelText="Posição" />
+        </div>
       </Dialog>
     );
   }
