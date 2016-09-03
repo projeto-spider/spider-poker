@@ -1,7 +1,7 @@
 import {connect} from 'react-redux';
 import ImportDialog from '../components/ImportDialog';
 import {closeImportDialog} from '../reducers/config';
-import {manipulateStory} from '../reducers/stories';
+import {manipulate} from '../reducers/stories';
 
 const mapStateToProps = state => ({
   open: state.getIn(['config', 'dialogs', 'import'])
@@ -9,7 +9,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   addStory(description) {
-    dispatch(manipulateStory({
+    dispatch(manipulate({
       description,
       id: -1,
       position: 999999
