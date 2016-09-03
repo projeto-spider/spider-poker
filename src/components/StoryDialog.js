@@ -22,7 +22,7 @@ export default class StoryDialog extends Component {
       const {id, description, position} = story;
 
       this.setState({
-        id, description, position
+        id: id || -1, description, position
       });
     } else {
       this.setState(this.emptyModel);

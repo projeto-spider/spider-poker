@@ -11,42 +11,31 @@ export const REMOVE_STORY = 'app/stories/REMOVE_STORY';
 export default function storiesReducer(state = INITIAL_STATE, action) {
   switch(action.type) {
     case '@@INIT': {
-      return orderStories(state);
+      return order(state);
     }
 
     case MANIPULATE_STORY: {
       const {payload} = action;
 
-      const story = payload.id !== -1 ? payload : {
+      const isUpdating = payload.id !== -1;
+
+      if (isUpdating) {
+        return updateStory(state, payload);
+      }
+
+      return addStory(state, {
         ...payload,
         average: 0,
         card: [],
         flipped: false,
-        id: idGenerator++,
-      };
-
-      const storiesBefore = state
-        .filter(
-          s => s.get('position') < story.position && s.get('id') !== story.id
-        );
-
-      const storiesAfter = state
-        .filter(
-          s => s.get('position') >= story.position && s.get('id') !== story.id
-        );
-
-      // eslint-disable-next-line
-      return orderStories(List().concat(
-        storiesBefore,
-        fromJS([story]),
-        storiesAfter
-      ));
+        id: Date.now(),
+      });
     }
 
     case REMOVE_STORY: {
       const id = action.payload;
 
-      return orderStories(
+      return order(
         state.filterNot(
           story => story.get('id') === id
         )
@@ -81,19 +70,37 @@ export function removeStory(id) {
 }
 
 /* Helper */
-function orderStories(stories) {
-  const sorted = stories.sort((a, b) => a.get('position') - b.get('position'));
+function addStory(stories, newStory) {
+  return order(stories
+    .map(story => {
+      if (story.get('id') !== newStory.id && story.get('position') >= newStory.position) {
+        return story.update('position', position => position + 1);
+      }
 
-  let currentPosition = 1;
-  const numbersOk = stories.reduce(
-    (acc, story) => story.get('position') === currentPosition++ ? acc : false
-  );
+      return story;
+    })
+    .insert(newStory.position < 0 ? 0 : newStory.position - 1, fromJS(newStory)));
+}
 
-  if (numbersOk) {
-    return sorted;
-  }
+function updateStory(stories, toUpdate) {
+  return order(stories
+    .map(story => {
+      if (story.get('id') === toUpdate.id) {
+        return story.merge(fromJS(toUpdate));
+      }
 
+      return story;
+    }));
+}
+
+function order(stories) {
   let position = 1;
-  return sorted.map(story => story.update('position', pos => position++));
+  return stories
+    .sortBy(sorter)
+    .map(story => story.update('position', () => position++));
+}
+
+function sorter(story) {
+  return story.position;
 }
 
