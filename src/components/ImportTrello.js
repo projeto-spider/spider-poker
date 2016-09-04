@@ -3,6 +3,7 @@ import FlatButton from 'material-ui/FlatButton';
 import {List, ListItem} from 'material-ui/List';
 import CircularProgress from 'material-ui/CircularProgress';
 import Beenhere from 'material-ui/svg-icons/maps/beenhere';
+import ImportList from './ImportList';
 
 const trello = window.Trello;
 
@@ -14,7 +15,6 @@ export default class ImportTrello extends Component {
     this.loadBoards = this.loadBoards.bind(this);
     this.selectBoard = this.selectBoard.bind(this);
     this.loadLists = this.loadLists.bind(this);
-    this.importCards = this.importCards.bind(this);
   }
 
   componentWillMount() {
@@ -63,23 +63,22 @@ export default class ImportTrello extends Component {
     this.setState({loading: true});
 
     trello.get(`/boards/${boardId}/lists`, {cards: 'all'}, lists => {
-      this.setState({lists, loading: false});
+      this.setState({
+        lists: lists.map(list => ({
+          name: list.name,
+          cards: list.cards.map(card => ({
+            name: card.name,
+            isChecked: true
+          }))
+        })),
+        loading: false
+      });
     }, error => console.log(error));
   }
 
   selectBoard(boardId) {
     this.setState({boardId});
     this.loadLists(boardId);
-  }
-
-  importCards(listKey) {
-    const list = this.state.lists[listKey];
-
-    list.cards.forEach(card => this.props.addStory(card.name));
-
-    this.setState({
-      lists: this.state.lists.filter((_v, key) => key !== listKey)
-    });
   }
 
   render() {
@@ -144,18 +143,10 @@ export default class ImportTrello extends Component {
 
   get selectListView() {
     return (
-      <div>
-        Selecione uma lista:
-        <List>
-          {this.state.lists.map((list, key) => (
-            <ListItem
-              primaryText={list.name}
-              onTouchTap={() => this.importCards(key)}
-              key={key}
-            />
-          ))}
-        </List>
-      </div>
+      <ImportList
+        lists={this.state.lists}
+        addStory={this.props.addStory}
+      />
     );
   }
 }
