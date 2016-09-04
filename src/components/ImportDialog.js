@@ -14,6 +14,7 @@ export default class ImportDialog extends Component {
         modal={true}
         open={this.props.open}
         bodyClassName="ImportDialog-body"
+        autoScrollBodyContent={true}
       >
         <Tabs>
           <Tab label="Trello" >
