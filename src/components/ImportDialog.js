@@ -3,6 +3,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import ImportTrello from './ImportTrello';
+import ImportRedmine from './ImportRedmine';
 
 import '../styles/ImportDialog.css';
 
@@ -23,8 +24,8 @@ export default class ImportDialog extends Component {
             </div>
           </Tab>
           <Tab label="Redmine" >
-            <div>
-              TODO
+            <div className="ImportDialog-pad">
+              <ImportRedmine addStory={this.props.addStory} />
             </div>
           </Tab>
         </Tabs>
