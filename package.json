@@ -1,0 +1,25 @@
+{
+  "name": "planning-poker",
+  "version": "0.1.0",
+  "description": "Planning Poker WebApp",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/projeto-spider/planning-poker.git"
+  },
+  "keywords": [
+    "planning",
+    "poker",
+    "scrum",
+    "webapp"
+  ],
+  "author": "lubien <lubien1996@gmai.com> (http://lubien.me)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/projeto-spider/planning-poker/issues"
+  },
+  "homepage": "https://github.com/projeto-spider/planning-poker#readme"
+}
