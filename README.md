@@ -1,1 +1,2 @@
-# Spider Planning Poker
+# Planning Poker
+
