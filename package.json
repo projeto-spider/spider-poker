@@ -4,6 +4,7 @@
   "description": "Planning Poker WebApp",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon server/index.js",
     "test": "ava"
   },
   "repository": {
@@ -21,5 +22,18 @@
   "bugs": {
     "url": "https://github.com/projeto-spider/planning-poker/issues"
   },
-  "homepage": "https://github.com/projeto-spider/planning-poker#readme"
+  "homepage": "https://github.com/projeto-spider/planning-poker#readme",
+  "dependencies": {
+    "koa": "^1.2.4",
+    "koa-router": "^5.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.10.2",
+    "xo": "^0.16.0"
+  },
+  "xo": {
+    "ignores": [
+      "client/**/*"
+    ]
+  }
 }
