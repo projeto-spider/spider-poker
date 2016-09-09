@@ -1,6 +1,9 @@
 # Ignore webpack assets list
 webpack.assets.json
 
+# Ignore build public scripts
+public/scripts
+
 # dependencies
 node_modules
 
