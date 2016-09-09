@@ -4,7 +4,7 @@ import transit from 'transit-immutable-js';
 import rootReducer from './root-reducer';
 
 const enhancers = compose(
-  window.devToolsExtension ? window.devToolsExtension() : f => f
+  process.env.isClient && window.devToolsExtension ? window.devToolsExtension() : f => f
 );
 
 const store = createStore(

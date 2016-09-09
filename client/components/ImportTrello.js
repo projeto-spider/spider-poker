@@ -5,7 +5,7 @@ import CircularProgress from 'material-ui/CircularProgress';
 import Beenhere from 'material-ui/svg-icons/maps/beenhere';
 import ImportList from './ImportList';
 
-const trello = window.Trello;
+const trello = process.env.isClient ? window.Trello : {};
 
 export default class ImportTrello extends Component {
   constructor(props) {

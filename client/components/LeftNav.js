@@ -11,7 +11,7 @@ import Restore from 'material-ui/svg-icons/action/restore';
 import '../styles/LeftNav.css';
 
 export default function LeftNav() {
-  const docked =  window.innerWidth >= 980;
+  const docked = process.env.isClient ? window.innerWidth >= 980 : false;
   const style = docked ? {marginTop: '65px'} : {marginTop: '0'};
 
   return (

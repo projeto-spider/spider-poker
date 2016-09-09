@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { Provider } from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import LeftNav from './components/LeftNav';
 import NavbarActions from './containers/NavbarActions';
@@ -7,10 +8,19 @@ import ManipulateStory from './containers/ManipulateStory';
 import FloatingActions from './containers/FloatingActions';
 import ConfirmRemoveStory from './containers/ConfirmRemoveStory';
 import ImportDialogActions from './containers/ImportDialogActions';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
-class App extends Component {
-  render() {
-    return (
+import './index.css';
+
+if (process.env.isClient) {
+	// Needed for material-ui
+	// See: http://stackoverflow.com/a/34015469/988941
+	injectTapEventPlugin();
+}
+
+function App({ store }) {
+  return (
+    <Provider store={store}>
       <MuiThemeProvider>
         <section>
           <NavbarActions />
@@ -18,14 +28,15 @@ class App extends Component {
             <VisibleStories />
           </section>
           <LeftNav />
-        <ManipulateStory />
-        <FloatingActions />
-        <ConfirmRemoveStory />
-        <ImportDialogActions />
+          <ManipulateStory />
+          <FloatingActions />
+          <ConfirmRemoveStory />
+          <ImportDialogActions />
         </section>
       </MuiThemeProvider>
-    );
-  }
+    </Provider>
+  );
 }
 
 export default App;
+
