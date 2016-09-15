@@ -12,7 +12,7 @@ export default function Card({ username, avatar }) {
             avatar={avatar}
           />
           <CardText>
-              <div className="Card-value">?</div>
+            <div className="Card-value">?</div>
           </CardText>
         </MaterialCard>
       </div>

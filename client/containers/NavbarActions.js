@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import Navbar from '../components/Navbar';
 import { openImportDialog } from '../reducers/config';
 
-const mapStateToProps = state => ({
+const mapStateToProps = () => ({
 });
 
 const mapDispatchToProps = dispatch => ({

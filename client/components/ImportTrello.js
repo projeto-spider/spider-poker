@@ -81,22 +81,6 @@ export default class ImportTrello extends Component {
     this.loadLists(boardId);
   }
 
-  render() {
-    if (this.state.loading) {
-      return this.loadingView;
-    }
-
-    if (!this.state.authorized) {
-      return this.nonAuthorizedView;
-    }
-
-    if (this.state.boardId) {
-      return this.selectListView;
-    }
-
-    return this.selectBoardView;
-  }
-
   get loadingView() {
     const style = {
       textAlign: 'center',
@@ -148,6 +132,22 @@ export default class ImportTrello extends Component {
         addStory={this.props.addStory}
       />
     );
+  }
+
+  render() {
+    if (this.state.loading) {
+      return this.loadingView;
+    }
+
+    if (!this.state.authorized) {
+      return this.nonAuthorizedView;
+    }
+
+    if (this.state.boardId) {
+      return this.selectListView;
+    }
+
+    return this.selectBoardView;
   }
 }
 

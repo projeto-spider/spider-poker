@@ -61,23 +61,6 @@ export default class StoryDialog extends Component {
     };
   }
 
-  render() {
-    return (
-      <Dialog
-        title={this.dialogTitle}
-        actions={this.actions}
-        open={this.props.open}
-        onRequestClose={this.props.close}
-      >
-        <div onKeyPress={this.onKeyPress}>
-          <TextField name="description" defaultValue={this.state.description} onChange={this.onChangeDescription} fullWidth floatingLabelText="Descrição" />
-          <br />
-          <TextField name="position" defaultValue={this.state.position} onChange={this.onChangePosition} floatingLabelText="Posição" />
-        </div>
-      </Dialog>
-    );
-  }
-
   get isEditing() {
     return this.state.id > -1;
   }
@@ -104,6 +87,34 @@ export default class StoryDialog extends Component {
 
   get submitLabel() {
     return this.isEditing ? 'Salvar' : 'Adicionar';
+  }
+
+  render() {
+    return (
+      <Dialog
+        title={this.dialogTitle}
+        actions={this.actions}
+        open={this.props.open}
+        onRequestClose={this.props.close}
+      >
+        <div onKeyPress={this.onKeyPress}>
+          <TextField
+            name="description"
+            defaultValue={this.state.description}
+            onChange={this.onChangeDescription}
+            fullWidth
+            floatingLabelText="Descrição"
+          />
+          <br />
+          <TextField
+            name="position"
+            defaultValue={this.state.position}
+            onChange={this.onChangePosition}
+            floatingLabelText="Posição"
+          />
+        </div>
+      </Dialog>
+    );
   }
 }
 

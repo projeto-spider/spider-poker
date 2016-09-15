@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 import Helmet from 'react-helmet';
-import { Provider } from 'react-redux';
 import store from '../../client/store';
 import App from '../../client/App';
 

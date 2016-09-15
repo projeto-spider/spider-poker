@@ -4,6 +4,7 @@ import transit from 'transit-immutable-js';
 import rootReducer from './root-reducer';
 
 const enhancers = compose(
+  // eslint-disable-next-line
   process.env.isClient && window.devToolsExtension ? window.devToolsExtension() : f => f
 );
 
@@ -13,10 +14,11 @@ const store = createStore(
 
 // Thanks to chaintan17
 // See: https://github.com/mxstbr/react-boilerplate/issues/396
-store.subscribe(function persistState() {
+store.subscribe(() => {
   try {
     const state = store.getState();
     const serializedState = transit.toJSON(state);
+    // eslint-disable-next-line
     localStorage.setItem('state', serializedState);
   } catch (err) {
     console.log('Could not save current redux state', err);

@@ -8,6 +8,16 @@ import ImportRedmine from './ImportRedmine';
 import '../styles/ImportDialog.css';
 
 export default class ImportDialog extends Component {
+  get actions() {
+    return [
+      <FlatButton
+        label="Fechar"
+        primary
+        onTouchTap={this.props.close}
+      />,
+    ];
+  }
+
   render() {
     return (
       <Dialog
@@ -31,16 +41,6 @@ export default class ImportDialog extends Component {
         </Tabs>
       </Dialog>
     );
-  }
-
-  get actions() {
-    return [
-      <FlatButton
-        label="Fechar"
-        primary
-        onTouchTap={this.props.close}
-      />,
-    ];
   }
 }
 

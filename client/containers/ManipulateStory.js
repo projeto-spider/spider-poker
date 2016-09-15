@@ -8,7 +8,7 @@ const mapStateToProps = state => {
   const current = modal.get('story');
 
   const story = state.getIn(['stories', 'list']).filter(
-    story => story.get('id') === current
+    s => s.get('id') === current
   ).last();
 
   return {

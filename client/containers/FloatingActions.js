@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import FloatingButton from '../components/FloatingButton';
 import { edit } from '../reducers/stories';
 
-const mapStateToProps = state => ({
+const mapStateToProps = () => ({
 });
 
 const mapDispatchToProps = dispatch => ({

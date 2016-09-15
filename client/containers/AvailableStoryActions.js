@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import StoryActions from '../components/StoryActions';
 import { edit, select, confirmRemove } from '../reducers/stories';
 
-const mapStateToProps = state => ({
+const mapStateToProps = () => ({
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -16,6 +16,13 @@ export default class ImportRedmine extends Component {
     this.setState(this.startState);
   }
 
+  onChangeInput(field) {
+    return e => {
+      this.setState({ [field]: e.target.value });
+    };
+  }
+
+  // eslint-disable-next-line
   get startState() {
     return {
       loading: false,
@@ -38,9 +45,11 @@ export default class ImportRedmine extends Component {
     const queryString = apiKey !== '' ? `?key=${apiKey}` : '';
 
     if (username !== '' && password !== '') {
-      headers['Authorization'] = `Basic ${new Buffer(`${username}:${password}`).toString('base64')}`;
+      headers.Authorization =
+        `Basic ${new Buffer(`${username}:${password}`).toString('base64')}`;
     }
 
+    // eslint-disable-next-line
     fetch(`${hostname}/projects/${project}/issues.json${queryString}`, {
       headers,
     })
@@ -76,24 +85,7 @@ export default class ImportRedmine extends Component {
       .catch(console.error);
   }
 
-  onChangeInput(field) {
-    return e => {
-      this.setState({ [field]: e.target.value });
-    };
-  }
-
-  render() {
-    if (this.state.loading) {
-      return this.loadingView;
-    }
-
-    if (!Array.isArray(this.state.issues)) {
-      return this.selectProjectView;
-    }
-
-    return this.selectListView;
-  }
-
+  // eslint-disable-next-line
   get loadingView() {
     const style = {
       textAlign: 'center',
@@ -189,6 +181,18 @@ export default class ImportRedmine extends Component {
         addStory={this.props.addStory}
       />
     );
+  }
+
+  render() {
+    if (this.state.loading) {
+      return this.loadingView;
+    }
+
+    if (!Array.isArray(this.state.issues)) {
+      return this.selectProjectView;
+    }
+
+    return this.selectListView;
   }
 }
 

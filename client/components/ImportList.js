@@ -16,14 +16,16 @@ export default class ImportList extends Component {
     this.setState(this.startState);
   }
 
+  componentDidMount() {
+    // eslint-disable-next-line
+    this.setState({ lists: fromJS(this.props.lists) });
+  }
+
+  // eslint-disable-next-line
   get startState() {
     return {
       lists: [],
     };
-  }
-
-  componentDidMount() {
-    this.setState({ lists: fromJS(this.props.lists) });
   }
 
   toggleCard(listId, cardId) {
@@ -66,12 +68,12 @@ export default class ImportList extends Component {
               nestedItems={list.get('cards').map((card, cardId) => (
                 <ListItem
                   key={cardId}
-                  onClick={this.toggleCard.bind(undefined, listId, cardId)}
+                  onClick={() => this.toggleCard(listId, cardId)}
                   primaryText={card.get('name')}
                   leftIcon={
                     <Checkbox
                       checked={card.get('isChecked')}
-                      onCheck={this.toggleCard.bind(undefined, listId, cardId)}
+                      onCheck={this.toggleCard(listId, cardId)}
                     />}
                 />
               )).toJS()}

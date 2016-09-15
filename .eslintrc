@@ -3,6 +3,8 @@
   "extends": "airbnb",
   "rules": {
     "no-param-reassign": 0,
+    "react/prop-types": 0,
+    "no-use-before-define": 0,
     "no-console": 0,
     "import/no-unresolved": 0,
   }
