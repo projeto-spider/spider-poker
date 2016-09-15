@@ -1,5 +1,5 @@
-import {createStore, compose} from 'redux';
-import {fromJS} from 'immutable';
+import { createStore, compose } from 'redux';
+import { fromJS } from 'immutable';
 import transit from 'transit-immutable-js';
 import rootReducer from './root-reducer';
 
@@ -37,5 +37,5 @@ function loadState() {
   } catch (err) {
     return fromJS({});
   }
-};
+}
 

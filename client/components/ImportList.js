@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
-import {fromJS} from 'immutable';
+import React, { Component } from 'react';
+import { fromJS } from 'immutable';
 import FlatButton from 'material-ui/FlatButton';
-import {List, ListItem} from 'material-ui/List';
+import { List, ListItem } from 'material-ui/List';
 import Checkbox from 'material-ui/Checkbox';
 
 export default class ImportList extends Component {
@@ -18,18 +18,18 @@ export default class ImportList extends Component {
 
   get startState() {
     return {
-      lists: []
+      lists: [],
     };
   }
 
   componentDidMount() {
-    this.setState({lists: fromJS(this.props.lists)});
+    this.setState({ lists: fromJS(this.props.lists) });
   }
 
   toggleCard(listId, cardId) {
     this.setState({
       lists: this.state.lists
-        .updateIn([listId, 'cards', cardId, 'isChecked'], isChecked => !isChecked)
+        .updateIn([listId, 'cards', cardId, 'isChecked'], isChecked => !isChecked),
     });
   }
 
@@ -43,12 +43,12 @@ export default class ImportList extends Component {
                 return true;
               }
 
-              this.props.addStory(card.get('name'))
+              this.props.addStory(card.get('name'));
 
               return false;
             })
           )
-        )
+        ),
     });
   }
 
@@ -62,7 +62,7 @@ export default class ImportList extends Component {
               key={listId}
               primaryText={list.get('name')}
               initiallyOpen={false}
-              primaryTogglesNestedList={true}
+              primaryTogglesNestedList
               nestedItems={list.get('cards').map((card, cardId) => (
                 <ListItem
                   key={cardId}
@@ -81,7 +81,7 @@ export default class ImportList extends Component {
 
         <FlatButton
           label="Importar"
-          style={{width: '100%'}}
+          style={{ width: '100%' }}
           onTouchTap={this.importCards}
         />
       </div>

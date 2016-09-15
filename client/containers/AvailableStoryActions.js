@@ -1,6 +1,6 @@
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import StoryActions from '../components/StoryActions';
-import {edit, select, confirmRemove} from '../reducers/stories';
+import { edit, select, confirmRemove } from '../reducers/stories';
 
 const mapStateToProps = state => ({
 });
@@ -14,7 +14,7 @@ const mapDispatchToProps = dispatch => ({
   },
   confirmRemoveStory(id) {
     dispatch(confirmRemove(id));
-  }
+  },
 });
 
 const AvailableStoryActions = connect(

@@ -4,7 +4,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 
 import '../styles/FloatingButton.css';
 
-export default function FloatingButton({addStory}) {
+export default function FloatingButton({ addStory }) {
   return (
     <FloatingActionButton className="FloatingButton" onClick={() => addStory()}>
       <ContentAdd />

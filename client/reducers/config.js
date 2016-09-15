@@ -1,16 +1,16 @@
-import {fromJS} from 'immutable';
+import { fromJS } from 'immutable';
 
 const INITIAL_STATE = fromJS({
   dialogs: {
-    import: false
-  }
+    import: false,
+  },
 });
 
 const OPEN_IMPORT_DIALOG = 'app/config/OPEN_IMPORT_DIALOG';
 const CLOSE_IMPORT_DIALOG = 'app/config/CLOSE_IMPORT_DIALOG';
 
 export default function configReducer(state = INITIAL_STATE, action) {
-  switch(action.type) {
+  switch (action.type) {
     case OPEN_IMPORT_DIALOG: {
       return state.setIn(['dialogs', 'import'], true);
     }
@@ -27,13 +27,13 @@ export default function configReducer(state = INITIAL_STATE, action) {
 
 export function openImportDialog() {
   return {
-    type: OPEN_IMPORT_DIALOG
+    type: OPEN_IMPORT_DIALOG,
   };
 }
 
 export function closeImportDialog() {
   return {
-    type: CLOSE_IMPORT_DIALOG
+    type: CLOSE_IMPORT_DIALOG,
   };
 }
 

@@ -1,10 +1,10 @@
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import ImportDialog from '../components/ImportDialog';
-import {closeImportDialog} from '../reducers/config';
-import {manipulate} from '../reducers/stories';
+import { closeImportDialog } from '../reducers/config';
+import { manipulate } from '../reducers/stories';
 
 const mapStateToProps = state => ({
-  open: state.getIn(['config', 'dialogs', 'import'])
+  open: state.getIn(['config', 'dialogs', 'import']),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -12,12 +12,12 @@ const mapDispatchToProps = dispatch => ({
     dispatch(manipulate({
       description,
       id: -1,
-      position: 999999
+      position: 999999,
     }));
   },
   close() {
     dispatch(closeImportDialog());
-  }
+  },
 });
 
 const ImportDialogActions = connect(

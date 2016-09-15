@@ -1,6 +1,6 @@
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import StoryDialog from '../components/StoryDialog';
-import {add, manipulate, closeStoryModal} from '../reducers/stories';
+import { add, manipulate, closeStoryModal } from '../reducers/stories';
 
 const mapStateToProps = state => {
   const modal = state
@@ -13,7 +13,7 @@ const mapStateToProps = state => {
 
   return {
     open: modal.get('open'),
-    story: story ? story.toJS() : {}
+    story: story ? story.toJS() : {},
   };
 };
 
@@ -26,7 +26,7 @@ const mapDispatchToProps = dispatch => ({
   },
   close() {
     dispatch(closeStoryModal());
-  }
+  },
 });
 
 const StoryDialogContainer = connect(

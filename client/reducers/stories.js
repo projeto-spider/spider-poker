@@ -1,12 +1,12 @@
-import {fromJS} from 'immutable';
+import { fromJS } from 'immutable';
 
 const INITIAL_STATE = fromJS({
   current: -1,
   dialogs: {
-    manipulate: {open: false, story: -1},
-    remove: -1
+    manipulate: { open: false, story: -1 },
+    remove: -1,
   },
-  list: []
+  list: [],
 });
 
 const MANIPULATE_STORY = 'app/stories/MANIPULATE_STORY';
@@ -18,19 +18,19 @@ const SELECT_STORY = 'app/stories/SELECT_STORY';
 const CONFIRM_REMOVE_STORY = 'app/stories/CONFIRM_REMOVE_STORY';
 
 export default function storiesReducer(state = INITIAL_STATE, action) {
-  switch(action.type) {
+  switch (action.type) {
     case '@@INIT': {
       return state.update('list', list => order(list));
     }
 
     case MANIPULATE_STORY: {
-      const {payload} = action;
+      const { payload } = action;
 
       const isUpdating = payload.id !== -1;
       const newState = state
         .setIn(['dialogs', 'manipulate'], fromJS({
           open: false,
-          story: -1
+          story: -1,
         }));
 
       if (isUpdating) {
@@ -52,7 +52,7 @@ export default function storiesReducer(state = INITIAL_STATE, action) {
       return state
         .setIn(['dialogs', 'manipulate'], fromJS({
           open: false,
-          story: -1
+          story: -1,
         }));
     }
 
@@ -83,7 +83,7 @@ export default function storiesReducer(state = INITIAL_STATE, action) {
       return state
         .setIn(['dialogs', 'manipulate'], fromJS({
           open: true,
-          story: id
+          story: id,
         }));
     }
 
@@ -102,47 +102,47 @@ export default function storiesReducer(state = INITIAL_STATE, action) {
 export function manipulate(story) {
   return {
     type: MANIPULATE_STORY,
-    payload: story
+    payload: story,
   };
 }
 
 export function edit(id) {
   return {
     type: EDIT_STORY,
-    payload: id
+    payload: id,
   };
 }
 
 export function remove(id) {
   return {
     type: REMOVE_STORY,
-    payload: id
+    payload: id,
   };
 }
 
 export function select(id) {
   return {
     type: SELECT_STORY,
-    payload: id
+    payload: id,
   };
 }
 
 export function confirmRemove(id) {
   return {
     type: CONFIRM_REMOVE_STORY,
-    payload: id
+    payload: id,
   };
 }
 
 export function closeStoryModal() {
   return {
-    type: CLOSE_STORY_MODAL
+    type: CLOSE_STORY_MODAL,
   };
 }
 
 export function closeRemoveModal() {
   return {
-    type: CLOSE_REMOVE_MODAL
+    type: CLOSE_REMOVE_MODAL,
   };
 }
 

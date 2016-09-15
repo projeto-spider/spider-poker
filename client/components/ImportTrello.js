@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import FlatButton from 'material-ui/FlatButton';
-import {List, ListItem} from 'material-ui/List';
+import { List, ListItem } from 'material-ui/List';
 import CircularProgress from 'material-ui/CircularProgress';
 import Beenhere from 'material-ui/svg-icons/maps/beenhere';
 import ImportList from './ImportList';
@@ -27,57 +27,57 @@ export default class ImportTrello extends Component {
       authorized: false,
       boards: [],
       lists: [],
-      boardId: false
+      boardId: false,
     };
   }
 
   authorize() {
-    this.setState({loading: true});
+    this.setState({ loading: true });
 
     trello.authorize({
       type: 'popup',
       name: 'Planning Poker',
       scope: {
-        read: 'true'
+        read: 'true',
       },
       expiration: 'never',
       success: () => {
-        this.setState({authorized: true, loading: false});
+        this.setState({ authorized: true, loading: false });
         this.loadBoards();
       },
       error: () => {
-        this.setState({authorized: false});
-      }
-     });
+        this.setState({ authorized: false });
+      },
+    });
   }
 
   loadBoards() {
-    this.setState({loading: true});
+    this.setState({ loading: true });
 
     trello.get('/members/me/boards', boards => {
-      this.setState({boards, loading: false});
+      this.setState({ boards, loading: false });
     }, error => console.log(error));
   }
 
   loadLists(boardId) {
-    this.setState({loading: true});
+    this.setState({ loading: true });
 
-    trello.get(`/boards/${boardId}/lists`, {cards: 'all'}, lists => {
+    trello.get(`/boards/${boardId}/lists`, { cards: 'all' }, lists => {
       this.setState({
         lists: lists.map(list => ({
           name: list.name,
           cards: list.cards.map(card => ({
             name: card.name,
-            isChecked: true
-          }))
+            isChecked: true,
+          })),
         })),
-        loading: false
+        loading: false,
       });
     }, error => console.log(error));
   }
 
   selectBoard(boardId) {
-    this.setState({boardId});
+    this.setState({ boardId });
     this.loadLists(boardId);
   }
 
@@ -99,7 +99,7 @@ export default class ImportTrello extends Component {
 
   get loadingView() {
     const style = {
-      textAlign: 'center'
+      textAlign: 'center',
     };
 
     return (
@@ -111,7 +111,7 @@ export default class ImportTrello extends Component {
 
   get nonAuthorizedView() {
     const style = {
-      width: '100%'
+      width: '100%',
     };
 
     return (

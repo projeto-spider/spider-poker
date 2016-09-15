@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -18,12 +18,12 @@ export default class StoryDialog extends Component {
     this.setState(this.emptyModel);
   }
 
-  componentWillReceiveProps({story}) {
+  componentWillReceiveProps({ story }) {
     if (story) {
-      const {id, description, position} = story;
+      const { id, description, position } = story;
 
       this.setState({
-        id: id || -1, description, position
+        id: id || -1, description, position,
       });
     } else {
       this.setState(this.emptyModel);
@@ -32,14 +32,14 @@ export default class StoryDialog extends Component {
 
   onChangeDescription(e) {
     this.setState({
-      description: e.target.value
+      description: e.target.value,
     });
   }
 
   onChangePosition(e) {
     const value = Number(e.target.value);
     this.setState({
-      position: isNaN(value) ? 0 : value
+      position: isNaN(value) ? 0 : value,
     });
   }
 
@@ -57,7 +57,7 @@ export default class StoryDialog extends Component {
     return {
       id: -1,
       description: '',
-      position: 0
+      position: 0,
     };
   }
 
@@ -86,15 +86,15 @@ export default class StoryDialog extends Component {
     return [
       <FlatButton
         label="Cancelar"
-        primary={true}
+        primary
         onTouchTap={this.props.close}
       />,
       <RaisedButton
         label={this.submitLabel}
-        primary={true}
+        primary
         type="submit"
         onTouchTap={this.handleSubmit}
-      />
+      />,
     ];
   }
 

@@ -20,4 +20,4 @@ export async function index(ctx) {
     state,
     scripts,
   });
-};
+}

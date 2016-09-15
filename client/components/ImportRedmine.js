@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import CircularProgress from 'material-ui/CircularProgress';
 import TextField from 'material-ui/TextField';
@@ -8,7 +8,7 @@ export default class ImportRedmine extends Component {
   constructor(props) {
     super(props);
 
-    this.loadProjects= this.loadProjects.bind(this);
+    this.loadProjects = this.loadProjects.bind(this);
     this.onChangeInput = this.onChangeInput.bind(this);
   }
 
@@ -29,9 +29,9 @@ export default class ImportRedmine extends Component {
   }
 
   loadProjects() {
-    this.setState({loading: true});
+    this.setState({ loading: true });
 
-    const {hostname, project, apiKey, username, password} = this.state;
+    const { hostname, project, apiKey, username, password } = this.state;
 
     const headers = {};
 
@@ -42,10 +42,10 @@ export default class ImportRedmine extends Component {
     }
 
     fetch(`${hostname}/projects/${project}/issues.json${queryString}`, {
-      headers
+      headers,
     })
       .then(r => r.json())
-      .then(({issues = []}) => {
+      .then(({ issues = [] }) => {
         const typed = {};
 
         issues.forEach(issue => {
@@ -56,7 +56,7 @@ export default class ImportRedmine extends Component {
             typed[type] = [];
           }
 
-          typed[type].push({name: value, isChecked: true});
+          typed[type].push({ name: value, isChecked: true });
         });
 
         const listed = [];
@@ -64,23 +64,22 @@ export default class ImportRedmine extends Component {
         for (const type of Object.keys(typed)) {
           listed.push({
             name: type,
-            cards: typed[type]
+            cards: typed[type],
           });
         }
 
         this.setState({
           issues: listed,
-          loading: false
+          loading: false,
         });
-
       })
       .catch(console.error);
   }
 
   onChangeInput(field) {
     return e => {
-      this.setState({[field]: e.target.value});
-    }
+      this.setState({ [field]: e.target.value });
+    };
   }
 
   render() {
@@ -97,7 +96,7 @@ export default class ImportRedmine extends Component {
 
   get loadingView() {
     const style = {
-      textAlign: 'center'
+      textAlign: 'center',
     };
 
     return (
@@ -109,13 +108,13 @@ export default class ImportRedmine extends Component {
 
   get selectProjectView() {
     const headerStyles = {
-      margin: '12px 0 0'
+      margin: '12px 0 0',
     };
     const fullwidthInput = {
-      width: '100%'
+      width: '100%',
     };
     const loginInputStyles = {
-      width: '50%'
+      width: '50%',
     };
 
     const formFilled =
@@ -130,7 +129,7 @@ export default class ImportRedmine extends Component {
         <h4 style={headerStyles}>Projeto</h4>
         <TextField
           floatingLabelText="Dominio"
-          floatingLabelFixed={true}
+          floatingLabelFixed
           hintText="dominio.com"
           style={fullwidthInput}
           value={this.state.hostname}
@@ -139,7 +138,7 @@ export default class ImportRedmine extends Component {
 
         <TextField
           floatingLabelText="Identificador"
-          floatingLabelFixed={true}
+          floatingLabelFixed
           hintText="dominio.com/projects/{seu_identificador}"
           style={fullwidthInput}
           value={this.state.project}

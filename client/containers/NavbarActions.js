@@ -1,6 +1,6 @@
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import Navbar from '../components/Navbar';
-import {openImportDialog} from '../reducers/config';
+import { openImportDialog } from '../reducers/config';
 
 const mapStateToProps = state => ({
 });
@@ -8,7 +8,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   openImportDialog() {
     dispatch(openImportDialog());
-  }
+  },
 });
 
 const NavbarActions = connect(

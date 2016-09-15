@@ -1,13 +1,13 @@
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import RemoveStoryDialog from '../components/RemoveStoryDialog';
-import {remove, closeRemoveModal} from '../reducers/stories';
+import { remove, closeRemoveModal } from '../reducers/stories';
 
 const mapStateToProps = state => {
   const id = state.getIn(['stories', 'dialogs', 'remove']);
 
   return {
     open: id !== -1,
-    id
+    id,
   };
 };
 
@@ -17,7 +17,7 @@ const mapDispatchToProps = dispatch => ({
   },
   removeStory(id) {
     dispatch(remove(id));
-  }
+  },
 });
 
 const ConfirmRemoveStory = connect(

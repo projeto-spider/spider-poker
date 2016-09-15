@@ -1,12 +1,12 @@
 import React from 'react';
-import {CardActions} from 'material-ui/Card';
+import { CardActions } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import Cancel from 'material-ui/svg-icons/navigation/cancel';
 import RadioButtonUnchecked from 'material-ui/svg-icons/toggle/radio-button-unchecked';
 import ModeEdit from 'material-ui/svg-icons/editor/mode-edit';
-import {red300, blueGrey500} from 'material-ui/styles/colors';
+import { red300, blueGrey500 } from 'material-ui/styles/colors';
 
-export default function VisibleStories({storyId, current, editStory, selectStory, confirmRemoveStory}) {
+export default function VisibleStories({ storyId, current, editStory, selectStory, confirmRemoveStory }) {
   const commonActions = (
     <span>
       <FlatButton
@@ -16,7 +16,7 @@ export default function VisibleStories({storyId, current, editStory, selectStory
       />
       <FlatButton
         label="Remover"
-        icon={<Cancel color={red300}/>}
+        icon={<Cancel color={red300} />}
         onTouchTap={() => confirmRemoveStory(storyId)}
       />
     </span>

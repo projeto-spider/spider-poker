@@ -1,8 +1,8 @@
 import React from 'react';
-import {Card as MaterialCard, CardHeader, CardText} from 'material-ui/Card';
+import { Card as MaterialCard, CardHeader, CardText } from 'material-ui/Card';
 import '../styles/Card.css';
 
-export default function Card({username, avatar}) {
+export default function Card({ username, avatar }) {
   return (
     <div className="col-xs-6 col-sm-4 col-md-6 col-lg-4">
       <div className="box">

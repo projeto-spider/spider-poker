@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import {Tabs, Tab} from 'material-ui/Tabs';
+import { Tabs, Tab } from 'material-ui/Tabs';
 import ImportTrello from './ImportTrello';
 import ImportRedmine from './ImportRedmine';
 
@@ -12,10 +12,10 @@ export default class ImportDialog extends Component {
     return (
       <Dialog
         actions={this.actions}
-        modal={true}
+        modal
         open={this.props.open}
         bodyClassName="ImportDialog-body"
-        autoScrollBodyContent={true}
+        autoScrollBodyContent
       >
         <Tabs>
           <Tab label="Trello" >
@@ -37,9 +37,9 @@ export default class ImportDialog extends Component {
     return [
       <FlatButton
         label="Fechar"
-        primary={true}
+        primary
         onTouchTap={this.props.close}
-      />
+      />,
     ];
   }
 }
