@@ -11,7 +11,7 @@
     "build-server": "cross-env NODE_ENV=production webpack --config ./webpack.prod.server.js",
     "build-client": "cross-env NODE_ENV=production webpack --config ./webpack.prod.client.js",
     "clean-build": "trash build/ && mkdir build",
-    "lint": "eslint ./server/app.js"
+    "lint": "eslint ./**/*.{js,jsx}"
   },
   "repository": {
     "type": "git",
