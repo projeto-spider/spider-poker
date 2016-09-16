@@ -38,19 +38,19 @@ export default class ImportRedmine extends Component {
   loadProjects() {
     this.setState({ loading: true });
 
-    const { hostname, project, apiKey, username, password } = this.state;
+    const { hostname = '', project = '', apiKey = '', username, password } = this.state;
+
+    const queryString =
+      `hostname=${hostname}&project=${project}&key=${apiKey}`;
 
     const headers = {};
-
-    const queryString = apiKey !== '' ? `?key=${apiKey}` : '';
-
     if (username !== '' && password !== '') {
       headers.Authorization =
         `Basic ${new Buffer(`${username}:${password}`).toString('base64')}`;
     }
 
     // eslint-disable-next-line
-    fetch(`${hostname}/projects/${project}/issues.json${queryString}`, {
+    fetch(`/api/redmine/issues?${queryString}`, {
       headers,
     })
       .then(r => r.json())
