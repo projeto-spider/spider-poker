@@ -73,7 +73,7 @@ export default class ImportList extends Component {
                   leftIcon={
                     <Checkbox
                       checked={card.get('isChecked')}
-                      onCheck={this.toggleCard(listId, cardId)}
+                      onCheck={() => this.toggleCard(listId, cardId)}
                     />}
                 />
               )).toJS()}
@@ -84,7 +84,7 @@ export default class ImportList extends Component {
         <FlatButton
           label="Importar"
           style={{ width: '100%' }}
-          onTouchTap={this.importCards}
+          onTouchTap={() => this.importCards()}
         />
       </div>
     );
