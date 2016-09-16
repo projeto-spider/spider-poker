@@ -9,8 +9,6 @@ export async function issues(ctx) {
 
   const url = `${hostname}/projects/${project}/issues.json`;
 
-  console.log(url, ctx);
-
   try {
     const { body } = await got.get(url, {
       query: { key },
