@@ -2,7 +2,7 @@ import serverSideRender from '../lib/server-side-render';
 import frontEndScripts from '../lib/front-end-scripts';
 
 export async function index(ctx) {
-  const { rendered, head, state } = await serverSideRender()
+  const { rendered, head, state, css } = await serverSideRender()
     .catch(err => {
       console.log(err);
       if (err.code && err.msg) {
@@ -19,5 +19,6 @@ export async function index(ctx) {
     rendered,
     state,
     scripts,
+    css,
   });
 }

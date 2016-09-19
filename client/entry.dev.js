@@ -1,8 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
+import { StyleSheet } from 'aphrodite';
 import App from './App';
 import store from './store';
+
+// eslint-disable-next-line
+StyleSheet.rehydrate(JSON.parse(window.__RENDERED_CLASS_NAMES__));
 
 ReactDOM.render(
   <AppContainer>
