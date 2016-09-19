@@ -10,8 +10,6 @@ import FloatingActions from './containers/FloatingActions';
 import ConfirmRemoveStory from './containers/ConfirmRemoveStory';
 import ImportDialogActions from './containers/ImportDialogActions';
 
-import './index.css';
-
 if (process.env.isClient) {
   // Needed for material-ui
   // See: http://stackoverflow.com/a/34015469/988941
