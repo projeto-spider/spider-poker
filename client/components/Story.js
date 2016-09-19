@@ -1,13 +1,13 @@
 import React from 'react';
+import { css } from 'aphrodite';
 import { Card, CardHeader } from 'material-ui/Card';
 import Avatar from 'material-ui/Avatar';
 import AvailableStoryActions from '../containers/AvailableStoryActions';
-
-import '../styles/Story.css';
+import style from '../styles/Story';
 
 export default function Story({ id, position, current, description }) {
   return (
-    <Card className={current ? 'Story Story-active' : 'Story'}>
+    <Card className={current ? css(style.story, style.active) : css(style.story)}>
       <CardHeader
         avatar={<Avatar>{position}</Avatar>}
         title={description}

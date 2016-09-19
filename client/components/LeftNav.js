@@ -8,14 +8,16 @@ import { green500, grey500 } from 'material-ui/styles/colors';
 import Done from 'material-ui/svg-icons/action/done';
 import Restore from 'material-ui/svg-icons/action/restore';
 
-import '../styles/LeftNav.css';
-
 export default function LeftNav() {
   const docked = process.env.isClient ? window.innerWidth >= 980 : false;
   const style = docked ? { marginTop: '65px' } : { marginTop: '0' };
 
   return (
-    <Drawer containerClassName="LeftNav" docked={docked} open={false} containerStyle={style}>
+    <Drawer
+      containerStyle={style}
+      docked={docked}
+      open={false}
+    >
       <List>
         <Subheader>Usuários</Subheader>
         <ListItem

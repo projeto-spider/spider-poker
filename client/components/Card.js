@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card as MaterialCard, CardHeader, CardText } from 'material-ui/Card';
-import '../styles/Card.css';
+import { css } from 'aphrodite';
+import style from '../styles/Card';
 
 export default function Card({ username, avatar }) {
   return (
@@ -12,7 +13,7 @@ export default function Card({ username, avatar }) {
             avatar={avatar}
           />
           <CardText>
-            <div className="Card-value">?</div>
+            <div className={css(style.value)}>?</div>
           </CardText>
         </MaterialCard>
       </div>
