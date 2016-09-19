@@ -22,11 +22,6 @@ module.exports = {
         loader: 'babel',
         plugins: ['react-hot-loader/babel'],
       },
-      {
-        test: /\.css$/,
-        exclude: /node_modules/,
-        loader: 'style!css!postcss',
-      },
     ],
   },
   resolve: {
