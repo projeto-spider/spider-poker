@@ -32,6 +32,25 @@ app.use(views(path.join(__dirname, 'views/'), {
   extension: 'pug',
 }));
 
+if (config.is.dev) {
+  // Webpack
+  const webpack = require('webpack'); // eslint-disable-line
+  const { devMiddleware, hotMiddleware } = require('koa-webpack-middleware'); // eslint-disable-line
+  const WebpackDevServer = require('webpack-dev-server'); // eslint-disable-line
+  const webpackConfig = require('../webpack.dev.client'); // eslint-disable-line
+  const compiler = webpack(webpackConfig);
+  app.use(devMiddleware(compiler, {
+    noInfo: true,
+    publicPath: webpackConfig.output.publicPath,
+  }));
+  app.use(hotMiddleware(compiler, {
+  }));
+  app.use((ctx, next) => {
+    if (!/^\/webpack/.test(ctx.request.url)) {
+      return next();
+    }
+  });
+}
 // Routes
 import routes from './routes/';
 routes.map(
@@ -44,28 +63,3 @@ app.listen(config.PORT, config.HOST, () => {
   console.log(`Server listening at ${config.HOST}:${config.PORT}`);
 });
 
-if (config.is.dev) {
-  // Webpack
-  const webpack = require('webpack'); // eslint-disable-line
-  const WebpackDevServer = require('webpack-dev-server'); // eslint-disable-line
-  const webpackConfig = require('../webpack.dev.client'); // eslint-disable-line
-  const webpackServer = new WebpackDevServer(webpack(webpackConfig), {
-    hot: true,
-    publicPath: webpackConfig.output.publicPath,
-    headers: { 'Access-Control-Allow-Origin': '*' },
-    quiet: false,
-    noInfo: false,
-    stats: {
-      assets: false,
-      colors: true,
-      version: false,
-      hash: false,
-      timings: false,
-      chunks: false,
-      chunkModules: false,
-    },
-  });
-  webpackServer.listen(8080, config.HOST, () => {
-    console.log(`Webpack server listening at ${config.HOST}:8080`);
-  });
-}

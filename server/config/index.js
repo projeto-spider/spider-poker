@@ -8,7 +8,7 @@ const {
   PORT = 3000,
   HOST = NODE_ENV === 'development' ? 'localhost' : '0.0.0.0',
   BASE_URL = `${PROTOCOL_PREFIX}://${HOST}:${PORT}`,
-  WEBPACK_BASE_URL = `${PROTOCOL_PREFIX}://${HOST}:8080`,
+  WEBPACK_BASE_URL = `/webpack`,
 } = process.env;
 
 const config = {
