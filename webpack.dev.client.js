@@ -1,18 +1,16 @@
 const webpack = require('webpack');
 const path = require('path');
-const config = require('./server/config');
 
 module.exports = {
   entry: [
-    'react-hot-loader/patch',
-    `webpack-dev-server/client?${config.WEBPACK_BASE_URL}/`,
+    `webpack-dev-server/client?http://localhost:8080/`,
     'webpack/hot/only-dev-server',
     path.join(__dirname, './client/entry.dev.js'),
   ],
   output: {
     path: path.join(__dirname, './public/scripts/'),
     filename: 'bundle.js',
-    publicPath: `${config.WEBPACK_BASE_URL}/`,
+    publicPath: `http://localhost:8080/`,
   },
   module: {
     loaders: [
@@ -20,7 +18,7 @@ module.exports = {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         loader: 'babel',
-        plugins: ['react-hot-loader/babel'],
+        presets: ['react', 'babel'],
       },
     ],
   },
