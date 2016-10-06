@@ -12,6 +12,9 @@
 
 const path = require('path');
 const fold = require('adonis-fold');
+const webpack = require('webpack');
+const WebpackDevServer = require('webpack-dev-server');
+const webpackConfig = require('../webpack.dev.client');
 const app = require('./app');
 
 const packageFile = path.join(__dirname, '../package.json');
@@ -75,21 +78,22 @@ module.exports = function (callback) {
 			|--------------------------------------------------------------------------
 			|
 			| We are all set to fire the Http Server and start receiving new requests.
+			| If in development, set the webpack-dev-server
 			|
 			*/
-			const webpack = require('webpack');
-			const WebpackDevServer = require('webpack-dev-server');
-			const webpackConfig = require('../webpack.dev.client');
-
-			const compiler = webpack(webpackConfig);
-			const webpackServer = new WebpackDevServer(compiler, {
-				noInfo: true,
-				hot: true
-			});
-
 			const Server = use('Adonis/Src/Server');
 			Server.listen(Env.get('HOST'), Env.get('PORT'));
-			webpackServer.listen(8080);
+
+			if (Env.get('NODE_ENV') === 'development') {
+				const compiler = webpack(webpackConfig);
+				const webpackServer = new WebpackDevServer(compiler, {
+					noInfo: true,
+					hot: true
+				});
+
+				webpackServer.listen(8080);
+			}
+
 			if (typeof (callback) === 'function') {
 				callback();
 			}
