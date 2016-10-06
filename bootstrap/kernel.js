@@ -1,5 +1,4 @@
 'use strict';
-/* eslint-disable no-undef */
 
 /*
 |--------------------------------------------------------------------------
@@ -12,6 +11,7 @@
 */
 
 const path = require('path');
+const fold = require('adonis-fold');
 const Ace = require('adonis-ace');
 const app = require('./app');
 
