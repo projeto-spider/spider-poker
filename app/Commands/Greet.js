@@ -1,6 +1,6 @@
-'use strict'
+'use strict';
 
-const Command = use('Command')
+const Command = use('Command');
 
 class Greet extends Command {
 
@@ -10,8 +10,8 @@ class Greet extends Command {
 	 *
 	 * @return {String}
 	 */
-	get signature () {
-		return 'greet {name}'
+	get signature() {
+		return 'greet {name}';
 	}
 
 	/**
@@ -20,8 +20,8 @@ class Greet extends Command {
 	 *
 	 * @return {String}
 	 */
-	get description () {
-		return 'Greet a user with a name'
+	get description() {
+		return 'Greet a user with a name';
 	}
 
 	/**
@@ -31,10 +31,10 @@ class Greet extends Command {
 	 * @param  {Object} args    [description]
 	 * @param  {Object} options [description]
 	 */
-	* handle (args, options) {
-		this.info(`Hello ${args.name}`)
+	* handle(args, options) {
+		this.info(`Hello ${args.name}`);
 	}
 
 }
 
-module.exports = Greet
+module.exports = Greet;

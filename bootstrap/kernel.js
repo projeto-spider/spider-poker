@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 /*
 |--------------------------------------------------------------------------
@@ -10,12 +10,12 @@
 |
 */
 
-const app = require('./app')
-const fold = require('adonis-fold')
-const Ace = require('adonis-ace')
-const path = require('path')
-const packageFile = path.join(__dirname, '../package.json')
-require('./extend')
+const app = require('./app');
+const fold = require('adonis-fold');
+const Ace = require('adonis-ace');
+const path = require('path');
+const packageFile = path.join(__dirname, '../package.json');
+require('./extend');
 
 module.exports = function () {
 	fold.Registrar
@@ -30,7 +30,7 @@ module.exports = function () {
 			| providers can be referenced with short sweet names.
 			|
 			*/
-			fold.Ioc.aliases(app.aliases)
+			fold.Ioc.aliases(app.aliases);
 
 			/*
 			|--------------------------------------------------------------------------
@@ -42,8 +42,8 @@ module.exports = function () {
 			| to setup autoloading.
 			|
 			*/
-			const Helpers = use('Helpers')
-			Helpers.load(packageFile, fold.Ioc)
+			const Helpers = use('Helpers');
+			Helpers.load(packageFile, fold.Ioc);
 
 			/*
 			|--------------------------------------------------------------------------
@@ -54,8 +54,8 @@ module.exports = function () {
 			| executed command. It's so simple :)
 			|
 			*/
-			Ace.register(app.commands)
-			Ace.invoke(require(packageFile))
+			Ace.register(app.commands);
+			Ace.invoke(require(packageFile));
 		})
-		.catch((error) => console.error(error.stack))
-}
+		.catch(error => console.error(error.stack));
+};

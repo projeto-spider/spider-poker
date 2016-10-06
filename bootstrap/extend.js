@@ -1,6 +1,6 @@
-'use strict'
+'use strict';
 
-const Ioc = require('adonis-fold').Ioc
+const Ioc = require('adonis-fold').Ioc;
 
 /*
 |--------------------------------------------------------------------------

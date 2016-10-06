@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 module.exports = {
 	/*
@@ -62,4 +62,4 @@ module.exports = {
 	|
 	*/
 	maxAge: 90
-}
+};

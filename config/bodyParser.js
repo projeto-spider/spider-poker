@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 module.exports = {
 	/*
@@ -102,4 +102,4 @@ module.exports = {
 		*/
 		maxSize: '2mb'
 	}
-}
+};

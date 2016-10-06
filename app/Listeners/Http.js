@@ -1,8 +1,8 @@
-'use strict'
+'use strict';
 
-const Env = use('Env')
-const Ouch = use('youch')
-const Http = exports = module.exports = {}
+const Env = use('Env');
+const Ouch = use('youch');
+const Http = exports = module.exports = {};
 
 /**
  * handle errors occured during a Http request.
@@ -18,24 +18,24 @@ Http.handleError = function * (error, request, response) {
 	if (Env.get('NODE_ENV') === 'development') {
 		const ouch = new Ouch().pushHandler(
 			new Ouch.handlers.PrettyPageHandler('blue', null, 'sublime')
-		)
-		ouch.handleException(error, request.request, response.response, (output) => {
-			console.error(error.stack)
-		})
-		return
+		);
+		ouch.handleException(error, request.request, response.response, output => {
+			console.error(error.stack);
+		});
+		return;
 	}
 
 	/**
 	 * PRODUCTION REPORTER
 	 */
-	const status = error.status || 500
-	console.error(error.stack)
-	yield response.status(status).sendView('errors/index', {error})
-}
+	const status = error.status || 500;
+	console.error(error.stack);
+	yield response.status(status).sendView('errors/index', {error});
+};
 
 /**
  * listener for Http.start event, emitted after
  * starting http server.
  */
 Http.onStart = function () {
-}
+};

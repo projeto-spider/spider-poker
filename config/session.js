@@ -1,6 +1,6 @@
-'use strict'
+'use strict';
 
-const Env = use('Env')
+const Env = use('Env');
 
 module.exports = {
 	/*
@@ -96,4 +96,4 @@ module.exports = {
 		directory: 'sessions'
 	}
 
-}
+};
