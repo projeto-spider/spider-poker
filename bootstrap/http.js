@@ -17,80 +17,80 @@ const packageFile = path.join(__dirname, '../package.json')
 require('./extend')
 
 module.exports = function (callback) {
-  fold.Registrar
-    .register(app.providers)
-    .then(() => {
-      /*
-      |--------------------------------------------------------------------------
-      | Register Aliases
-      |--------------------------------------------------------------------------
-      |
-      | After registering all the providers, we need to setup aliases so that
-      | providers can be referenced with short sweet names.
-      |
-      */
-      fold.Ioc.aliases(app.aliases)
+	fold.Registrar
+		.register(app.providers)
+		.then(() => {
+			/*
+			|--------------------------------------------------------------------------
+			| Register Aliases
+			|--------------------------------------------------------------------------
+			|
+			| After registering all the providers, we need to setup aliases so that
+			| providers can be referenced with short sweet names.
+			|
+			*/
+			fold.Ioc.aliases(app.aliases)
 
-      /*
-      |--------------------------------------------------------------------------
-      | Register Package File
-      |--------------------------------------------------------------------------
-      |
-      | Adonis application package.json file has the reference to the autoload
-      | directory. Here we register the package file with the Helpers provider
-      | to setup autoloading.
-      |
-      */
-      const Helpers = use('Helpers')
-      const Env = use('Env')
-      Helpers.load(packageFile, fold.Ioc)
+			/*
+			|--------------------------------------------------------------------------
+			| Register Package File
+			|--------------------------------------------------------------------------
+			|
+			| Adonis application package.json file has the reference to the autoload
+			| directory. Here we register the package file with the Helpers provider
+			| to setup autoloading.
+			|
+			*/
+			const Helpers = use('Helpers')
+			const Env = use('Env')
+			Helpers.load(packageFile, fold.Ioc)
 
-      /*
-      |--------------------------------------------------------------------------
-      | Register Events
-      |--------------------------------------------------------------------------
-      |
-      | Here we require the event.js file to register events defined inside
-      | events.js file.
-      |
-      */
-      require('./events')
+			/*
+			|--------------------------------------------------------------------------
+			| Register Events
+			|--------------------------------------------------------------------------
+			|
+			| Here we require the event.js file to register events defined inside
+			| events.js file.
+			|
+			*/
+			require('./events')
 
-      /*
-      |--------------------------------------------------------------------------
-      | Load Middleware And Routes
-      |--------------------------------------------------------------------------
-      |
-      | Middleware and Routes are required to oil up your HTTP server. Here we
-      | require defined files for same.
-      |
-      */
-      use(Helpers.makeNameSpace('Http', 'kernel'))
-      use(Helpers.makeNameSpace('Http', 'routes'))
+			/*
+			|--------------------------------------------------------------------------
+			| Load Middleware And Routes
+			|--------------------------------------------------------------------------
+			|
+			| Middleware and Routes are required to oil up your HTTP server. Here we
+			| require defined files for same.
+			|
+			*/
+			use(Helpers.makeNameSpace('Http', 'kernel'))
+			use(Helpers.makeNameSpace('Http', 'routes'))
 
-      /*
-      |--------------------------------------------------------------------------
-      | Start Http Server
-      |--------------------------------------------------------------------------
-      |
-      | We are all set to fire the Http Server and start receiving new requests.
-      |
-      */
-      const webpack = require('webpack')
-      const WebpackDevServer = require('webpack-dev-server')
-      const webpackConfig = require('../webpack.dev.client')
-      const compiler = webpack(webpackConfig)
-      const webpackServer = new WebpackDevServer(compiler, {
-        noInfo: true,
-        hot: true,
-      })
+			/*
+			|--------------------------------------------------------------------------
+			| Start Http Server
+			|--------------------------------------------------------------------------
+			|
+			| We are all set to fire the Http Server and start receiving new requests.
+			|
+			*/
+			const webpack = require('webpack')
+			const WebpackDevServer = require('webpack-dev-server')
+			const webpackConfig = require('../webpack.dev.client')
+			const compiler = webpack(webpackConfig)
+			const webpackServer = new WebpackDevServer(compiler, {
+				noInfo: true,
+				hot: true,
+			})
 
-      const Server = use('Adonis/Src/Server')
-      Server.listen(Env.get('HOST'), Env.get('PORT'))
-      webpackServer.listen(8080)
-      if (typeof (callback) === 'function') {
-        callback()
-      }
-    })
-    .catch((error) => console.error(error.stack))
+			const Server = use('Adonis/Src/Server')
+			Server.listen(Env.get('HOST'), Env.get('PORT'))
+			webpackServer.listen(8080)
+			if (typeof (callback) === 'function') {
+				callback()
+			}
+		})
+		.catch((error) => console.error(error.stack))
 }
