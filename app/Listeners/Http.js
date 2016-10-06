@@ -19,7 +19,7 @@ Http.handleError = function * (error, request, response) {
 		const ouch = new Ouch().pushHandler(
 			new Ouch.handlers.PrettyPageHandler('blue', null, 'sublime')
 		);
-		ouch.handleException(error, request.request, response.response, output => {
+		ouch.handleException(error, request.request, response.response, _output => {
 			console.error(error.stack);
 		});
 		return;

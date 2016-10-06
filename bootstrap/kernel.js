@@ -1,4 +1,5 @@
 'use strict';
+/* eslint-disable no-undef */
 
 /*
 |--------------------------------------------------------------------------
@@ -10,10 +11,10 @@
 |
 */
 
-const app = require('./app');
-const fold = require('adonis-fold');
-const Ace = require('adonis-ace');
 const path = require('path');
+const Ace = require('adonis-ace');
+const app = require('./app');
+
 const packageFile = path.join(__dirname, '../package.json');
 require('./extend');
 
@@ -57,5 +58,5 @@ module.exports = function () {
 			Ace.register(app.commands);
 			Ace.invoke(require(packageFile));
 		})
-		.catch(error => console.error(error.stack));
+		.catch(err => console.error(err.stack));
 };

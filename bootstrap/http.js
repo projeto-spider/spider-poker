@@ -10,9 +10,10 @@
 |
 */
 
-const app = require('./app');
-const fold = require('adonis-fold');
 const path = require('path');
+const fold = require('adonis-fold');
+const app = require('./app');
+
 const packageFile = path.join(__dirname, '../package.json');
 require('./extend');
 
@@ -79,6 +80,7 @@ module.exports = function (callback) {
 			const webpack = require('webpack');
 			const WebpackDevServer = require('webpack-dev-server');
 			const webpackConfig = require('../webpack.dev.client');
+
 			const compiler = webpack(webpackConfig);
 			const webpackServer = new WebpackDevServer(compiler, {
 				noInfo: true,
@@ -92,5 +94,5 @@ module.exports = function (callback) {
 				callback();
 			}
 		})
-		.catch(error => console.error(error.stack));
+		.catch(err => console.error(err.stack));
 };

@@ -71,7 +71,8 @@
       "use"
     ],
     "rules": {
-      "xo/filename-case": 0
+      "xo/filename-case": 0,
+      "no-unused-vars": [2, {"args": "all", "argsIgnorePattern": "^_"}]
     },
     "ignores": [
       "client/**/*"
