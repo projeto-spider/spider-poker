@@ -9,3 +9,10 @@ Route.get('/', function * (_req, res) {
 		scripts
 	});
 });
+
+// Widgets
+
+Route.group('widgets', function () {
+	Route
+		.get('/redmine/issues', 'Widgets/RedmineController.issues');
+}).prefix('/widgets');

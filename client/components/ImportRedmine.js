@@ -50,7 +50,7 @@ export default class ImportRedmine extends Component {
     }
 
     // eslint-disable-next-line
-    fetch(`/api/redmine/issues?${queryString}`, {
+		fetch(`/widgets/redmine/issues?${queryString}`, {
       headers,
     })
       .then(r => r.json())
