@@ -19,8 +19,12 @@ module.exports = {
 				exclude: /node_modules/,
 				loader: 'babel',
 				presets: ['react', 'babel']
-			}
-		]
+			},
+			{
+				test: /\.less$/,
+				loaders: ['style', 'css', 'less'],
+			},
+		],
 	},
 	resolve: {
 		extensions: ['', '.js', '.jsx']
