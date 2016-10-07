@@ -72,6 +72,7 @@
       "use"
     ],
     "rules": {
+      "comma-dangle": 0,
       "xo/filename-case": 0,
       "no-unused-vars": [
         2,
