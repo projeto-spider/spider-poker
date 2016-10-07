@@ -26,4 +26,5 @@ lib-cov
 .DS_Store
 
 # Client side builds
+webpack.assets.json
 public/build
