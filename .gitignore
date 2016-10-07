@@ -24,3 +24,6 @@ lib-cov
 
 # Mac Only
 .DS_Store
+
+# Client side builds
+public/build
