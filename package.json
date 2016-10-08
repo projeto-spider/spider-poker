@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --watch app --watch bootstrap --watch config --watch .env -x \"node --harmony_proxies\" server.js",
+    "build": "npm run build-client",
     "build-client": "cross-env NODE_ENV=production webpack --config ./webpack.prod.js",
-    "start": "cross-env NODE_ENV=production node --harmony_proxies server.js",
+    "start": "npm run build-client && cross-env NODE_ENV=production node --harmony_proxies server.js",
     "test": "xo"
   },
   "repository": {
