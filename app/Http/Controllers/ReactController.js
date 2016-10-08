@@ -3,30 +3,43 @@ const Env = use('Env');
 
 class ReactController {
 	* main(_req, res) {
+		const {scripts, styles} = ReactController.assets();
+
 		return yield res.sendView('master', {
-			...this.assets,
+			scripts, styles,
 		});
 	}
 
-	get assets() {
+	static assets() {
+		const vendorStyles = [
+			'/vendor/bootstrap/bootstrap.min.css',
+			'/vendor/adminlte/AdminLTE.min.css',
+		];
+
 		if (Env.get('NODE_ENV') === 'development') {
 			return {
 				scripts: [
-					'http://localhost:8080/bundle.js'
+					`http://localhost:${Env.get('WEBPACK_PORT', 3000)}/bundle.js`
 				],
-				style: [
+				styles: [
+					...vendorStyles,
 				],
 			};
 		}
 
-		const {app, vendor} = require('../../../webpack.assets.json');
+		if (!ReactController.webpackBuild) {
+			ReactController.webpackBuild = require('../../../webpack.assets.json');
+		}
+
+		const {app, vendor} = ReactController.webpackBuild;
 
 		return {
 			scripts: [
 				vendor.js,
 				app.js,
 			],
-			style: [
+			styles: [
+				...vendorStyles,
 			],
 		};
 	}
