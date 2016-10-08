@@ -3,14 +3,14 @@ const webpack = require('webpack');
 
 module.exports = {
 	entry: [
-		`webpack-dev-server/client?http://localhost:8080/`,
+		`webpack-dev-server/client`,
 		'webpack/hot/only-dev-server',
 		path.join(__dirname, './client/entry.dev.js')
 	],
 	output: {
 		path: path.join(__dirname, './public/scripts/'),
 		filename: 'bundle.js',
-		publicPath: `http://localhost:8080/`
+		publicPath: '/'
 	},
 	module: {
 		loaders: [

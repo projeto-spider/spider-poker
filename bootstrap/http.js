@@ -91,7 +91,7 @@ module.exports = function (callback) {
 					hot: true
 				});
 
-				webpackServer.listen(8080);
+				webpackServer.listen(Env.get('WEBPACK_PORT', 3000));
 			}
 
 			if (typeof (callback) === 'function') {
