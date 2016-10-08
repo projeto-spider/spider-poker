@@ -14,7 +14,7 @@ const path = require('path');
 const fold = require('adonis-fold');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
-const webpackConfig = require('../webpack.dev.client');
+const webpackConfig = require('../webpack.dev');
 const app = require('./app');
 
 const packageFile = path.join(__dirname, '../package.json');
