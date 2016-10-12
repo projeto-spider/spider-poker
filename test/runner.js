@@ -26,7 +26,6 @@ bootstrap(Server => {
 		console.log(stdin);
 		console.log(stdout);
 
-		// eslint-disable-next-line
 		process.exit(0);
 	});
 });

@@ -8,9 +8,10 @@
 |
 */
 
-const app = require('../bootstrap/app');
-const fold = require('adonis-fold');
 const path = require('path');
+const fold = require('adonis-fold');
+const app = require('../bootstrap/app');
+
 const packageFile = path.join(__dirname, '../package.json');
 require('../bootstrap/extend');
 
@@ -85,5 +86,5 @@ module.exports = function (callback) {
 			const Event = use('Event');
 			Event.fire('Http.start');
 		})
-		.catch(error => console.error(error.stack));
+		.catch(err => console.error(err.stack));
 };
