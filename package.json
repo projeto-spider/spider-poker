@@ -76,7 +76,8 @@
   "devDependencies": {
     "ava": "^0.16.0",
     "nodemon": "^1.9.1",
-    "sqlite": "^2.2.0"
+    "sqlite": "^2.2.0",
+    "xo": "^0.17.0"
   },
   "xo": {
     "global": [
