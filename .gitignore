@@ -30,4 +30,4 @@ webpack.assets.json
 public/build
 
 # Development database
-database/development.sqlite
+database/*.sqlite

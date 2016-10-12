@@ -4,7 +4,6 @@ const Env = use('Env');
 const Helpers = use('Helpers');
 
 module.exports = {
-
 	/*
 	|--------------------------------------------------------------------------
 	| Default Connection
@@ -13,20 +12,18 @@ module.exports = {
 	| Connection defines the default connection settings to be used while
 	| interacting with SQL databases.
 	|
-	*/
-	connection: Env.get('DB_CONNECTION', 'sqlite'),
-
-	/*
-	|--------------------------------------------------------------------------
-	| Sqlite
-	|--------------------------------------------------------------------------
-	|
-	| Sqlite is a flat file database and can be good choice under development
-	| environment.
-	|
-	| npm i --save sqlite3
+	| Fallbacks to sqlite.
+	| When running tests, use sqlite 'test.sqlite'.
 	|
 	*/
+	connection: Env.get('NODE_ENV') === 'test' ? 'testing' : Env.get('DB_CONNECTION', 'sqlite'),
+	testing: {
+		client: 'sqlite3',
+		connection: {
+			filename: Helpers.databasePath('test.sqlite')
+		},
+		useNullAsDefault: true
+	},
 	sqlite: {
 		client: 'sqlite3',
 		connection: {
@@ -34,17 +31,6 @@ module.exports = {
 		},
 		useNullAsDefault: true
 	},
-
-	/*
-	|--------------------------------------------------------------------------
-	| Mysql
-	|--------------------------------------------------------------------------
-	|
-	| Here we define connection settings for Mysql database.
-	|
-	| npm i --save mysql
-	|
-	*/
 	mysql: {
 		client: 'mysql',
 		connection: {
@@ -54,17 +40,6 @@ module.exports = {
 			database: Env.get('DB_DATABASE', 'adonis')
 		}
 	},
-
-	/*
-	|--------------------------------------------------------------------------
-	| PostgreSQL
-	|--------------------------------------------------------------------------
-	|
-	| Here we define connection settings for Mysql database.
-	|
-	| npm i --save pg
-	|
-	*/
 	pg: {
 		client: 'pg',
 		connection: {
@@ -74,5 +49,4 @@ module.exports = {
 			database: Env.get('DB_DATABASE', 'adonis')
 		}
 	}
-
 };
