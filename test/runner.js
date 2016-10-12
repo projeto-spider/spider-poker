@@ -17,13 +17,17 @@ bootstrap(Server => {
 	exec(commands, {
 		cwd: path.join(__dirname, '../'),
 	}, (err, stdin, stdout) => {
+		Server.getInstance().close();
+
 		if (err) {
 			throw err;
 		}
 
-		Server.getInstance().close();
 		console.log(stdin);
 		console.log(stdout);
+
+		// eslint-disable-next-line
+		process.exit(0);
 	});
 });
 
