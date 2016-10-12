@@ -90,7 +90,8 @@
       ]
     },
     "ignores": [
-      "client/**/*"
+      "client/**/*",
+      "public/**/*"
     ]
   }
 }
