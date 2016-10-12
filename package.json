@@ -72,7 +72,8 @@
     "App": "./app"
   },
   "devDependencies": {
-    "nodemon": "^1.9.1"
+    "nodemon": "^1.9.1",
+    "sqlite": "^2.2.0"
   },
   "xo": {
     "global": [
