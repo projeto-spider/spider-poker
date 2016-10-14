@@ -29,12 +29,19 @@ class AuthController {
 			});
 		}
 
-		const newUser = yield User.create(user);
-		const {id, username, email} = newUser;
+		try {
+			const {id, username, email} = yield User.create(user);
 
-		res.json({
-			id, username, email,
-		});
+			return res.json({
+				id, username, email,
+			});
+		} catch (err) {
+			console.error(err);
+			return res.status(422).json({
+				msg: 'Failed to register.',
+			});
+		}
+
 	}
 
 	* authorize(req, res) {
