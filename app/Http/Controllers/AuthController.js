@@ -1,5 +1,6 @@
 'use strict';
 const User = use('App/Model/User');
+const Profile = use('App/Model/Profile');
 const Validator = use('Validator');
 const Hash = use('Hash');
 
@@ -28,7 +29,12 @@ class AuthController {
 			});
 		}
 
-		const {id, username, email} = yield User.create(user);
+		const newUser = yield User.create(user);
+		const {id, username, email} = newUser;
+
+		const profile = new Profile();
+		profile.name = username;
+		yield newUser.profile().save(profile);
 
 		res.json({
 			id, username, email,
