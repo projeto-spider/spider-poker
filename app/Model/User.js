@@ -7,6 +7,7 @@ class User extends Lucid {
 		super.boot();
 
 		this.addHook('beforeCreate', 'User.encryptPassword');
+		this.addHook('afterCreate', 'User.createProfile');
 	}
 
 	apiTokens() {

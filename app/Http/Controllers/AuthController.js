@@ -32,10 +32,6 @@ class AuthController {
 		const newUser = yield User.create(user);
 		const {id, username, email} = newUser;
 
-		const profile = new Profile();
-		profile.name = username;
-		yield newUser.profile().save(profile);
-
 		res.json({
 			id, username, email,
 		});
