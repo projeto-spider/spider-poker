@@ -24,36 +24,32 @@ class UserController {
 	}
 
 	* update(req, res) {
+		const user = yield req.auth.getUser();
+
 		const id = Number(req.param('id'));
-		const isLoggedIn = yield req.auth.check();
-		const data = req.only(
-			'name', 'bio', 'location', 'company', 'contact', 'url'
-		);
 
-		if (!isLoggedIn) {
-			return res.status(403).json({
-				msg: 'Not logged in',
-			});
-		}
-
-		if (id !== req.auth.user.id) {
+		if (id !== user.id) {
 			return res.status(403).json({
 				msg: "Can't update users that aren't yourself",
 			});
 		}
+
+		const data = req.only(
+			'name', 'bio', 'location', 'company', 'contact', 'url'
+		);
 
 		yield Profile
 			.query()
 			.update(data)
 			.where('user_id', id);
 
-		const user = yield User
+		const updated = yield User
 			.query()
 			.where('id', id)
 			.with('profile')
 			.first();
 
-		return res.json(user);
+		return res.json(updated);
 	}
 
 	* destroy(_req, _res) {

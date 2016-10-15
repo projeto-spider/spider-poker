@@ -11,7 +11,10 @@ Route.group('auth', () => {
 Route.group('user', () => {
 	Route
 		.resources('users', 'UserController')
-		.except('create', 'store', 'edit', 'destroy');
+		.except('create', 'store', 'edit', 'destroy')
+		.middleware({
+			auth: ['update'],
+		});
 }).prefix('/api');
 
 Route.get('/', 'ReactController.main');
