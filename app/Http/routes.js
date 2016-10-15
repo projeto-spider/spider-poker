@@ -8,6 +8,12 @@ Route.group('auth', () => {
 	Route.post('/authorize', 'AuthController.authorize');
 }).prefix('/api/auth');
 
+Route.group('user', () => {
+	Route
+		.resources('users', 'UserController')
+		.except('create', 'store', 'edit', 'destroy');
+}).prefix('/api');
+
 Route.get('/', 'ReactController.main');
 
 // Widgets
