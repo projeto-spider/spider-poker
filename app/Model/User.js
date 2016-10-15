@@ -3,6 +3,13 @@
 const Lucid = use('Lucid');
 
 class User extends Lucid {
+	static get hidden() {
+		return [
+			'password',
+			'updated_at',
+		];
+	}
+
 	static boot() {
 		super.boot();
 
