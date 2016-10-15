@@ -18,7 +18,7 @@ class UserController {
 			.query()
 			.where('id', id)
 			.with('profile')
-			.fetch();
+			.first();
 
 		return res.json(user);
 	}
@@ -51,7 +51,7 @@ class UserController {
 			.query()
 			.where('id', id)
 			.with('profile')
-			.fetch();
+			.first();
 
 		return res.json(user);
 	}
