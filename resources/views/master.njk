@@ -7,19 +7,13 @@
 
   <title>Planning Poker</title>
 
-  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500' rel='stylesheet' type='text/css'>
-  <link href='//cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css' rel='stylesheet' type='text/css'>
   {% for style in styles %}
 	<link href='{{ style }}' rel='stylesheet' type='text/css'>
   {% endfor %}
   <link rel="icon" href="/assets/favicon.png" type="image/x-icon">
-  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
-<body>
+<body class="hold-transition skin-purple-light sidebar-mini">
   <div id="app"></div>
-
-  <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-  <script src="https://api.trello.com/1/client.js?key=8d5f5473952b71f3ffacf1b91c38c282"></script>
 
   {% for script in scripts %}
 	<script src="{{ script }}"></script>
