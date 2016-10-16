@@ -14,6 +14,7 @@ class ReactController {
 		const vendorStyles = [
 			'/vendor/bootstrap/bootstrap.min.css',
 			'/vendor/adminlte/AdminLTE.min.css',
+			'/vendor/adminlte/skins/skin-purple-light.min.css',
 		];
 
 		if (Env.get('NODE_ENV') === 'development') {
