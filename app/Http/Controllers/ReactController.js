@@ -24,6 +24,7 @@ class ReactController {
 				],
 				styles: [
 					...vendorStyles,
+					'/style.css',
 				],
 			};
 		}
