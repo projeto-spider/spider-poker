@@ -1,7 +1,32 @@
 import React, {Component} from 'react';
+import {
+	FormGroup,
+	FormControl,
+	Button,
+} from 'react-bootstrap';
 import {addClass, removeClass} from '../../utils';
 
 export default class Login extends Component {
+	constructor(props) {
+		super(props);
+
+		[
+			'valid',
+			'onChange',
+		].forEach(prop => this[prop] = this[prop].bind(this));
+	}
+
+	componentWillMount() {
+		this.setState({
+			username: '',
+			password: '',
+			dirty: {
+				username: false,
+				password: false,
+			},
+		});
+	}
+
 	componentDidMount() {
 		addClass('body', 'login-page');
 	}
@@ -10,21 +35,65 @@ export default class Login extends Component {
 		removeClass('body', 'login-page');
 	}
 
+	valid(prop) {
+		if (!this.state.dirty[prop]) {
+			return undefined;
+		}
+
+		return this.state[prop].length
+			? undefined
+			: 'error';
+	}
+
+	onChange(prop) {
+		return ev => {
+			this.setState({
+				[prop]: ev.target.value,
+				dirty: Object.assign({}, this.state.dirty, {[prop]: true}),
+			});
+		};
+	}
+
 	render() {
 		return (
 			<div>
 				<p className='login-box-msg'>Sign in</p>
 
-				<form method="post" action="/">
-					<div className="form-group has-feedback">
-						<input type="email" className="form-control" placeholder="Username or Email" />
-						<span className="glyphicon glyphicon-envelope form-control-feedback" />
-					</div>
-					<div className="form-group has-feedback">
-						<input type="password" className="form-control" placeholder="Password" />
-						<span className="glyphicon glyphicon-lock form-control-feedback" />
-					</div>
-					<button type="submit" className="btn btn-primary btn-block btn-flat">Sign In</button>
+				<form>
+					<FormGroup
+						controlId="username"
+						validationState={this.valid('username')}
+					>
+						<FormControl
+							type="text"
+							value={this.state.username}
+							placeholder="Username or Email"
+							onChange={this.onChange('username')}
+						/>
+						<FormControl.Feedback />
+					</FormGroup>
+
+					<FormGroup
+						controlId="password"
+						validationState={this.valid('password')}
+					>
+						<FormControl
+							type="text"
+							value={this.state.password}
+							placeholder="Password"
+							onChange={this.onChange('password')}
+						/>
+						<FormControl.Feedback />
+					</FormGroup>
+
+					<Button
+						block
+						type='submit'
+						bsStyle='primary'
+						className='btn-flat'
+					>
+						Sign In
+					</Button>
 				</form>
 			</div>
 		);
