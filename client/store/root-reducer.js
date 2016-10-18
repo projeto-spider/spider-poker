@@ -12,6 +12,7 @@ const rootReducer = reduceReducers(
 		config,
 		stories,
 		loadingBar,
+		auth,
 		flash,
 	}),
 );

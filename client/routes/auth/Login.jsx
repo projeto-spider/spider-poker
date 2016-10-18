@@ -1,18 +1,27 @@
 import React, {Component} from 'react';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {withRouter} from 'react-router';
 import {
 	FormGroup,
 	FormControl,
 	Button,
 } from 'react-bootstrap';
+import {login} from '../../reducers/auth';
+import {
+	clear as clearMessages,
+	AUTH_INVALID,
+} from '../../reducers/flash';
 import {addClass, removeClass} from '../../utils';
 
-export default class Login extends Component {
+class Login extends Component {
 	constructor(props) {
 		super(props);
 
 		[
 			'valid',
 			'onChange',
+			'onSubmit',
 		].forEach(prop => this[prop] = this[prop].bind(this));
 	}
 
@@ -35,6 +44,12 @@ export default class Login extends Component {
 		removeClass('body', 'login-page');
 	}
 
+	componentWillReceiveProps(props) {
+		if (props.loggedIn) {
+			return this.props.router.push('/');
+		}
+	}
+
 	valid(prop) {
 		if (!this.state.dirty[prop]) {
 			return undefined;
@@ -54,12 +69,22 @@ export default class Login extends Component {
 		};
 	}
 
+	onSubmit(ev) {
+		ev.preventDefault();
+		this.props.clearMessages(AUTH_INVALID);
+		this.props.login(this.state.username, this.state.password)
+	}
+
 	render() {
 		return (
 			<div>
 				<p className='login-box-msg'>Sign in</p>
 
-				<form>
+				{this.props.flash.map((message, id) => (
+					<div key={id}>{message.text}</div>
+				))}
+
+				<form onSubmit={this.onSubmit}>
 					<FormGroup
 						controlId="username"
 						validationState={this.valid('username')}
@@ -78,7 +103,7 @@ export default class Login extends Component {
 						validationState={this.valid('password')}
 					>
 						<FormControl
-							type="text"
+							type="password"
 							value={this.state.password}
 							placeholder="Password"
 							onChange={this.onChange('password')}
@@ -99,3 +124,20 @@ export default class Login extends Component {
 		);
 	}
 }
+
+const mapStateToProps = state => ({
+	flash: state.flash,
+	loggedIn: state.auth.loggedIn,
+});
+
+const mapDispatchToProps = dispatch => ({
+	...(bindActionCreators({
+		login,
+		clearMessages,
+	}, dispatch)),
+});
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps,
+)(withRouter(Login));
