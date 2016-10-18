@@ -39,6 +39,7 @@
     "adonis-validation-provider": "^3.0.4",
     "aphrodite": "^0.5.0",
     "assets-webpack-plugin": "^3.4.0",
+    "axios": "^0.15.1",
     "babel-cli": "^6.16.0",
     "babel-loader": "^6.2.5",
     "babel-plugin-module-alias": "^1.6.0",
