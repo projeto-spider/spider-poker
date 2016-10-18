@@ -1,9 +1,12 @@
-import { createStore, compose } from 'redux';
+import { createStore, compose, applyMiddleware } from 'redux';
 import { fromJS } from 'immutable';
+import promiseMiddleware from 'redux-promise-middleware';
 import rootReducer from './root-reducer';
 
 const enhancers = compose(
-  // eslint-disable-next-line
+	applyMiddleware(
+		promiseMiddleware(),
+	),
   process.env.isClient && window.devToolsExtension ? window.devToolsExtension() : f => f
 );
 
