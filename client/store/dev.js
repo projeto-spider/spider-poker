@@ -1,5 +1,4 @@
 import { createStore, compose, applyMiddleware } from 'redux';
-import { fromJS } from 'immutable';
 import promiseMiddleware from 'redux-promise-middleware';
 import rootReducer from './root-reducer';
 
@@ -11,7 +10,7 @@ const enhancers = compose(
 );
 
 const store = createStore(
-    rootReducer, fromJS({}), enhancers
+	rootReducer, {}, enhancers
 );
 
 export default store;

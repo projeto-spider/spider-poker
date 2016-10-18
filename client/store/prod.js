@@ -11,6 +11,7 @@ const enhancers = compose(
 
 const store = createStore(
     rootReducer, fromJS({}), enhancers
+    rootReducer, {}, enhancers
 );
 
 export default store;
