@@ -1,4 +1,4 @@
-import {LOGIN_REJECTED} from './auth';
+import {LOGIN_REJECTED, REGISTER_REJECTED} from './auth';
 
 const INITIAL_STATE = [];
 
@@ -31,7 +31,17 @@ export default function flashReducer(state = INITIAL_STATE, {type, payload = {}}
 					type: AUTH_INVALID,
 					level: FLASH_ERROR,
 					text: 'Invalid credentials',
-				}
+				},
+			];
+		}
+		case REGISTER_REJECTED: {
+			return [
+				...state,
+				{
+					type: AUTH_INVALID,
+					level: FLASH_ERROR,
+					text: payload,
+				},
 			];
 		}
 		default: {

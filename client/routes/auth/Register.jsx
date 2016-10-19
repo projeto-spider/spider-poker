@@ -1,18 +1,32 @@
 import React, {Component} from 'react';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {withRouter} from 'react-router';
 import {
 	FormGroup,
 	FormControl,
 	Button,
 } from 'react-bootstrap';
+import {
+	rejectRegister,
+} from '../../reducers/auth';
+import {
+	clear as clearMessages,
+	REGISTER_INVALID,
+} from '../../reducers/flash';
+import {api} from '../../lib';
 import {addClass, removeClass} from '../../utils';
 
-export default class Register extends Component {
+class Register extends Component {
 	constructor(props) {
 		super(props);
 
 		[
 			'valid',
 			'onChange',
+			'onSubmit',
+			'onSuccess',
+			'onError',
 		].forEach(prop => this[prop] = this[prop].bind(this));
 	}
 
@@ -64,13 +78,36 @@ export default class Register extends Component {
 		};
 	}
 
+	onSubmit(ev) {
+		ev.preventDefault();
+		this.props.clearMessages(REGISTER_INVALID);
+
+		const {username, password, email} = this.state;
+		api.auth.register({
+			username, password, email,
+		})
+			.then(this.onSuccess)
+			.catch(this.onError);
+	}
+
+	onSuccess(data) {
+		return this.props.router.push('/auth/login');
+	}
+
+	onError(data) {
+		this.props.rejectRegister('Invalid credentials');
+	}
+
 	render() {
 		return (
 			<div>
 				<p className='login-box-msg'>Sign up</p>
 
+				{this.props.flash.map((message, id) => (
+					<div key={id}>{message.text}</div>
+				))}
 
-				<form>
+				<form onSubmit={this.onSubmit}>
 					<FormGroup
 						controlId="username"
 						validationState={this.valid('username')}
@@ -102,7 +139,7 @@ export default class Register extends Component {
 						validationState={this.valid('password')}
 					>
 						<FormControl
-							type="text"
+							type="password"
 							value={this.state.password}
 							placeholder="Password"
 							onChange={this.onChange('password')}
@@ -115,7 +152,7 @@ export default class Register extends Component {
 						validationState={this.valid('repassword')}
 					>
 						<FormControl
-							type="text"
+							type="password"
 							value={this.state.repassword}
 							placeholder="Confirm password"
 							onChange={this.onChange('repassword')}
@@ -136,3 +173,19 @@ export default class Register extends Component {
 		);
 	}
 }
+
+const mapStateToProps = state => ({
+	flash: state.flash,
+});
+
+const mapDispatchToProps = dispatch => ({
+	...(bindActionCreators({
+		clearMessages,
+		rejectRegister,
+	}, dispatch)),
+});
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps,
+)(withRouter(Register));
