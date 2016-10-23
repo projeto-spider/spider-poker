@@ -16,6 +16,24 @@ class AuthController {
 			AuthController.registerSanitizationRules
 		);
 
+		if (!AuthController.isEmail(user.email)) {
+			return res.status(422).json({
+				msg: 'Invalid email',
+			});
+		}
+
+		if (!AuthController.validUsername(user.username)) {
+			return res.status(422).json({
+				msg: 'Invalid username. Must contain only letters, numbers, underscores or slashes. Minimum 6 characters and maximum 50.',
+			});
+		}
+
+		if (user.password.length < 6) {
+			return res.status(422).json({
+				msg: 'Password too weak. Must be at least 6 characters long.',
+			});
+		}
+
 		const exists = yield User
 			.query()
 			.select('id')
@@ -80,6 +98,14 @@ class AuthController {
 		return {
 			email: 'normalize_email',
 		};
+	}
+
+	static validUsername(username) {
+		return /^(\w){6,50}$/.test(username);
+	}
+
+	static isEmail(email) {
+		return /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/.test(email);
 	}
 }
 

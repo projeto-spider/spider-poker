@@ -18,22 +18,39 @@ test('Authorization', async t => {
 });
 
 test('Registration errors', async t => {
+	// Username already exists
 	t.throws(request.post('/api/auth/register', {
-		body: {username: 'admin', email: 'foo@gmail.com', password: 'bar'},
+		body: {username: 'admin', email: 'foo@gmail.com', password: 'barbar'},
 	}));
 
+	// Email already exists
 	t.throws(request.post('/api/auth/register', {
-		body: {username: 'non-existent', email: 'admin@gmail.com', password: 'bar'},
+		body: {username: 'non-existent', email: 'admin@gmail.com', password: 'barfoo'},
+	}));
+
+	// Invalid username
+	t.throws(request.post('/api/auth/register', {
+		body: {username: 'foo bar', email: 'foo@gmail.com', password: 'barfoo'},
+	}));
+
+	// Weak password
+	t.throws(request.post('/api/auth/register', {
+		body: {username: 'foobar', email: 'foo@gmail.com', password: 'foo'},
+	}));
+
+	// Invalid email
+	t.throws(request.post('/api/auth/register', {
+		body: {username: 'foobar', email: 'foo', password: 'foo'},
 	}));
 });
 
 test('Registration', async t => {
 	await request.post('/api/auth/register/', {
-		body: {username: 'foo', email: 'foo@bar.com', password: 'bar'},
+		body: {username: 'foobar', email: 'foo@bar.com', password: 'foobar'},
 	});
 
 	const {token} = await request.post('/api/auth/authorize', {
-		body: {username: 'foo', password: 'bar'},
+		body: {username: 'foobar', password: 'foobar'},
 	});
 
 	const {valid} = await request.get('/api/auth/valid', {
