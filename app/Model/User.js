@@ -24,6 +24,19 @@ class User extends Lucid {
 	profile() {
 		return this.hasOne('App/Model/Profile');
 	}
+
+	isAdmin() {
+		return this.role === 'admin';
+	}
+
+	get role() {
+		switch (this.role) {
+			case 10:
+				return 'admin';
+			default:
+				return 'user';
+		}
+	}
 }
 
 module.exports = User;
