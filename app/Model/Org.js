@@ -8,6 +8,10 @@ class Org extends Lucid {
 			'updated_at',
 		];
 	}
+
+	projects() {
+		return this.hasMany('App/Model/Project');
+	}
 }
 
 module.exports = Org
