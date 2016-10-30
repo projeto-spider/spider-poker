@@ -2,9 +2,9 @@
 
 const Schema = use('Schema');
 
-class OrgsTableSchema extends Schema {
+class OrganizationsTableSchema extends Schema {
 	up () {
-		this.create('orgs', table => {
+		this.create('organizations', table => {
 			table.increments();
 			table.string('name', 80).notNullable().unique();
 			table.string('display_name', 254).notNullable();
@@ -18,8 +18,8 @@ class OrgsTableSchema extends Schema {
 	}
 
 	down () {
-		this.drop('orgs');
+		this.drop('organizations');
 	}
 }
 
-module.exports = OrgsTableSchema;
+module.exports = OrganizationsTableSchema;

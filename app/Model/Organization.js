@@ -1,8 +1,8 @@
-'use strict'
+'use strict';
 
 const Lucid = use('Lucid')
 
-class Org extends Lucid {
+class Organization extends Lucid {
 	static get hidden() {
 		return [
 			'updated_at',
@@ -14,4 +14,4 @@ class Org extends Lucid {
 	}
 }
 
-module.exports = Org
+module.exports = Organization;

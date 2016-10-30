@@ -23,7 +23,7 @@ Route.group('api', () => {
 	// Organizations
 
 	Route
-		.resources('orgs', 'OrgsController')
+		.resources('organizations', 'OrganizationsController')
 		.except('create', 'store', 'edit', 'destroy');
 
 	// Projects
