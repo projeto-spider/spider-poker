@@ -5,7 +5,9 @@ const Org = use('App/Model/Org');
 class OrgsController {
 	* index (req, res) {
 		const {page = 1} = req.params();
-		const orgs = yield Org
+		const orgs = yield Organization
+			.query()
+			.public()
 			.paginate(page, 10);
 
 		return res.json(orgs);

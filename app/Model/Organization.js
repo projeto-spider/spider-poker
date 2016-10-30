@@ -12,6 +12,10 @@ class Organization extends Lucid {
 	projects() {
 		return this.hasMany('App/Model/Project');
 	}
+
+	static scopePublic(builder) {
+		builder.where('private', false);
+	}
 }
 
 module.exports = Organization;
