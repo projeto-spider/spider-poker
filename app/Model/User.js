@@ -29,7 +29,7 @@ class User extends Lucid {
 		return this.role === 'admin';
 	}
 
-	get role() {
+	getRole() {
 		switch (this.role) {
 			case 10:
 				return 'admin';
