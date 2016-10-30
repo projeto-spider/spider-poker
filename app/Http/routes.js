@@ -29,13 +29,13 @@ Route.group('api', () => {
 	// Projects
 
 	Route
-		.resources('project', 'ProjectsController')
+		.resources('projects', 'ProjectsController')
 		.except('create', 'store', 'edit', 'destroy');
 
 	// Backlog
 
 	Route
-		.resources('backlog', 'BacklogController')
+		.resources('backlogs', 'BacklogController')
 		.except('create', 'store', 'edit', 'destroy');
 }).prefix('/api');
 
