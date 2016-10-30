@@ -12,6 +12,10 @@ class Project extends Lucid {
 	organization() {
 		return this.belongsTo('App/Model/Org');
 	}
+
+	static scopePublic(builder) {
+		builder.where('private', false);
+	}
 }
 
 module.exports = Project;

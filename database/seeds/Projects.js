@@ -9,6 +9,11 @@ class ProjectsSeeder {
 			name: 'planning-poker',
 			display_name: 'Planning Poker',
 			private: false,
+		}, {
+			org_id: 2,
+			name: 'world-domination',
+			display_name: 'World Domination',
+			private: true,
 		}]);
 	}
 }

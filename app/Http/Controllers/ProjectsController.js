@@ -6,6 +6,8 @@ class ProjectsController {
 	* index (req, res) {
 		const {page = 1} = req.params();
 		const projects = yield Project
+			.query()
+			.public()
 			.paginate(page, 10);
 
 		return res.json(projects);
