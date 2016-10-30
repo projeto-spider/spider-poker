@@ -2,13 +2,17 @@
 
 const Route = use('Route');
 
-Route.group('auth', () => {
-	Route.get('/valid', 'AuthController.valid');
-	Route.post('/register', 'AuthController.register');
-	Route.post('/authorize', 'AuthController.authorize');
-}).prefix('/api/auth');
+// API
 
-Route.group('user', () => {
+Route.group('api', () => {
+	// Auth
+
+	Route.get('/auth/valid', 'AuthController.valid');
+	Route.post('/auth/register', 'AuthController.register');
+	Route.post('/auth/authorize', 'AuthController.authorize');
+
+	// Users
+
 	Route
 		.resources('users', 'UserController')
 		.except('create', 'store', 'edit', 'destroy')
