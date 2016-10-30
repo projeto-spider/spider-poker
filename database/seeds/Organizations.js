@@ -8,6 +8,10 @@ class OrganizationsSeeder {
 			name: 'projeto-spider',
 			display_name: 'Projeto Spider',
 			private: false,
+		}, {
+			name: 'iluminatti',
+			display_name: 'Iluminatti',
+			private: true,
 		}]);
 	}
 }
