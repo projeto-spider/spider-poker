@@ -19,6 +19,24 @@ Route.group('api', () => {
 		.middleware({
 			auth: ['update'],
 		});
+
+	// Organizations
+
+	Route
+		.resources('orgs', 'OrgsController')
+		.except('create', 'store', 'edit', 'destroy');
+
+	// Projects
+
+	Route
+		.resources('project', 'ProjectsController')
+		.except('create', 'store', 'edit', 'destroy');
+
+	// Backlog
+
+	Route
+		.resources('backlog', 'BacklogController')
+		.except('create', 'store', 'edit', 'destroy');
 }).prefix('/api');
 
 // Widgets
