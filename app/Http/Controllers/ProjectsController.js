@@ -18,7 +18,8 @@ class ProjectsController {
 
 		const project = yield Project
 			.query()
-			.where('id', id)
+			.orWhere('id', id)
+			.orWhere('name', id)
 			.with('organization')
 			.first();
 

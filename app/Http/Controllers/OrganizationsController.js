@@ -16,9 +16,10 @@ class OrgsController {
 	* show(req, res) {
 		const id = req.param('id');
 
-		const org = yield Org
+		const org = yield Organization
 			.query()
-			.where('id', id)
+			.orWhere('id', id)
+			.orWhere('name', id)
 			.first();
 
 		if (!org) {

@@ -16,7 +16,8 @@ class UserController {
 
 		const user = yield User
 			.query()
-			.where('id', id)
+			.orWhere('id', id)
+			.orWhere('username', id)
 			.with('profile')
 			.first();
 
