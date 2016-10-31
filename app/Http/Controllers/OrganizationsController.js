@@ -1,8 +1,8 @@
 'use strict';
 
-const Org = use('App/Model/Org');
+const Organization = use('App/Model/Organization');
 
-class OrgsController {
+class OrganizationsController {
 	* index (req, res) {
 		const {page = 1} = req.params();
 		const orgs = yield Organization
@@ -30,4 +30,4 @@ class OrgsController {
 	}
 }
 
-module.exports = OrgsController;
+module.exports = OrganizationsController;
