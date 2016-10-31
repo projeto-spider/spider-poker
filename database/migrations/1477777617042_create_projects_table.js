@@ -7,7 +7,7 @@ class ProjectsTableSchema extends Schema {
 	up () {
 		this.create('projects', table => {
 			table.increments();
-			table.integer('org_id').unsigned().references('id').inTable('orgs');
+			table.integer('organization_id').unsigned().references('id').inTable('orgs');
 			table.string('name', 254).notNullable().unique();
 			table.string('display_name', 254).notNullable();
 			table.string('description', 254);
