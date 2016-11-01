@@ -179,7 +179,7 @@ export default function Dashboard({children}) {
  				</section>
  			</aside>
 
- 			<div className="content-wrapper">
+ 			<div className="content-wrapper" style={{minHeight: window.innerHeight}}>
  				<section className="content-header">
 					<h1>
 						Page Header
