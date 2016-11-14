@@ -84,9 +84,12 @@ defmodule Poker.User do
   # Helpers
 
   defp put_password_hash(changeset) do
-    password = get_change(changeset, :password)
-
-    changeset
-    |> put_change(:password_hash, hashpwsalt(password))
+    case get_change(changeset, :password) do
+      password when is_binary(password) ->
+        changeset
+        |> put_change(:password_hash, hashpwsalt(password))
+      _ ->
+        changeset
+    end
   end
 end
