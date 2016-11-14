@@ -1,3 +1,4 @@
+import React from 'react';
 import Dashboard from './Dashboard';
 
 // Authentication
@@ -34,7 +35,7 @@ const routes = [
 		path: '/',
 		component: Dashboard,
 		indexRoute: {
-			component: HomePage,
+			component: () => (<div>foo</div>),
 		},
 		childRoutes: [
 		],

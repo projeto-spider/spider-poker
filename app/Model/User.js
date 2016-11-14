@@ -25,6 +25,10 @@ class User extends Lucid {
 		return this.hasOne('App/Model/Profile');
 	}
 
+	organizations() {
+		return this.belongsToMany('App/Model/Organization');
+	}
+
 	isAdmin() {
 		return this.role === 'admin';
 	}

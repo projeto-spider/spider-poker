@@ -9,6 +9,10 @@ class Organization extends Lucid {
 		];
 	}
 
+	users() {
+		return this.hasMany('App/Model/User');
+	}
+
 	projects() {
 		return this.hasMany('App/Model/Project');
 	}

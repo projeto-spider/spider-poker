@@ -25,6 +25,13 @@ export function request(url, options) {
 	});
 
 const api = {
+	organizations: {
+		list(page) {
+			return request.get('/api/organizations/', {
+				body: {page},
+			});
+		},
+	},
 	auth: {
 		valid(token) {
 			return request.get('/api/auth/valid', {
