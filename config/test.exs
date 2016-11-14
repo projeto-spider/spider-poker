@@ -13,7 +13,7 @@ config :logger, level: :warn
 config :poker, Poker.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "postgres",
-  password: "postgres",
+  password: "",
   database: "poker_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
@@ -21,3 +21,7 @@ config :poker, Poker.Repo,
 # Come On In
 config :comeonin, :bcrypt_log_rounds, 4
 config :comeonin, :pbkdf2_rounds, 1
+
+# Guardian
+config :guardian, Guardian,
+  secret_key: "2K/%r$0d]wdwv6A9h938"
