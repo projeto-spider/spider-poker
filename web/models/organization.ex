@@ -1,6 +1,14 @@
 defmodule Poker.Organization do
   use Poker.Web, :model
 
+  alias Poker.{Project, OrganizationUser}
+
+  @derive {Poison.Encoder, except: [:__meta__, :__struct__, :id, :projects,
+                                    :organizations_users, :users, :updated_at,
+                                    :inserted_at]}
+
+  @name_regex ~r{^([a-zA-Z])(\w|-)+$}
+
   schema "organizations" do
     field :name, :string
     field :display_name, :string
@@ -9,7 +17,9 @@ defmodule Poker.Organization do
     field :location, :string
     field :url, :string
     field :private, :boolean, default: false
-    has_many :projects, Poker.Project
+    has_many :projects, Project
+    has_many :organizations_users, OrganizationUser, on_delete: :delete_all
+    has_many :users, through: [:organizations_users, :user]
 
     timestamps()
   end
@@ -19,6 +29,7 @@ defmodule Poker.Organization do
   def changeset(struct, _params \\ %{}) do
     struct
     |> validate_length(:name, min: 6, max: 64)
+    |> validate_format(:name, @name_regex)
     |> unique_constraint(:name)
   end
 
@@ -30,8 +41,15 @@ defmodule Poker.Organization do
     end
 
     struct
-    |> cast(params, [:name, :display_name, :description, :company, :location, :url, :private])
+    |> cast(params, [:name, :display_name, :description, :company, :location,
+                     :url, :private])
     |> validate_required([:name, :display_name])
     |> changeset(params)
+  end
+
+  def update_changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, [:display_name, :description, :company, :location, :url,
+                     :private])
   end
 end
