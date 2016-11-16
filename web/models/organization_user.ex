@@ -19,7 +19,7 @@ defmodule Poker.OrganizationUser do
 
   def registration_changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:role])
+    |> cast(params, [:role, :user_id, :organization_id])
     |> changeset(params)
   end
 end
