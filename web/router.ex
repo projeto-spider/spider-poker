@@ -28,6 +28,7 @@ defmodule Poker.Router do
     resources "/organizations", OrganizationController, except: [:new, :edit]
     resources "/projects", ProjectController, except: [:new, :edit]
 
+    get "/sessions/me", SessionController, :me
     post "/sessions/create", SessionController, :create
   end
 end

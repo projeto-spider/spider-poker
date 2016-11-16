@@ -1,8 +1,15 @@
 defmodule Poker.SessionController do
   use Poker.Web, :controller
 
-  alias Poker.User
+  alias Poker.{User, UserView}
   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
+
+  plug EnsureAuthenticated when action in [:me]
+
+  def me(conn, _params) do
+    user = current_resource(conn)
+    render conn, UserView, "user.json", user: user
+  end
 
   def create(conn, %{"username" => username, "password" => password}) do
     user = Repo.get_by User, username: username
@@ -11,16 +18,6 @@ defmodule Poker.SessionController do
   def create(conn, %{"email" => email, "password" => password}) do
     user = Repo.get_by User, email: email
     check_user(conn, user, password)
-  end
-
-  def delete(conn, %{"id" => id}) do
-    session = Repo.get!(Session, id)
-
-    # Here we use delete! (with a bang) because we expect
-    # it to always work (and if it does not, it will raise).
-    Repo.delete!(session)
-
-    send_resp(conn, :no_content, "")
   end
 
   # Helpers
