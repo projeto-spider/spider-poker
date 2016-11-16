@@ -1,7 +1,7 @@
 defmodule Poker.User do
   use Poker.Web, :model
 
-  alias Poker.{User, Profile, OrganizationUser}
+  alias Poker.{User, Profile}
   import Comeonin.Bcrypt, only: [hashpwsalt: 1]
 
   @derive {Poison.Encoder, except: [:__meta__, :__struct__, :id, :password,
@@ -22,7 +22,7 @@ defmodule Poker.User do
     field :password_confirmation, :string, virtual: true
     field :password_hash, :string
     has_one :profile, Profile, on_replace: :update, on_delete: :delete_all
-    has_many :organizations_users, OrganizationUser
+    has_many :organizations_users, Poker.OrganizationUser
     has_many :organizations, through: [:organizations_users, :organization]
 
     timestamps()

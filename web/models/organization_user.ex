@@ -11,7 +11,7 @@ defmodule Poker.OrganizationUser do
 
   # Changesets
 
-  def changeset(struct, params \\ %{}) do
+  def changeset(struct, _params \\ %{}) do
     struct
     |> validate_required([:role])
     |> validate_inclusion(:role, ["owner", "member"])
