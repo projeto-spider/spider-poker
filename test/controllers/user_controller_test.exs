@@ -86,7 +86,7 @@ defmodule Poker.UserControllerTest do
 
   defp with_token(conn) do
     token_conn = post conn, session_path(conn, :create, username: "foobar",
-                                                  password: "123456")
+                                                        password: "123456")
     token = json_response(token_conn, 200)["token"]
 
     conn
