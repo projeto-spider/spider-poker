@@ -1,8 +1,6 @@
 defmodule Poker.Organization do
   use Poker.Web, :model
 
-  alias Poker.{Project, OrganizationUser}
-
   @derive {Poison.Encoder, except: [:__meta__, :__struct__, :id, :projects,
                                     :organizations_users, :users, :updated_at,
                                     :inserted_at]}
@@ -17,8 +15,8 @@ defmodule Poker.Organization do
     field :location, :string
     field :url, :string
     field :private, :boolean, default: false
-    has_many :projects, Project
-    has_many :organizations_users, OrganizationUser, on_delete: :delete_all
+    has_many :projects, Poker.Project
+    has_many :organizations_users, Poker.OrganizationUser, on_delete: :delete_all
     has_many :users, through: [:organizations_users, :user]
 
     timestamps()

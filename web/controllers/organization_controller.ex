@@ -78,7 +78,7 @@ defmodule Poker.OrganizationController do
       end
   end
 
-  defp can_see_organization(%{params: %{"id" => name}} = conn, _opts) do
+  defp can_see_organization(conn, _opts) do
     organization = conn.assigns.organization
 
     if not organization.private do
@@ -104,7 +104,7 @@ defmodule Poker.OrganizationController do
     end
   end
 
-  defp can_modify_organization(%{params: %{"id" => name}} = conn, _opts) do
+  defp can_modify_organization(conn, _opts) do
     logged_in = current_resource(conn)
     organization = conn.assigns.organization
 
