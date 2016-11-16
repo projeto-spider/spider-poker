@@ -3,16 +3,21 @@ defmodule Poker.OrganizationTest do
 
   alias Poker.Organization
 
-  @valid_attrs %{company: "some content", description: "some content", display_name: "some content", location: "some content", name: "some content", private: true, url: "some content"}
-  @invalid_attrs %{}
+  @valid_attrs %{"name" => "organization", "display_name" => "Organization"}
 
   test "changeset with valid attributes" do
-    changeset = Organization.changeset(%Organization{}, @valid_attrs)
+    changeset = Organization.registration_changeset(%Organization{}, @valid_attrs)
     assert changeset.valid?
   end
 
-  test "changeset with invalid attributes" do
-    changeset = Organization.changeset(%Organization{}, @invalid_attrs)
+  test "when display_name is empty, use it's name as display" do
+    fixture = Map.drop(@valid_attrs, ["display_name"])
+    changeset = Organization.registration_changeset(%Organization{}, fixture)
+    assert changeset.valid?
+  end
+
+  test "empty changeset" do
+    changeset = Organization.registration_changeset(%Organization{}, %{})
     refute changeset.valid?
   end
 end

@@ -1,12 +1,12 @@
 defmodule Poker.User do
   use Poker.Web, :model
 
-  alias Poker.User
-  alias Poker.Profile
+  alias Poker.{User, Profile, OrganizationUser}
   import Comeonin.Bcrypt, only: [hashpwsalt: 1]
 
   @derive {Poison.Encoder, except: [:__meta__, :__struct__, :id, :password,
                                     :password_confirmation, :password_hash,
+                                    :organizations_users, :organizations,
                                     :inserted_at, :updated_at]}
 
   @username_regex ~r{^([a-zA-Z])(\w|-)+$}
@@ -21,7 +21,9 @@ defmodule Poker.User do
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true
     field :password_hash, :string
-    has_one :profile, Poker.Profile, on_replace: :update
+    has_one :profile, Profile, on_replace: :update, on_delete: :delete_all
+    has_many :organizations_users, OrganizationUser
+    has_many :organizations, through: [:organizations_users, :organization]
 
     timestamps()
   end
