@@ -33,7 +33,7 @@ defmodule Poker.UserController do
     render(conn, "show.json", user: conn.assigns.user)
   end
 
-  def update(conn, %{"id" => username, "user" => user_params}) do
+  def update(conn, %{"username" => username, "user" => user_params}) do
     user = Repo.get_by!(User.with_profile, username: username)
 
     changeset = User.update_changeset(user, user_params)
@@ -60,7 +60,7 @@ defmodule Poker.UserController do
 
   # Helpers
 
-  defp prefetch_user(%{params: %{"id" => username}} = conn, _opts) do
+  defp prefetch_user(%{params: %{"username" => username}} = conn, _opts) do
     case Repo.get_by(User.with_profile, username: username) do
       nil ->
         conn
@@ -71,7 +71,7 @@ defmodule Poker.UserController do
       end
   end
 
-  defp is_me(%{params: %{"id" => username}} = conn, _opts) do
+  defp is_me(%{params: %{"username" => username}} = conn, _opts) do
     logged_in = current_resource(conn)
 
     if logged_in.username != username do

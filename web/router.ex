@@ -24,7 +24,7 @@ defmodule Poker.Router do
   scope "/api", Poker do
     pipe_through :api
 
-    resources "/users", UserController, except: [:new, :edit]
+    resources "/users", UserController, param: "username", except: [:new, :edit] do
     resources "/organizations", OrganizationController, except: [:new, :edit]
     resources "/projects", ProjectController, except: [:new, :edit]
 
