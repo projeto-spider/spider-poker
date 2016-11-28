@@ -3,9 +3,9 @@ defmodule Poker.UserController do
 
   alias Poker.User
 
-  plug EnsureAuthenticated when action in [:update, :delete]
-  plug :prefetch_user when action in [:show, :update, :delete]
-  plug :is_me when action in [:update, :delete]
+  plug :ensure_authenticated when action in [:update, :delete]
+  plug :fetch_logged_in_user when action in [:update, :delete]
+  plug :ensure_param_is_logged_in_user when action in [:update, :delete]
 
   def index(conn, _params) do
     users = Repo.all User.with_profile
@@ -34,7 +34,7 @@ defmodule Poker.UserController do
   end
 
   def update(conn, %{"username" => username, "user" => user_params}) do
-    user = Repo.get_by!(User.with_profile, username: username)
+    user = conn.assigns.logged_in
 
     changeset = User.update_changeset(user, user_params)
 
@@ -49,36 +49,12 @@ defmodule Poker.UserController do
   end
 
   def delete(conn, _params) do
-    user = conn.assigns.user
+    user = conn.assigns.logged_in
 
     # Here we use delete! (with a bang) because we expect
     # it to always work (and if it does not, it will raise).
     Repo.delete!(user)
 
     send_resp(conn, :no_content, "")
-  end
-
-  # Helpers
-
-  defp prefetch_user(%{params: %{"username" => username}} = conn, _opts) do
-    case Repo.get_by(User.with_profile, username: username) do
-      nil ->
-        conn
-        |> send_resp(:not_found, "User doesn't exist")
-      user ->
-        conn
-        |> assign(:user, user)
-      end
-  end
-
-  defp is_me(%{params: %{"username" => username}} = conn, _opts) do
-    logged_in = current_resource(conn)
-
-    if logged_in.username != username do
-      conn
-      |> send_resp(:unauthorized, "Trying to modify users other than self")
-    else
-      conn
-    end
   end
 end

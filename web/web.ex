@@ -37,8 +37,8 @@ defmodule Poker.Web do
       import Poker.Router.Helpers
       import Poker.Gettext
       import Guardian, only: [encode_and_sign: 2]
-      import Guardian.Plug, only: [current_resource: 1]
-      alias Guardian.Plug.{EnsureAuthenticated}
+      import Poker.Plugs.SessionPlug
+      import Poker.Plugs.AuthorizationPlug
     end
   end
 

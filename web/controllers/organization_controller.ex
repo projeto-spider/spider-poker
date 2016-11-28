@@ -3,7 +3,8 @@ defmodule Poker.OrganizationController do
 
   alias Poker.{Organization, OrganizationUser}
 
-  plug EnsureAuthenticated when action in [:create, :update, :delete]
+  plug :ensure_authenticated when action in [:create, :update, :delete]
+  plug :fetch_logged_in_user when action in [:create, :show, :update, :delete]
   plug :prefetch_organization when action in [:show, :update, :delete]
   plug :can_see_organization when action in [:show]
   plug :can_modify_organization when action in [:update, :delete]
@@ -18,7 +19,7 @@ defmodule Poker.OrganizationController do
 
     case Repo.insert(changeset) do
       {:ok, organization} ->
-        logged_in = current_resource(conn)
+        logged_in = conn.assigns.logged_in
         role_params = %{"organization_id" => organization.id,
                         "user_id" => logged_in.id, "role" => "owner"}
         role = OrganizationUser.registration_changeset(%OrganizationUser{}, role_params)
@@ -84,7 +85,7 @@ defmodule Poker.OrganizationController do
     if not organization.private do
       conn
     else
-      case current_resource(conn) do
+      case conn.assigns.logged_in do
         nil ->
           conn
           |> send_resp(:unauthorized, "Cannot see this organization")
@@ -105,7 +106,7 @@ defmodule Poker.OrganizationController do
   end
 
   defp can_modify_organization(conn, _opts) do
-    logged_in = current_resource(conn)
+    logged_in = conn.assigns.logged_in
     organization = conn.assigns.organization
 
     query = from it in OrganizationUser,

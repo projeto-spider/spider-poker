@@ -4,10 +4,11 @@ defmodule Poker.SessionController do
   alias Poker.{User, UserView}
   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
 
-  plug EnsureAuthenticated when action in [:me]
+  plug :ensure_authenticated when action in [:me]
+  plug :fetch_logged_in_user when action in [:me]
 
   def me(conn, _params) do
-    user = current_resource(conn)
+    user = conn.assigns.logged_in
     render conn, UserView, "user.json", user: user
   end
 
