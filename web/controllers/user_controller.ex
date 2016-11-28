@@ -29,8 +29,9 @@ defmodule Poker.UserController do
     end
   end
 
-  def show(conn, _params) do
-    render(conn, "show.json", user: conn.assigns.user)
+  def show(conn, %{"username" => username}) do
+    user = Repo.get_by! User.with_profile, username: username
+    render(conn, "show.json", user: user)
   end
 
   def update(conn, %{"username" => username, "user" => user_params}) do

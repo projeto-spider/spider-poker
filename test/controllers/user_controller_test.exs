@@ -1,12 +1,10 @@
 defmodule Poker.UserControllerTest do
   use Poker.ConnCase
-
+  import TestHelper
   alias Poker.User
-  @valid_attrs %{}
-  @invalid_attrs %{}
 
   setup %{conn: conn} do
-    setup_users
+    generate_users
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
 
@@ -46,7 +44,7 @@ defmodule Poker.UserControllerTest do
   end
 
   test "updates and renders chosen resource when data is valid", %{conn: conn} do
-    conn = with_token(conn)
+    conn = conn_with_token(conn)
 
     conn = put conn, user_path(conn, :update, "foobar"), user: %{
       "profile" => %{"name" => "Foobar"}
@@ -59,37 +57,9 @@ defmodule Poker.UserControllerTest do
   end
 
   test "deletes chosen resource", %{conn: conn} do
-    conn = with_token(conn)
+    conn = conn_with_token(conn)
     conn = delete conn, user_path(conn, :delete, "foobar")
     assert response(conn, 204)
     refute Repo.get_by(User, username: "foobar")
-  end
-
-  # Helpers
-
-  defp setup_users do
-    users = [
-      %{"username" => "foobar", "email" => "foobar@example.com",
-        "password" => "123456", "password_confirmation" => "123456"},
-      %{"username" => "barbar", "email" => "barbar@example.com",
-        "password" => "123456", "password_confirmation" => "123456"},
-      %{"username" => "bazbar", "email" => "bazbar@example.com",
-        "password" => "123456", "password_confirmation" => "123456"},
-    ]
-
-    users
-    |> Enum.map(fn user ->
-      User.registration_changeset(%User{}, user)
-      |> Repo.insert!
-    end)
-  end
-
-  defp with_token(conn) do
-    token_conn = post conn, session_path(conn, :create, username: "foobar",
-                                                        password: "123456")
-    token = json_response(token_conn, 200)["token"]
-
-    conn
-    |> put_req_header("authorization", token)
   end
 end
