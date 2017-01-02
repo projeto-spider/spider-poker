@@ -59,7 +59,7 @@
 
 <script>
   import {R} from 'app/utils';
-  import Auth from 'app/api/auth';
+  import {Auth} from 'app/api';
   import store from 'app/state';
   import {ErrorableInput} from 'app/partials';
 

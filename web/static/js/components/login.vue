@@ -46,8 +46,8 @@
 
 <script>
   import {R} from 'app/utils';
-  import Auth from 'app/api/auth';
-  import store from 'app/state/store';
+  import {Auth} from 'app/api';
+  import store from 'app/state';
   import {ErrorableInput} from 'app/partials';
 
   export default {
@@ -75,19 +75,18 @@
 
         Auth.signin(this.username, this.password)
           .then(({token}) => {
-            store.commit("auth/set_token", token);
+            store.commit('auth/set_token', token);
             this.status = 'success';
             this.$router.push({name: 'home'});
 
             return Auth.me();
           })
-          .then(r => r.json())
           .then(user => {
             this.$store.commit('auth/set_user', user);
           })
           .catch(e => {
             this.status = 'errored';
-          })
+          });
       }
     }
   }

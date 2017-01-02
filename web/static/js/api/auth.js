@@ -2,7 +2,8 @@ import Vue from 'vue';
 
 export default {
   me() {
-    return Vue.http.get('/api/sessions/me');
+    return Vue.http.get('/api/sessions/me')
+      .then(r => r.json());
   },
 
   signin(username, password) {
