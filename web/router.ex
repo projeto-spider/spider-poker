@@ -15,12 +15,6 @@ defmodule Poker.Router do
     plug Guardian.Plug.LoadResource
   end
 
-  scope "/", Poker do
-    pipe_through :browser # Use the default browser stack
-
-    get "/*path", PageController, :index
-  end
-
   scope "/api", Poker do
     pipe_through :api
 
@@ -35,5 +29,11 @@ defmodule Poker.Router do
 
     get "/sessions/me", SessionController, :me
     post "/sessions/create", SessionController, :create
+  end
+
+  scope "/", Poker do
+    pipe_through :browser # Use the default browser stack
+
+    get "/*path", PageController, :index
   end
 end
