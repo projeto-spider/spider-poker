@@ -22,7 +22,12 @@ exports.config = {
     stylesheets: {
       joinTo: "css/app.css",
       order: {
-        before: ["web/static/css/bootstrap.min.css"],
+        before: [
+          "node_modules/font-awesome/css/font-awesome.min.css",
+          "node_modules/bootstrap/dist/css/bootstrap.min.css",
+          "node_modules/admin-lte/dist/css/AdminLTE.min.css",
+          "node_modules/admin-lte/dist/css/skins/skin-purple-light.min.css"
+        ],
         after: ["web/static/css/app.css"] // concat app.css last
       }
     },
@@ -72,6 +77,13 @@ exports.config = {
   },
 
   npm: {
-    enabled: true
-  }
+    styles: {
+      'font-awesome': ['css/font-awesome.min.css'],
+      bootstrap: ['dist/css/bootstrap.min.css'],
+      'admin-lte': [
+        'dist/css/AdminLTE.min.css',
+        'dist/css/skins/skin-purple-light.min.css'
+      ],
+    },
+  },
 };
