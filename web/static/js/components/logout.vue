@@ -8,7 +8,7 @@
 </template>
 
 <script>
-  import store from 'app/state/store';
+  import store from 'app/state';
 
   export default {
     name: 'Logout',
