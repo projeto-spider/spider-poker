@@ -1,4 +1,4 @@
-import store from 'app/state/store';
+import store from 'app/state';
 import {
   App, ErrorView, Login, Register, Logout
 } from 'app/components';

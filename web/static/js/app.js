@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import 'babel-polyfill';
-import store from './state/store';
+import store from 'app/state';
 import VueRouter from 'vue-router';
 import routes from './config/routes';
 import VueResource from 'vue-resource';
