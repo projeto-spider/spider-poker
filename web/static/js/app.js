@@ -1,21 +1,34 @@
-// Brunch automatically concatenates all files in your
-// watched paths. Those paths can be configured at
-// config.paths.watched in "brunch-config.js".
-//
-// However, those files will only be executed if
-// explicitly imported. The only exception are files
-// in vendor, which are never wrapped in imports and
-// therefore are always executed.
+import Vue from 'vue';
+import 'babel-polyfill';
+import store from './state/store';
+import VueRouter from 'vue-router';
+import routes from './config/routes';
+import VueResource from 'vue-resource';
+import VueValidator from 'vue-validator';
+import RouterBase from './components/router-base.vue'
 
-// Import dependencies
-//
-// If you no longer want to use a dependency, remember
-// to also remove its path from "config.paths.watched".
-import "phoenix_html"
+Vue.use(VueRouter);
+Vue.use(VueResource);
+Vue.use(VueValidator);
 
-// Import local files
-//
-// Local files can be imported directly using relative
-// paths "./socket" or full ones "web/static/js/socket".
+const environment = process.env.NODE_ENV;
 
-// import socket from "./socket"
+Vue.config.debug = (environment === 'development');
+Vue.config.devtools = (environment === 'development');
+
+Vue.http.interceptors.push((request, next) => {
+  request.headers.set('Authorization', store.state.auth.token);
+  next();
+})
+
+let router = new VueRouter({
+  mode: 'history',
+  history: true,
+  routes
+});
+
+new Vue({
+  el: "#content",
+  render: r => r(RouterBase),
+  router, store
+})
