@@ -9,13 +9,9 @@ charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
 
-[*.json]
+[*.{js,json,vue,babelrc}]
 indent_size = 2
 indent_style = space
 
 [*.md]
 trim_trailing_whitespace = false
-
-[client/*]
-indent_size = 2
-indent_style = space

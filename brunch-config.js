@@ -22,6 +22,7 @@ exports.config = {
     stylesheets: {
       joinTo: "css/app.css",
       order: {
+        before: ["web/static/css/bootstrap.min.css"],
         after: ["web/static/css/app.css"] // concat app.css last
       }
     },
@@ -52,9 +53,16 @@ exports.config = {
   // Configure your plugins
   plugins: {
     babel: {
+      presets: ["es2015"],
       // Do not use ES6 compiler in vendor code
       ignore: [/web\/static\/vendor/]
-    }
+    },
+    afterBrunch: [
+      [
+        'mkdir priv/static/fonts/ -p',
+        'cp web/static/fonts/* priv/static/fonts/'
+      ].join(' && ')
+    ]
   },
 
   modules: {
