@@ -18,9 +18,11 @@ defmodule Poker.Project do
 
   # Query composers
 
-  def visible(query \\ Project, user_id \\ 0) do
+  def visible(query \\ Project, org_name, user_id \\ 0) do
     from proj in query,
     join: user in assoc(proj, :users),
+    join: org in assoc(proj, :organization),
+    where: org.name == ^org_name,
     where: user.id == ^user_id or proj.private == false
   end
 

@@ -4,7 +4,7 @@ defmodule Poker.ProjectController do
   alias Poker.Project
 
   def index(conn, %{"organization_id" => org_name}) do
-    query = Project.visible(Project, 0)
+    query = Project.visible(Project, org_name, 0)
     projects = Repo.all(query)
     render(conn, "index.json", projects: projects)
   end
