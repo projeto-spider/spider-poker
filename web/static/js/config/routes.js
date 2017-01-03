@@ -1,8 +1,5 @@
 import store from 'app/state';
 import {
-  App, ErrorView
-} from 'app/components';
-import {
   AuthPanel, DashBoard
 } from 'app/layouts';
 import views from '../views';
@@ -30,7 +27,7 @@ export default [
   {
     path: '*',
     name: 'error',
-    component: ErrorView
+    component: views.Errors.Error404
   },
 ]
 
