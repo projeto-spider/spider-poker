@@ -1,7 +1,7 @@
 <template lang="pug">
   .wrapper
     header.main-header
-      a.logo(href='#')
+      router-link(':to'='{name: "home"}').logo
         span.logo-mini #[b P]Poker
         span.logo-lg #[b Planning]Poker
 
