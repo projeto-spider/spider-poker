@@ -20,6 +20,7 @@ export default [
     name: 'home',
     component: DashBoard,
     children: [
+      {name: 'organization', path: 'organization/:id', component: views.Organizations.Show},
       {name: 'organizations', path: 'organizations', component: views.Organizations.List},
     ]
   },

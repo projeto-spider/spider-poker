@@ -5,11 +5,13 @@ import VueRouter from 'vue-router';
 import routes from './config/routes';
 import VueResource from 'vue-resource';
 import VueValidator from 'vue-validator';
+import NProgress from 'vue-nprogress';
 import RouterBase from './components/router-base.vue'
 
 Vue.use(VueRouter);
 Vue.use(VueResource);
 Vue.use(VueValidator);
+Vue.use(NProgress);
 
 const environment = process.env.NODE_ENV;
 
@@ -27,8 +29,10 @@ let router = new VueRouter({
   routes
 });
 
+const nprogress = new NProgress();
+
 new Vue({
   el: "#content",
   render: r => r(RouterBase),
-  router, store
+  router, store, nprogress
 })

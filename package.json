@@ -33,6 +33,7 @@
     "javascript-brunch": "~2.0.0",
     "pug": "^2.0.0-beta6",
     "uglify-js-brunch": "~2.0.1",
-    "vue-brunch": "^1.2.3"
+    "vue-brunch": "^1.2.3",
+    "vue-nprogress": "^0.1.4"
   }
 }

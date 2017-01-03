@@ -84,6 +84,7 @@ exports.config = {
         'dist/css/AdminLTE.min.css',
         'dist/css/skins/skin-purple-light.min.css'
       ],
+      nprogress: ['nprogress.css'],
     },
   },
 };

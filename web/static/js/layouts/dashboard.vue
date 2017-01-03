@@ -1,5 +1,7 @@
 <template lang="pug">
   .wrapper
+    .nprogress-container
+
     header.main-header
       router-link(':to'='{name: "home"}').logo
         span.logo-mini #[b P]Poker
@@ -7,7 +9,8 @@
 
       nav.navbar.navbar-static-top(role="navigation")
         .navbar-custom-menu
-          ul.nav.navbar-menu
+          ul.nav.navbar-nav
+            notifications
 
     sidebar
 
@@ -67,13 +70,14 @@
 </template>
 
 <script>
-  import {Sidebar} from 'app/components';
+  import {Sidebar, Notifications} from 'app/components';
 
   export default {
     name: 'DashBoard',
 
     components: {
       sidebar: Sidebar,
+      notifications: Notifications,
     },
 
     computed: {
