@@ -5,29 +5,10 @@
 
       ul.sidebar-menu
         li.header MENU
-        li.active
-          a(href='#')
-            i.fa.fa-link
-            span Link
         router-link(tag='li', ':to'='{name: "organizations"}')
           a(href='#')
-            i.fa.fa-link
+            i.fa.fa-users
             span Organizations
-        li
-          a(href='#')
-            i.fa.fa-link
-            span Another Link
-        li.treeview
-          a(href='#')
-            i.fa.fa-link
-            span Multilevel
-            span.pull-right-container
-              i.fa.fa-angle-left.pull-right
-          ul.treeview-menu
-            li
-              a(href='#') Link in level 2
-            li
-              a(href='#') Link in level 2
 </template>
 
 <script>
