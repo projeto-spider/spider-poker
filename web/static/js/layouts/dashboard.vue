@@ -67,7 +67,7 @@
 </template>
 
 <script>
-  import {Sidebar} from 'app/partials';
+  import {Sidebar} from 'app/components';
 
   export default {
     name: 'DashBoard',

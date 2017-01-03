@@ -6,7 +6,6 @@
     ["module-alias", [
       { "src": "./web/static/js/components", "expose": "app/components" },
       { "src": "./web/static/js/layouts", "expose": "app/layouts" },
-      { "src": "./web/static/js/components/partials", "expose": "app/partials" },
       { "src": "./web/static/js/api", "expose": "app/api" },
       { "src": "./web/static/js/state/store.js", "expose": "app/state" },
       { "src": "./web/static/js/utils.js", "expose": "app/utils" }

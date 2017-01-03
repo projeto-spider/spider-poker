@@ -61,7 +61,7 @@
   import {R} from 'app/utils';
   import {Auth} from 'app/api';
   import store from 'app/state';
-  import {ErrorableInput} from 'app/partials';
+  import {ErrorableInput} from 'app/components';
 
   export default {
     name: 'Register',

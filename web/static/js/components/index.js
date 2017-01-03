@@ -1,2 +1,3 @@
-export {default as App} from './app';
-export {default as ErrorView} from './error';
+export {default as Sidebar} from './sidebar';
+export {default as SidebarUserPanel} from './sidebar-user-panel';
+export {default as ErrorableInput} from './errorable-input';
