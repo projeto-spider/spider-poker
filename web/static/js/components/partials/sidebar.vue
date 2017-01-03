@@ -9,6 +9,10 @@
           a(href='#')
             i.fa.fa-link
             span Link
+        router-link(tag='li', ':to'='{name: "organizations"}')
+          a(href='#')
+            i.fa.fa-link
+            span Organizations
         li
           a(href='#')
             i.fa.fa-link

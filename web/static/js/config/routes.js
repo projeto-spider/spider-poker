@@ -1,26 +1,30 @@
 import store from 'app/state';
 import {
-  App, ErrorView, Login, Register, Logout
+  App, ErrorView
 } from 'app/components';
 import {
   AuthPanel, DashBoard
 } from 'app/layouts';
+import views from '../views';
 
 export default [
   {
     path: '/auth',
     component: AuthPanel,
     children: [
-      {name: 'login', path: 'login', component: Login, beforeEnter: requireLoggedOff()},
-      {name: 'register', path: 'register', component: Register, beforeEnter: requireLoggedOff()},
-      {name: 'logout', path: 'logout', component: Logout},
+      {name: 'login', path: 'login', component: views.Auth.Login, beforeEnter: requireLoggedOff()},
+      {name: 'register', path: 'register', component: views.Auth.Register, beforeEnter: requireLoggedOff()},
+      {name: 'logout', path: 'logout', component: views.Auth.Logout},
     ]
   },
 
   {
     path: '/',
     name: 'home',
-    component: DashBoard
+    component: DashBoard,
+    children: [
+      {name: 'organizations', path: 'organizations', component: views.Organizations.List},
+    ]
   },
 
   {
