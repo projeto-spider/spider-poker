@@ -13,7 +13,7 @@
             td {{org.description || '-'}}
             td {{org.private ? 'Yes' : 'No'}}
             td
-              router-link(':to'='{name: "home"}').label.label-success View
+              router-link(':to'='{name: "organization", params: {id: org.name}}').label.label-success View
 </template>
 
 <script>
@@ -22,7 +22,7 @@
   import {Organizations} from 'app/api';
 
   export default {
-    name: 'Organizations',
+    name: 'OrganizationsList',
 
     created() {
       store.commit('page/set', {title: 'Organizations'});
@@ -35,7 +35,6 @@
     data() {
       return {
         organizations: [],
-        page: 1,
       };
     },
 
