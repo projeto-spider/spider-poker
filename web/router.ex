@@ -1,5 +1,6 @@
 defmodule Poker.Router do
   use Poker.Web, :router
+  use Plug.ErrorHandler
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -37,5 +38,12 @@ defmodule Poker.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/*path", PageController, :index
+  end
+
+  defp handle_errors(conn, %{reason: %Bodyguard.NotAuthorizedError{}}) do
+    send_resp conn, 403, ""
+  end
+  defp handle_errors(conn, _reason) do
+    send_resp conn, conn.status, ""
   end
 end
