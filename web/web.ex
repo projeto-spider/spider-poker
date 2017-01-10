@@ -39,6 +39,7 @@ defmodule Poker.Web do
       import Guardian, only: [encode_and_sign: 2]
       import Poker.Plugs.SessionPlug
       import Poker.Plugs.AuthorizationPlug
+      import Bodyguard.Controller
     end
   end
 
@@ -55,6 +56,7 @@ defmodule Poker.Web do
       import Poker.Router.Helpers
       import Poker.ErrorHelpers
       import Poker.Gettext
+      import Bodyguard.ViewHelpers
     end
   end
 

@@ -41,6 +41,7 @@ defmodule Poker.Mixfile do
      {:ja_serializer, "~> 0.11.2"},
      {:ja_resource, "~> 0.1.0"},
      {:guardian, "~> 0.13.0"},
+     {:bodyguard, "~> 0.5.0"},
      {:comeonin, "~> 2.5"}]
   end
 
