@@ -13,7 +13,7 @@ config :poker,
 config :poker, Poker.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "PtZux+4wH0tbKSqKRcMNHUhNd4K1IADslG5lnUTTlNeDLr0LWuebNJWjfA9uPWfF",
-  render_errors: [view: Poker.ErrorView, accepts: ~w(html json)],
+  render_errors: [view: Poker.ErrorView, accepts: ~w(html json json-api)],
   pubsub: [name: Poker.PubSub,
            adapter: Phoenix.PubSub.PG2]
 

@@ -11,6 +11,8 @@ defmodule Poker.Router do
 
   pipeline :api do
     plug :accepts, ["json-api"]
+    plug JaSerializer.ContentTypeNegotiation
+    plug JaSerializer.Deserializer
     plug Guardian.Plug.VerifyHeader
     plug Guardian.Plug.LoadResource
   end
