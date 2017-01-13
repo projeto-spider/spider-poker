@@ -7,8 +7,8 @@ defmodule Poker.Plugs.SessionPlug do
     EnsureAuthenticated.call conn, EnsureAuthenticated.init(opts)
   end
 
-  def fetch_logged_in_user(conn, opts \\ %{}) do
-    user = current_resource(conn)
-    assign conn, :logged_in, user
+  def preload_session(conn, opts \\ %{}) do
+    user = current_resource conn
+    assign conn, :current_user, user
   end
 end

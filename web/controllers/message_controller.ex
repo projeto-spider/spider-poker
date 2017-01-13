@@ -4,7 +4,7 @@ defmodule Poker.MessageController do
   alias Poker.{Message, User}
 
   plug :ensure_authenticated
-  plug :fetch_logged_in_user
+  plug :preload_session
   plug :ensure_param_is_logged_in_user, [param: "user_username"]
     when not action in [:create]
 

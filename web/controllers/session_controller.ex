@@ -5,7 +5,7 @@ defmodule Poker.SessionController do
   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
 
   plug :ensure_authenticated when action in [:me]
-  plug :fetch_logged_in_user when action in [:me]
+  plug :preload_session when action in [:me]
 
   def me(conn, _params) do
     user = conn.assigns.logged_in

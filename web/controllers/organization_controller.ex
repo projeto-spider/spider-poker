@@ -4,7 +4,7 @@ defmodule Poker.OrganizationController do
   alias Poker.{Organization, OrganizationUser}
 
   plug :ensure_authenticated when action in [:create, :update, :delete]
-  plug :fetch_logged_in_user when action in [:create, :show, :update, :delete]
+  plug :preload_session when action in [:create, :show, :update, :delete]
   plug :prefetch_organization when action in [:show, :update, :delete]
   plug :can_see_organization when action in [:show]
   plug :can_modify_organization when action in [:update, :delete]
