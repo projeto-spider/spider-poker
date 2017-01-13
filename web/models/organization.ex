@@ -30,7 +30,7 @@ defmodule Poker.Organization do
     |> unique_constraint(:name)
   end
 
-  def registration_changeset(struct, params \\ %{}) do
+  def create_changeset(struct, params \\ %{}) do
     params = if params["display_name"] do
       params
     else
