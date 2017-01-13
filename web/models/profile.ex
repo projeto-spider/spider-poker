@@ -16,7 +16,7 @@ defmodule Poker.Profile do
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:name, :bio, :location, :company, :contact, :url])
+    |> cast(params, [:name, :bio, :location, :contact, :url])
     |> validate_required([:name])
   end
 end
