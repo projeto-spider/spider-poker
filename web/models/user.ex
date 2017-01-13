@@ -1,20 +1,13 @@
 defmodule Poker.User do
   use Poker.Web, :model
 
-  alias Poker.{User, Profile}
+  alias Poker.{User, Profile, Helpers}
   import Comeonin.Bcrypt, only: [hashpwsalt: 1]
 
   @derive {Poison.Encoder, except: [:__meta__, :__struct__, :id, :password,
                                     :password_confirmation, :password_hash,
                                     :organizations_users, :organizations,
                                     :notifications, :inserted_at, :updated_at]}
-
-  @username_regex ~r{^([a-zA-Z])(\w|-)+$}
-  @email_regex Regex.compile!("^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}
-  {\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|
-  gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}
-  \.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$")
-
   schema "users" do
     field :username, :string
     field :email, :string
@@ -42,8 +35,8 @@ defmodule Poker.User do
     struct
     |> validate_length(:username, min: 6, max: 64)
     |> validate_length(:password, min: 6)
-    |> validate_format(:username, @username_regex)
-    |> validate_format(:email, @email_regex)
+    |> validate_format(:username, Helpers.username_regex)
+    |> validate_format(:email, Helpers.email_regex)
     |> unique_constraint(:username)
     |> unique_constraint(:email)
   end
