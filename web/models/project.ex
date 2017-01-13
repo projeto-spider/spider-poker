@@ -16,14 +16,13 @@ defmodule Poker.Project do
     timestamps()
   end
 
-  # Query composers
+  # Changesets
 
-  def visible(query \\ Project, org_name, user_id \\ 0) do
-    from proj in query,
-    join: user in assoc(proj, :users),
-    join: org in assoc(proj, :organization),
-    where: org.name == ^org_name,
-    where: user.id == ^user_id or proj.private == false
+  def changeset(struct, params \\ %{}) do
+    struct
+    |> validate_length(:name, min: 6, max: 64)
+    |> validate_format(:name, Helpers.username_regex)
+    |> unique_constraint(:name)
   end
 
   # Changesets
