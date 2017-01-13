@@ -1,15 +1,25 @@
 defmodule Poker.NotificationView do
   use Poker.Web, :view
+  use JaSerializer.PhoenixView
+  alias Poker.Repo
 
-  def render("index.json", %{notifications: notifications}) do
-    %{data: render_many(notifications, Poker.NotificationView, "notification.json")}
-  end
+  location "/notifications/:id"
 
-  def render("show.json", %{notification: notification}) do
-    %{data: render_one(notification, Poker.NotificationView, "notification.json")}
-  end
+  attributes [:content, :read]
 
-  def render("notification.json", %{notification: notification}) do
+  has_one :user,
+    serializer: Poker.UserView,
+    links: [
+      self: "/users/:user_id"
+    ]
+
+  def user_id(notification, _conn) do
     notification
+    |> Map.fetch!(:user_id)
+  end
+
+  def user(notification, _conn) do
+    Poker.User
+    |> Repo.get(notification.user_id)
   end
 end

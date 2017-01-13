@@ -1,33 +1,27 @@
 defmodule Poker.NotificationController do
   use Poker.Web, :controller
+  use JaResource
 
   alias Poker.{Notification, User}
 
-  plug :ensure_authenticated
-  plug :fetch_logged_in_user
-  plug :ensure_param_is_logged_in_user, param: "user_username"
+  plug :preload_session when action in [:index, :update]
+  plug JaResource, only: [:index, :update]
 
-  def index(conn, _params) do
-    user_id = conn.assigns.logged_in.id
-    notifications = Repo.all Notification.from_user_id Notification, user_id
-    render(conn, "index.json", notifications: notifications)
+  # Scope
+
+  def records(conn) do
+    scope conn, Notification
   end
 
-  def update(conn, %{"id" => id, "notification" => notification_params}) do
-    user_id = conn.assigns.logged_in.id
-    notification = Notification
-                   |> Notification.from_user_id(user_id)
-                   |> Repo.get!(id)
+  # Handlers
 
-    changeset = Notification.update_changeset(notification, notification_params)
+  def handle_update(conn, notification, attributes) do
+    authorize! conn, notification
 
-    case Repo.update(changeset) do
-      {:ok, notification} ->
-        render(conn, "show.json", notification: notification)
-      {:error, changeset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(Poker.ChangesetView, "error.json", changeset: changeset)
-    end
+    Notification.update_changeset notification, attributes
   end
+
+  # Filters
+
+  filterable_by ["user_id"]
 end
