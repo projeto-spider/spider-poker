@@ -29,9 +29,8 @@ defmodule Poker.Router do
     end
     resources "/notifications", NotificationController, only: [:index, :update]
     resources "/messages", MessageController, only: [:create]
-    resources "/organizations", OrganizationController, except: [:new, :edit] do
-      resources "/projects", ProjectController, except: [:new, :edit]
-    end
+    resources "/organizations", OrganizationController, except: [:new, :edit]
+    resources "/projects", ProjectController, except: [:new, :edit]
 
     get "/sessions/me", SessionController, :me
     post "/sessions/create", SessionController, :create
