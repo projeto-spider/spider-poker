@@ -1,9 +1,6 @@
 defmodule Poker.Profile do
   use Poker.Web, :model
 
-  @derive {Poison.Encoder, except: [:__meta__, :__struct__, :user, :id,
-                                    :user_id, :inserted_at, :updated_at]}
-
   schema "profiles" do
     field :name, :string
     field :bio, :string
