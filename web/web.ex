@@ -40,6 +40,7 @@ defmodule Poker.Web do
       import Poker.Plugs.SessionPlug
       import Poker.Plugs.AuthorizationPlug
       import Bodyguard.Controller
+      import Poker.Helpers, only: [filterable_by: 1]
     end
   end
 
