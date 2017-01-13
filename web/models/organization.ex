@@ -5,7 +5,6 @@ defmodule Poker.Organization do
                                     :organizations_users, :users, :updated_at,
                                     :inserted_at]}
 
-  @name_regex ~r{^([a-zA-Z])(\w|-)+$}
 
   schema "organizations" do
     field :name, :string
@@ -26,7 +25,7 @@ defmodule Poker.Organization do
   def changeset(struct, _params \\ %{}) do
     struct
     |> validate_length(:name, min: 6, max: 64)
-    |> validate_format(:name, @name_regex)
+    |> validate_format(:name, Helpers.username_regex)
     |> unique_constraint(:name)
   end
 
