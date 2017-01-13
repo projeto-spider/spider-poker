@@ -1,4 +1,5 @@
 %{"base64url": {:hex, :base64url, "0.0.1", "36a90125f5948e3afd7be97662a1504b934dd5dac78451ca6e9abf85a10286be", [:rebar], []},
+  "bodyguard": {:hex, :bodyguard, "0.5.0", "e376ca7b804cf709dbe13faefcdd87f07560933fbe1bb147cf4150aa36f6a461", [:mix], [{:plug, "~> 1.0", [hex: :plug, optional: false]}]},
   "comeonin": {:hex, :comeonin, "2.6.0", "74c288338b33205f9ce97e2117bb9a2aaab103a1811d243443d76fdb62f904ac", [:make, :make, :mix], []},
   "connection": {:hex, :connection, "1.0.4", "a1cae72211f0eef17705aaededacac3eb30e6625b04a6117c1b2db6ace7d5976", [:mix], []},
   "cowboy": {:hex, :cowboy, "1.0.4", "a324a8df9f2316c833a470d918aaf73ae894278b8aa6226ce7a9bf699388f878", [:make, :rebar], [{:cowlib, "~> 1.0.0", [hex: :cowlib, optional: false]}, {:ranch, "~> 1.0", [hex: :ranch, optional: false]}]},
@@ -10,6 +11,7 @@
   "gettext": {:hex, :gettext, "0.12.1", "c0624f52763469ef7a3674919ae28b8286d88195b90fa1516180f31bbbd26d14", [:mix], []},
   "guardian": {:hex, :guardian, "0.13.0", "37c5b5302617276093570ee938baca146f53e1d5de1f5c2b8effb1d2fea596d2", [:mix], [{:jose, "~> 1.8", [hex: :jose, optional: false]}, {:phoenix, "~> 1.2.0", [hex: :phoenix, optional: true]}, {:plug, "~> 1.0", [hex: :plug, optional: false]}, {:poison, ">= 1.3.0", [hex: :poison, optional: false]}, {:uuid, ">=1.1.1", [hex: :uuid, optional: false]}]},
   "inflex": {:hex, :inflex, "1.8.0", "7cfc752ae244b30b42ac9cf4c092771b485bc3424139aba4a933e54be8c63931", [:mix], []},
+  "ja_resource": {:hex, :ja_resource, "0.1.0", "eed6443e7337147264bf28badabad48eb0cc32493ff06a48ac19d4b3657f5029", [:mix], [{:ecto, "~> 2.0", [hex: :ecto, optional: false]}, {:ja_serializer, "~> 0.9", [hex: :ja_serializer, optional: false]}, {:phoenix, "~> 1.1", [hex: :phoenix, optional: false]}, {:plug, "~> 1.2", [hex: :plug, optional: false]}]},
   "ja_serializer": {:hex, :ja_serializer, "0.11.2", "952b59b480e656e0bd991c5822dda4dfc6c507f1c55d6eaea363cd84e6002e2c", [:mix], [{:inflex, "~> 1.4", [hex: :inflex, optional: false]}, {:plug, "> 1.0.0", [hex: :plug, optional: false]}, {:poison, "~> 1.4 or ~> 2.0", [hex: :poison, optional: false]}, {:scrivener, "~> 1.2 or ~> 2.0", [hex: :scrivener, optional: true]}]},
   "jose": {:hex, :jose, "1.8.0", "1ee027c5c0ff3922e3bfe58f7891509e8f87f771ba609ee859e623cc60237574", [:mix, :rebar3], [{:base64url, "~> 0.0.1", [hex: :base64url, optional: false]}]},
   "mime": {:hex, :mime, "1.0.1", "05c393850524767d13a53627df71beeebb016205eb43bfbd92d14d24ec7a1b51", [:mix], []},
