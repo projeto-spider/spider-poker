@@ -4,10 +4,6 @@ defmodule Poker.User do
   alias Poker.{User, Profile, Helpers}
   import Comeonin.Bcrypt, only: [hashpwsalt: 1]
 
-  @derive {Poison.Encoder, except: [:__meta__, :__struct__, :id, :password,
-                                    :password_confirmation, :password_hash,
-                                    :organizations_users, :organizations,
-                                    :notifications, :inserted_at, :updated_at]}
   schema "users" do
     field :username, :string
     field :email, :string
@@ -20,13 +16,6 @@ defmodule Poker.User do
     has_many :notifications, Poker.Notification, on_delete: :delete_all
 
     timestamps()
-  end
-
-  # Query composers
-
-  def with_profile(query \\ User) do
-    query
-    |> preload([:profile])
   end
 
   # Changesets
@@ -73,8 +62,6 @@ defmodule Poker.User do
     struct
     # Need to cast params first
     |> cast(params, [])
-    # Let the profile changeset handle everything
-    |> cast_assoc(:profile)
   end
 
   # Helpers

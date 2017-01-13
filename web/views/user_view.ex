@@ -1,15 +1,15 @@
 defmodule Poker.UserView do
   use Poker.Web, :view
+  use JaSerializer.PhoenixView
 
-  def render("index.json", %{users: users}) do
-    %{data: render_many(users, Poker.UserView, "user.json")}
-  end
+  location "/users/:id"
 
-  def render("show.json", %{user: user}) do
-    %{data: render_one(user, Poker.UserView, "user.json")}
-  end
+  attributes [:username, :email]
 
-  def render("user.json", %{user: user}) do
-    user
-  end
+  has_one :profile,
+    serializer: Poker.ProfileView,
+    include: true,
+    links: [
+      self: "/users/:id/relationships/profile"
+    ]
 end
