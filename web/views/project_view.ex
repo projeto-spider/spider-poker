@@ -1,15 +1,15 @@
 defmodule Poker.ProjectView do
   use Poker.Web, :view
+  use JaSerializer.PhoenixView
 
-  def render("index.json", %{projects: projects}) do
-    %{data: render_many(projects, Poker.ProjectView, "project.json")}
-  end
+  location "/projects/:id"
 
-  def render("show.json", %{project: project}) do
-    %{data: render_one(project, Poker.ProjectView, "project.json")}
-  end
+  attributes [:name, :display_name, :description, :private]
 
-  def render("project.json", %{project: project}) do
-    project
-  end
+  has_one :organization,
+    serializer: Poker.OrganizationView,
+    include: true,
+    links: [
+      self: "/projects/:id/relationships/organization"
+    ]
 end
