@@ -37,15 +37,13 @@ defmodule Poker.Organization do
     end
 
     struct
-    |> cast(params, [:name, :display_name, :description, :company, :location,
-                     :url, :private])
+    |> cast(params, [:name, :display_name, :description, :location, :url, :private])
     |> validate_required([:name, :display_name])
     |> changeset(params)
   end
 
   def update_changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:display_name, :description, :company, :location, :url,
-                     :private])
+    |> cast(params, [:display_name, :description, :location, :url, :private])
   end
 end
