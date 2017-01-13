@@ -23,11 +23,19 @@ defmodule Poker.Project do
     |> unique_constraint(:name)
   end
 
-  # Changesets
+  def create_changeset(struct, params \\ %{}) do
+    params = Map.update params, "display_name", params["name"], &(&1)
 
-  def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:name, :display_name, :description, :private])
-    |> validate_required([:name, :display_name, :description, :private])
+    |> put_assoc(:organization, params["organization"])
+    |> validate_required([:name, :display_name, :private, :organization])
+    |> changeset(params)
+  end
+
+  def update_changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, [:display_name, :description, :private])
+    |> changeset(params)
   end
 end
