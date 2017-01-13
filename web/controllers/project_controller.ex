@@ -1,56 +1,45 @@
 defmodule Poker.ProjectController do
   use Poker.Web, :controller
+  use JaResource
 
-  alias Poker.Project
+  alias Poker.{Project, Organization}
 
-  def index(conn, %{"organization_id" => org_name}) do
-    query = Project.visible(Project, org_name, 0)
-    projects = Repo.all(query)
-    render(conn, "index.json", projects: projects)
+  plug :ensure_authenticated when action in [:create, :update, :delete]
+  plug :preload_session
+  plug JaResource
+
+  # Scope
+
+  def records(conn) do
+    scope conn, Project
   end
 
-  def create(conn, %{"project" => project_params}) do
-    changeset = Project.changeset(%Project{}, project_params)
+  # Handlers
 
-    case Repo.insert(changeset) do
-      {:ok, project} ->
-        conn
-        |> put_status(:created)
-        |> put_resp_header("location", organization_project_path(conn, :show, project))
-        |> render("show.json", project: project)
-      {:error, changeset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(Poker.ChangesetView, "error.json", changeset: changeset)
-    end
+  def handle_create(conn, attributes) do
+    authorize! conn, %Project{organization_id: attributes["organization_id"]}
+
+    organization = Repo.get! Organization, attributes["organization_id"]
+
+    attributes = attributes
+                 |> Map.put("organization", organization)
+
+    Project.create_changeset %Project{}, attributes
   end
 
-  def show(conn, %{"id" => id}) do
-    project = Repo.get!(Project, id)
-    render(conn, "show.json", project: project)
+  def handle_update(conn, project, attributes) do
+    authorize! conn, project
+
+    Project.update_changeset project, attributes
   end
 
-  def update(conn, %{"id" => id, "project" => project_params}) do
-    project = Repo.get!(Project, id)
-    changeset = Project.changeset(project, project_params)
+  def handle_delete(conn, project) do
+    authorize! conn, project
 
-    case Repo.update(changeset) do
-      {:ok, project} ->
-        render(conn, "show.json", project: project)
-      {:error, changeset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(Poker.ChangesetView, "error.json", changeset: changeset)
-    end
+    super conn, project
   end
 
-  def delete(conn, %{"id" => id}) do
-    project = Repo.get!(Project, id)
+  # Filters
 
-    # Here we use delete! (with a bang) because we expect
-    # it to always work (and if it does not, it will raise).
-    Repo.delete!(project)
-
-    send_resp(conn, :no_content, "")
-  end
+  filterable_by ["id", "name", "private"]
 end
