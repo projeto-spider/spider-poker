@@ -6,7 +6,6 @@ defmodule Poker.Repo.Migrations.CreateProfile do
       add :name, :string
       add :bio, :string
       add :location, :string
-      add :company, :string
       add :contact, :string
       add :url, :text
       add :user_id, references(:users, on_delete: :delete_all)

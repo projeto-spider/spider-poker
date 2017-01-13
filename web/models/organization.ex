@@ -11,7 +11,6 @@ defmodule Poker.Organization do
     field :name, :string
     field :display_name, :string
     field :description, :string
-    field :company, :string
     field :location, :string
     field :url, :string
     field :private, :boolean, default: false

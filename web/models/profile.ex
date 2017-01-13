@@ -8,7 +8,6 @@ defmodule Poker.Profile do
     field :name, :string
     field :bio, :string
     field :location, :string
-    field :company, :string
     field :contact, :string
     field :url, :string
     belongs_to :user, Poker.User
