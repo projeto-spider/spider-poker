@@ -21,10 +21,13 @@ defmodule Poker.Router do
   scope "/api", Poker do
     pipe_through :api
 
-    resources "/users", UserController, param: "username", except: [:new, :edit] do
-      resources "/notifications", NotificationController, only: [:index, :update]
-      resources "/messages", MessageController, only: [:index, :update]
+    resources "/users", UserController, except: [:new, :edit] do
+      resources "/relationships/profile", ProfileController,
+        singleton: true,
+        only: [:show, :update]
+      resources "/relationships/messages", MessageController, only: [:index, :update]
     end
+    resources "/notifications", NotificationController, only: [:index, :update]
     resources "/messages", MessageController, only: [:create]
     resources "/organizations", OrganizationController, except: [:new, :edit] do
       resources "/projects", ProjectController, except: [:new, :edit]
