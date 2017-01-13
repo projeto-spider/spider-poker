@@ -1,10 +1,7 @@
 defmodule Poker.Organization do
   use Poker.Web, :model
 
-  @derive {Poison.Encoder, except: [:__meta__, :__struct__, :id, :projects,
-                                    :organizations_users, :users, :updated_at,
-                                    :inserted_at]}
-
+  alias Poker.Helpers
 
   schema "organizations" do
     field :name, :string
