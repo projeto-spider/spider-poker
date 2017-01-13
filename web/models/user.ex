@@ -41,7 +41,7 @@ defmodule Poker.User do
     |> unique_constraint(:email)
   end
 
-  def registration_changeset(struct, params \\ %{}) do
+  def create_changeset(struct, params \\ %{}) do
     # Ensure the user will have a profile
     profile = if params["profile"] do
       # If provided, use it. It'll be validated by Profile.changeset/2
