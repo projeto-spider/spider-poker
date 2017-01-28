@@ -1,34 +1,87 @@
-import store from 'app/state';
+import store from 'app/store';
 import {
-  AuthPanel, DashBoard
+  AuthPanel, BaseLayout
 } from 'app/layouts';
 import views from '../views';
+
+const {
+  Auth,
+  Pages,
+  Users,
+  Organizations,
+  ErrorViews
+} = views
 
 export default [
   {
     path: '/auth',
     component: AuthPanel,
     children: [
-      {name: 'login', path: 'login', component: views.Auth.Login, beforeEnter: requireLoggedOff()},
-      {name: 'register', path: 'register', component: views.Auth.Register, beforeEnter: requireLoggedOff()},
-      {name: 'logout', path: 'logout', component: views.Auth.Logout},
+      {
+        name: 'login',
+        path: 'login',
+        component: Auth.Login,
+        beforeEnter: requireLoggedOff()
+      },
+
+      {
+        name: 'register',
+        path: 'register',
+        component: Auth.Register,
+        beforeEnter: requireLoggedOff()
+      },
+
+      {
+        name: 'logout',
+        path: 'logout',
+        component: Auth.Logout
+      },
     ]
   },
 
   {
     path: '/',
-    name: 'home',
-    component: DashBoard,
+    component: BaseLayout,
     children: [
-      {name: 'organization', path: 'organization/:id', component: views.Organizations.Show},
-      {name: 'organizations', path: 'organizations', component: views.Organizations.List},
+      // Pages
+      {
+        path: '/',
+        name: 'home',
+        component: Pages.Home
+      },
+
+      // Users
+      {
+        name: 'userShow',
+        path: 'user/:username',
+        component: Users.Show
+      },
+
+      {
+        name: 'usersList',
+        path: 'users',
+        component: Users.List
+      },
+
+      // Organizations
+      {
+        name: 'organizationShow',
+        path: 'organization/:id',
+        component: Organizations.Show
+      },
+
+      {
+        name: 'organizationsList',
+        path: 'organizations',
+        component: Organizations.List
+      },
     ]
   },
 
   {
     path: '*',
     name: 'error',
-    component: views.Errors.Error404
+    component: ErrorViews.Error404
   },
 ]
 
