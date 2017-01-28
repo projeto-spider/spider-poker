@@ -60,7 +60,7 @@
 <script>
   import {R} from 'app/utils';
   import {Auth} from 'app/api';
-  import store from 'app/state';
+  import store from 'app/store';
   import {ErrorableInput} from 'app/components';
 
   export default {

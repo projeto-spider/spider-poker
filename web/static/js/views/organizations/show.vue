@@ -30,7 +30,7 @@
 
 <script>
 import {R} from 'app/utils';
-import store from 'app/state';
+import store from 'app/store';
 import {Organizations} from 'app/api';
 
 export default {
