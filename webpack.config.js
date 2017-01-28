@@ -1,13 +1,16 @@
-var path = require('path')
-var webpack = require('webpack')
+const path = require('path')
+const webpack = require('webpack')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const environment = process.env.NODE_ENV
 
 module.exports = {
-  entry: path.join(__dirname, './web/static/js/app.js'),
+  entry: [
+    './web/static/js/app.js'
+  ],
 
   output: {
-    path: path.join(__dirname, './priv/static/js'),
-    filename: 'app.js'
+    path: './priv/static',
+    filename: 'js/app.js'
   },
 
   module: {
@@ -17,13 +20,16 @@ module.exports = {
         loader: 'vue-loader',
         options: {
           loaders: {
-            // Since sass-loader (weirdly) has SCSS as its default parse mode, we map
-            // the "scss" and "sass" values for the lang attribute to the right configs here.
-            // other preprocessors should work out of the box, no loader config like this nessessary.
-            'scss': 'vue-style-loader!css-loader!sass-loader',
-            'sass': 'vue-style-loader!css-loader!sass-loader?indentedSyntax'
+            css: ExtractTextPlugin.extract({
+              loader: 'css-loader',
+              fallbackLoader: 'vue-style-loader'
+            }),
+
+            sass: ExtractTextPlugin.extract({
+              loader: ['css-loader', 'sass-loader?indentedSyntax'],
+              fallbackLoader: 'vue-style-loader'
+            })
           }
-          // other vue-loader options go here
         }
       },
 
@@ -31,6 +37,16 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/
+      },
+
+      {
+        test: /\.css/,
+        loader: ExtractTextPlugin.extract(['style-loader', 'css-loader'])
+      },
+
+      {
+        test: /\.(eot|svg|ttf|woff|woff2)$/,
+        loader: 'file-loader?name=fonts/[name].[ext]'
       },
 
       {
@@ -48,7 +64,9 @@ module.exports = {
       'process.env': {
         NODE_ENV: `"${environment}"`
       }
-    })
+    }),
+
+    new ExtractTextPlugin('css/app.css')
   ],
 
   resolve: {
