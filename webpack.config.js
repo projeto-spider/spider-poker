@@ -1,4 +1,3 @@
-const path = require('path')
 const webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const environment = process.env.NODE_ENV
@@ -45,8 +44,12 @@ module.exports = {
       },
 
       {
-        test: /\.(eot|svg|ttf|woff|woff2)$/,
-        loader: 'file-loader?name=fonts/[name].[ext]'
+        test: /\.(otf|eot|svg|ttf|woff|woff2)$/,
+        loader: 'file-loader',
+        query: {
+          outputPath: 'fonts/',
+          publicPath: '../fonts/'
+        }
       },
 
       {
