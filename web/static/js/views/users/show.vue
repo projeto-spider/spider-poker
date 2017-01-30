@@ -90,23 +90,24 @@
     },
 
     methods: {
-      gravatar: gravatar.url
+      gravatar(email) {
+        return gravatar.url(email, {size: 512})
+      }
     },
 
     computed: {
       userInfos() {
+        const profile = R.view(R.lensPath(['user', 'profile']))(this)
+
         return R.pipe(
           R.prop('user'),
           R.pick(['email']),
           R.merge(
-            R.pick(
-              ['location', 'url'],
-              R.view(R.lensPath(['user', 'profile']))(this)
-            )
+            R.pick(['location', 'url'], profile)
           ),
           R.filter(Boolean),
-          R.mapObjIndexed((text, key) => ({text, key})),
-          R.values
+          R.toPairs,
+          R.map(([key, text]) => ({text, key})),
         )(this)
       }
     },
