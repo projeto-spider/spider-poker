@@ -4,14 +4,14 @@
 
     <div class="container">
       <div class="columns">
-        <div class="column is-two-thirds">
-          <article v-for="update in feed" class="media">
+        <div class="column">
+          <article v-for="user in users" class="media">
             <router-link
-              :to="{name: 'userShow', params: {username: update.username}}"
+              :to="{name: 'userShow', params: {username: user.username}}"
             >
               <figure class="media-left">
                 <p class="image is-64x64">
-                  <img :src="update.image">
+                  <img :src="gravatar(user.email)">
                 </p>
               </figure>
             </router-link>
@@ -19,27 +19,26 @@
             <div class="media-content">
               <p>
                 <router-link
-                  :to="{name: 'userShow', params: {username: update.username}}"
+                  :to="{name: 'userShow', params: {username: user.username}}"
                 >
-                  {{update.name}}
+                  {{user.profile.name}}
                 </router-link>
-                <small>{{update.timeago}}</small>
                 <p>
                   <router-link
-                    :to="{name: 'userShow', params: {username: update.username}}"
+                    :to="{name: 'userShow', params: {username: user.username}}"
                     class="is-primary"
                   >
-                    @{{update.username}}
+                    @{{user.username}}
                   </router-link>
                 </p>
               </p>
 
-              <p>{{update.did}}</p>
+              <p v-if='user.profile.bio'>{{user.profile.bio}}</p>
             </div>
           </article>
         </div>
 
-        <div class="column">
+        <div v-if='loggedin' class="column is-one-third">
           <nav class="panel">
             <p class="panel-heading">
               Quick Links
@@ -79,8 +78,10 @@
 </template>
 
 <script>
-  import Faker from 'faker/locale/en'
+  import {mapState} from 'vuex'
+  import gravatar from 'gravatar'
   import {HeroTitle} from 'app/components'
+  import {Users} from 'app/api'
 
   const TAB = {
     0: 'all',
@@ -99,17 +100,6 @@
     {name: 'Youtube', type: 'project'}
   ]
 
-  let hoursAgo = 2;
-
-  const feed = Array.from(Array(10))
-    .map(() => ({
-      image: Faker.image.avatar(),
-      username: Faker.internet.userName(),
-      name: `${Faker.name.findName()}`,
-      timeago: `${hoursAgo++}h ago`,
-      did: Faker.lorem.sentence()
-    }))
-
   export default {
     name: 'HomeView',
 
@@ -117,7 +107,7 @@
 
     data() {
       return {
-        feed,
+        users: [],
 
         currentTab: TAB.all,
 
@@ -135,6 +125,10 @@
     },
 
     computed: {
+      ...mapState({
+        loggedin: state => state.auth.user !== null
+      }),
+
       items() {
         const currentTab = this.currentTab;
 
@@ -148,9 +142,18 @@
     },
 
     methods: {
+      gravatar: gravatar.url,
+
       changeTab(index) {
         this.currentTab = index;
       }
+    },
+
+    created() {
+      Users.all()
+        .then(list => {
+          this.users = list
+        })
     }
   }
 </script>
