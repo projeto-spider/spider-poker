@@ -1,6 +1,16 @@
 <template>
   <main>
-    <hero-title v-if='user' :text="user.profile.name" :subtitle="`@${user.username}`"/>
+    <hero-title
+      v-if='user'
+      :text="user.profile.name"
+      :subtitle="`@${user.username}`"
+    />
+
+    <hero-title
+      v-if="status === 'errored'"
+      text="User does not exist"
+      color="danger"
+    />
 
     <div v-if='user' class="container">
       <div class="columns">
@@ -77,6 +87,8 @@
 
     data() {
       return {
+        status: 'not-asked',
+
         user: null,
 
         organizations: generateOrganizations(),
@@ -113,12 +125,16 @@
     },
 
     created() {
+      this.status = 'loading'
+
       Users.show(this.$route.params.username)
         .then(res => {
+          if (res.length === 0) {
+            return this.status = 'errored'
+          }
+
+          this.status = 'success'
           this.user = res[0]
-        })
-        .catch(() => {
-          console.error('Deu erro')
         })
     }
   }
