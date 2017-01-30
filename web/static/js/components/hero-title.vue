@@ -1,5 +1,5 @@
 <template>
-  <section class="hero is-primary">
+  <section class="hero" :class='this.colorClass'>
     <div class="hero-body">
       <div class="container is-fluid">
         <h1 class="title">
@@ -18,7 +18,17 @@
   export default {
     name: 'HeroTitle',
 
-    props: ['text', 'subtitle']
+    props: ['text', 'subtitle', 'color'],
+
+    computed: {
+      colorClass() {
+        if (!this.color) {
+          return {'is-primary': true}
+        }
+
+        return {[`is-${this.color}`]: true}
+      }
+    }
   }
 </script>
 
