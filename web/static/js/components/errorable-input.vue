@@ -1,31 +1,41 @@
-<template lang="pug">
-  .form-group.has-feedback(':class'="groupClass")
-    input(
-      v-if='type === "email"'
-      type='email',
-      class="form-control",
-      'v-model'="inputValue"
-      '@input'="input"
-      ':placeholder'='placeholder'
-    )
-    input(
-      v-if='type === "password"'
-      type='password',
-      class="form-control",
-      'v-model'="inputValue"
-      '@input'="input"
-      ':placeholder'='placeholder'
-    )
-    input(
-      v-if='type === "text"'
-      type='text',
-      class="form-control",
-      'v-model'="inputValue"
-      '@input'="input"
-      ':placeholder'='placeholder'
-    )
-    span(class="glyphicon form-control-feedback", 'v-bind:class'='iconClass')
-    span(v-for="error in errors", class="help-block") {{error}}
+<template>
+  <div class='control has-icon'>
+    <input
+      v-if="type === 'email'"
+      type="email"
+      class="input"
+      :class="inputClass"
+      v-model="inputValue"
+      @input="input"
+      :placeholder="placeholder"
+    />
+
+    <input
+      v-if="type === 'password'"
+      type="password"
+      class="input"
+      :class="inputClass"
+      v-model="inputValue"
+      @input="input"
+      :placeholder="placeholder"
+    />
+
+    <input
+      v-if="type === 'text'"
+      type="text"
+      class="input"
+      :class="inputClass"
+      v-model="inputValue"
+      @input="input"
+      :placeholder="placeholder"
+    />
+
+    <span class="icon is-small">
+      <i class="fa" :class="iconClass"></i>
+    </span>
+
+    <span v-for="error in errors" class="help is-danger">{{error}}</span>
+  </div>
 </template>
 
 <script>
@@ -37,11 +47,15 @@
         type: String,
         default: 'text',
       },
+
       value: {
         default: '',
       },
+
       errors: Array,
+
       icon: String,
+
       placeholder: String,
     },
 
@@ -52,16 +66,19 @@
     },
 
     computed: {
-      groupClass() {
+      errored() {
+        return this.errors.length > 0
+      },
+
+      inputClass() {
         return {
-          'has-error': this.errors.length > 0,
+          'is-danger': this.errored,
         };
       },
-      iconClass() {
-        const iconName = `glyphicon-${this.icon}`;
 
+      iconClass() {
         return {
-          [iconName]: true
+          [`fa-${this.icon}`]: true
         };
       }
     },
