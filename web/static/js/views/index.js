@@ -29,13 +29,13 @@ export default {
   },
 
   Users: {
-    UserShow,
-    UsersList
+    Show: UserShow,
+    List: UsersList
   },
 
   Organizations: {
-    OrganizationShow,
-    OrganizationsList
+    Show: OrganizationShow,
+    List: OrganizationsList
   },
 
   ErrorViews: {
