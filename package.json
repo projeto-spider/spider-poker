@@ -17,7 +17,8 @@
     "vue-resource": "^1.0.3",
     "vue-router": "^2.1.1",
     "vue-validator": "^3.0.0-alpha.1",
-    "vuex": "^2.1.1"
+    "vuex": "^2.1.1",
+    "yayson": "^2.0.3"
   },
   "devDependencies": {
     "admin-lte": "^2.3.8",
