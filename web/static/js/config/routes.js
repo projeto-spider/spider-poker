@@ -53,7 +53,7 @@ export default [
       // Users
       {
         name: 'userShow',
-        path: 'user/:username',
+        path: '@:username',
         component: Users.Show
       },
 
@@ -80,7 +80,7 @@ export default [
 
   {
     path: '*',
-    name: 'error',
+    name: 'error404',
     component: ErrorViews.Error404
   },
 ]
