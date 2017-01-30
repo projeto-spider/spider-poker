@@ -1,66 +1,124 @@
-<template lang='pug'>
-  div
-    .row(v-if='user !== null')
-      .col-md-4.col-md-push-3
-        .box.box-primary
-          .box-body.box-profile
-            h3.profile-username.text-center {{user.profile.name || user.username}}
-            p.text-muted.text-center {{user.username}}
-            ul.list-group.list-group-unbordered
-              li.list-group-item
-                b Email
-                a.pull-right {{user.email}}
+<template>
+  <main>
+    <hero-title v-if='user' :text="user.profile.name" :subtitle="`@${user.username}`"/>
 
-              li.list-group-item(v-if='user.profile.company')
-                b Company
-                a.pull-right {{user.profile.company}}
+    <div v-if='user' class="container">
+      <div class="columns">
+        <div class="column is-one-quarter">
+          <div class="image">
+            <img :src="gravatar(user.email)" alt="Avatar"/>
+          </div>
 
-              li.list-group-item(v-if='user.profile.contact')
-                b Contact
-                a.pull-right {{user.profile.contact}}
+          <p v-if="user.profile.bio">{{user.profile.bio}}</p>
 
-              li.list-group-item(v-if='user.profile.location')
-                b Location
-                a.pull-right {{user.profile.location}}
+          <div v-if="userInfos" class="panel">
+            <p v-for="info in userInfos" class="panel-block">
+              <span class="panel-icon">
+                <i class="fa" :class="userInfoIconClasses[info.key]" />
+              </span>
+              {{info.text}}
+            </p>
+          </div>
+        </div>
 
-              li.list-group-item(v-if='user.profile.url')
-                b URL
-                a.pull-right {{user.profile.url}}
+        <div class="column">
+          <article v-for="org in organizations" class="media">
+            <div class="media-content">
+              <div class="content">
+                <i class="fa fa-group" />&nbsp;
+                <strong>{{org.displayName}}</strong>
+                <p>{{org.info}}</p>
+              </div>
 
-              li.list-group-item(v-if='user.profile.bio')
-                b Bio
-                a.pull-right {{user.profile.bio}}
+              <article v-for="proj in org.projects" class="media">
+                <!-- This empty picture pulls the nested content right -->
+                <figure class="media-left"><p class="image is-48x48"></p></figure>
+
+                <div class="media-content">
+                  <i class="fa fa-list-alt" />&nbsp;
+                  <strong>{{proj.displayName}}</strong>
+                  <p>{{proj.info}}</p>
+                </div>
+              </article>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </main>
 </template>
 
 <script>
-import {R} from 'app/utils';
-import store from 'app/store';
-import {Users} from 'app/api';
+  import R from 'ramda'
+  import Faker from 'faker/locale/en'
+  import gravatar from 'gravatar'
+  import {Users} from 'app/api'
+  import {HeroTitle} from 'app/components'
 
-export default {
-  name: 'UserShow',
+  const random = (low, high) => Math.floor(Math.random() * high) + low
+  const range = length => Array.from({length})
 
-  created() {
-    store.commit('page/set', {title: 'Users'});
-    this.loadUsers();
-  },
+  const generateOrganizations = () =>
+    range(random(2, 10))
+      .map(() => ({
+        displayName: Faker.company.companyName(),
+        info: Faker.lorem.paragraph(),
+        projects: range(random(1, 5))
+                    .map(() => ({
+                      displayName: Faker.commerce.productName(),
+                      info: Faker.lorem.sentence()
+                    }))
+      }))
 
-  data() {
-    return {
-      user: null,
-    };
-  },
+  export default {
+    name: 'UserShowView',
 
-  methods: {
-    loadUsers() {
+    components: {HeroTitle},
+
+    data() {
+      return {
+        user: null,
+
+        organizations: generateOrganizations(),
+
+        userInfoIconClasses: {
+          location: {'fa-map-marker': true},
+          email: {'fa-envelope': true},
+          url: {'fa-globe': true},
+        }
+      }
+    },
+
+    methods: {
+      gravatar: gravatar.url
+    },
+
+    computed: {
+      userInfos() {
+        return R.pipe(
+          R.prop('user'),
+          R.pick(['email']),
+          R.merge(
+            R.pick(
+              ['location', 'url'],
+              R.view(R.lensPath(['user', 'profile']))(this)
+            )
+          ),
+          R.filter(Boolean),
+          R.mapObjIndexed((text, key) => ({text, key})),
+          R.values
+        )(this)
+      }
+    },
+
+    created() {
       Users.show(this.$route.params.username)
-        .then(({data}) => {
-          this.user = data;
+        .then(res => {
+          this.user = res[0]
         })
         .catch(() => {
-          this.$router.replace({name: 'error'})
-        });
-    },
-  },
-}
+          console.error('Deu erro')
+        })
+    }
+  }
 </script>
