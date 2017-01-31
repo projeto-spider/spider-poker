@@ -34,7 +34,9 @@
       <i class="fa" :class="iconClass"></i>
     </span>
 
-    <span v-for="error in errors" class="help is-danger">{{error}}</span>
+    <span v-for="error in errors" class="help is-danger">
+      {{error.detail}}
+    </span>
   </div>
 </template>
 
