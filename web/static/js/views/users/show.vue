@@ -29,6 +29,18 @@
               {{info.text}}
             </p>
           </div>
+
+          <router-link
+            v-if="currentUserIsSelf"
+            :to="{name: 'userEdit'}"
+            class="button is-info is-outlined is-fullwidth"
+          >
+            <span class="icon is-small">
+              <i class="fa fa-cog"></i>
+            </span>
+
+            <span>Edit profile</span>
+          </router-link>
         </div>
 
         <div class="column">
@@ -63,6 +75,7 @@
 </template>
 
 <script>
+  import {mapState} from 'vuex'
   import R from 'ramda'
   import Faker from 'faker/locale/en'
   import gravatar from 'gravatar'
@@ -112,6 +125,14 @@
     },
 
     computed: {
+      ...mapState({
+        loggedinId: R.view(R.lensPath(['auth', 'user', 'id'])),
+      }),
+
+      currentUserIsSelf() {
+        return this.loggedinId === this.user.id
+      },
+
       userInfos() {
         const profile = R.view(R.lensPath(['user', 'profile']))(this)
 
