@@ -1,15 +1,20 @@
 defmodule Poker.SessionController do
   use Poker.Web, :controller
 
-  alias Poker.{User, UserView}
+  alias Poker.{User, Profile, UserView}
   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
 
   plug :ensure_authenticated when action in [:me]
   plug :preload_session when action in [:me]
 
   def me(conn, _params) do
-    user = conn.assigns.logged_in
-    render conn, UserView, "user.json", user: user
+    user = conn.assigns.current_user
+
+    profile = from(p in Profile, where: p.user_id == ^user.id)
+              |> Repo.one!
+
+    user = Map.put(user, :profile, profile)
+    render conn, UserView, "show.json-api", data: user
   end
 
   def create(conn, %{"username" => username, "password" => password}) do
