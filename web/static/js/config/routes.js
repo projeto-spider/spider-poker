@@ -63,6 +63,13 @@ export default [
         component: Users.List
       },
 
+      {
+        name: 'userEdit',
+        path: 'profile/edit',
+        component: Users.Edit,
+        beforeEnter: requireAuth()
+      },
+
       // Organizations
       {
         name: 'organizationShow',

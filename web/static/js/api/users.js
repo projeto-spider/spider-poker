@@ -23,6 +23,16 @@ export default {
       .then(parse)
   },
 
+  update(id, attributes) {
+    return http.put(`users/${id}/relationships/profile`, {data: {attributes}})
+      .then(r => r.json())
+      .then(parse)
+  },
+
+  delete(id) {
+    return users.delete({id})
+  },
+
   notifications: {
     all(username) {
       return Vue.http.get(`/api/users/${username}/notifications`)

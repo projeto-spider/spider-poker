@@ -8,6 +8,7 @@ import Home from './pages/home'
 
 // Users
 import UserShow from './users/show'
+import UserEdit from './users/edit'
 import UsersList from './users/list'
 
 // Organizations
@@ -30,7 +31,8 @@ export default {
 
   Users: {
     Show: UserShow,
-    List: UsersList
+    List: UsersList,
+    Edit: UserEdit
   },
 
   Organizations: {
