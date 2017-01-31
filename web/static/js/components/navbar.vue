@@ -19,9 +19,8 @@
             Home
           </router-link>
 
-          <span class="nav-item">
+          <span v-if="!loggedin" class="nav-item">
             <router-link
-              v-if="!loggedin"
               :to="{name: 'login'}"
               class="button is-info is-inverted is-outlined"
             >
@@ -32,9 +31,8 @@
             </router-link>
           </span>
 
-          <span class="nav-item">
+          <span v-if="!loggedin" class="nav-item">
             <router-link
-              v-if="!loggedin"
               :to="{name: 'register'}"
               class="button is-info is-inverted is-outlined"
             >
@@ -45,9 +43,20 @@
             </router-link>
           </span>
 
-          <span class="nav-item">
+          <span v-if="loggedin" class="nav-item">
             <router-link
-              v-if="loggedin"
+              :to="{name: 'userShow', params: {username}}"
+              class="button is-success"
+            >
+              <span class="icon is-small">
+                <i class="fa fa-sign-out"></i>
+              </span>
+              <span>Profile</span>
+            </router-link>
+          </span>
+
+          <span v-if="loggedin" class="nav-item">
+            <router-link
               :to="{name: 'logout'}"
               class="button is-danger"
             >
@@ -64,6 +73,7 @@
 </template>
 
 <script>
+  import R from 'ramda'
   import {mapState} from 'vuex'
 
   export default {
@@ -77,7 +87,12 @@
 
     computed: {
       ...mapState({
-        loggedin: state => state.auth.user !== null
+        loggedin: R.pipe(
+          R.view(R.lensPath(['auth', 'user'])),
+          R.isNil,
+          R.not
+        ),
+        username: R.view(R.lensPath(['auth', 'user', 'username']))
       })
     },
 
