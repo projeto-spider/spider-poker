@@ -49,7 +49,7 @@
               class="button is-success"
             >
               <span class="icon is-small">
-                <i class="fa fa-sign-out"></i>
+                <i class="fa fa-user"></i>
               </span>
               <span>Profile</span>
             </router-link>
