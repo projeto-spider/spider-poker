@@ -63,7 +63,7 @@
 
     data() {
       return {
-        inputValue: '',
+        inputValue: this.value,
       }
     },
 
