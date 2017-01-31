@@ -1,18 +1,15 @@
-import Vue from 'vue';
+import {http} from './http'
+import parse from './parse'
 
 export default {
   me() {
-    return Vue.http.get('/api/sessions/me')
-      .then(r => r.json());
+    return http.get('/api/sessions/me')
+      .then(r => r.json())
+      .then(parse)
   },
 
   signin(username, password) {
-    return Vue.http.post('/api/sessions/create', {username, password})
+    return http.post('/api/sessions/create', {username, password})
       .then(r => r.json());
-  },
-
-  signup(user) {
-    return Vue.http.post('/api/users', {user})
-      .then(r => r.json());
-  },
+  }
 }
