@@ -1,66 +1,74 @@
-<template lang="pug">
-  div
-    p(class='login-box-msg', v-if='status === "not-asked"') Sign up to start using Planning Poker
+<template>
+  <div>
+    <div v-if="status == 'errored'" class="callout callout-danger">
+      <h4>Register fail</h4>
+      <p>Verify your data</p>
+    </div>
 
-    .progress.progress-sm.active(v-if='status == "loading"')
-      .progress-bar.progress-bar-success.progress-bar-striped(
-        role='progressbar',
-        aria-valuenow='100',
-        aria-valuemin='0',
-        aria-valuemax="100",
-        style="width: 100%"
-      )
-        span.sr-only Loading
+    <div v-if="status == 'success'" class="callout callout-success">
+      <h4>Register success</h4>
+      <p>Redirecting you to the login page</p>
+    </div>
 
-    .callout.callout-danger(v-if="status == 'errored'")
-      h4 Register fail
-      p Verify your data
-
-    .callout.callout-success(v-if="status == 'success'")
-      h4 Register success
-      p Redirecting you to the login page
-
-    form(method="post", '@submit.prevent'='submit', '@keyup.13'='submit')
-      errorable-input(
-        v-model="username",
-        ':errors'="errors.username",
-        icon='user',
+    <form
+      method="post"
+      @submit.prevent="submit"
+      @keyup.13="submit"
+    >
+      <errorable-input
+        v-model="username"
+        :errors="errors.username"
+        icon="user"
         placeholder="Username"
-      )
-      errorable-input(
-        v-model="email",
-        ':errors'="errors.email",
-        icon='envelope',
+      />
+
+      <errorable-input
+        v-model="email"
+        :errors="errors.email"
+        icon="envelope"
         placeholder="Email"
-      )
-      errorable-input(
-        v-model="password",
-        ':errors'="errors.password",
-        icon='lock',
-        placeholder="Password",
-        type='password'
-      )
-      errorable-input(
-        v-model="password_confirmation",
-        ':errors'="errors.password_confirmation",
-        icon='lock',
-        placeholder="Password confirmation",
-        type='password'
-      )
-      button(
-        type="submit",
-        class="btn btn-primary btn-block btn-flat"
-        ':disabled'="status === 'loading'"
-      ) Sign Up
-    .social-auth-links.text-center
-      p - OR -
-    router-link(':to'="{name: 'login'}") I already have a membership
+      />
+
+      <errorable-input
+        v-model="password"
+        :errors="errors.password"
+        icon="lock"
+        placeholder="Password"
+        type="password"
+      />
+
+      <errorable-input
+        v-model="password_confirmation"
+        :errors="errors.password_confirmation"
+        icon="lock"
+        placeholder="Password confirmation"
+        type="password"
+      />
+
+      <div class="control is-grouped has-addons has-addons-centered">
+        <p class="control">
+          <router-link :to="{name: 'login'}" class='button is-link'>
+            Sign In
+          </router-link>
+        </p>
+
+        <p class="control">
+          <button
+            type="submit"
+            :disabled="status === 'loading'"
+            class="button is-primary"
+          >
+            Sign Up
+          </button>
+        </p>
+      </div>
+    </form>
+  </div>
 </template>
 
 <script>
-  import {R} from 'app/utils';
-  import {Auth} from 'app/api';
-  import store from 'app/store';
+  import R from 'ramda';
+  import {Users, parseErrors} from 'app/api';
   import {ErrorableInput} from 'app/components';
 
   export default {
@@ -94,22 +102,33 @@
 
         this.status = 'loading';
 
-        Auth.signup(R.pick([
+        Users.create(R.pick([
           'username', 'email', 'password', 'password_confirmation'
         ])(this))
           .then(res => {
-            this.$router.push({name: 'login', query: {username: res.data.username}});
-            this.status = 'success';
+            const username = R.view(R.lensPath(['data', 'attributes', 'username']), res)
+            this.$router.push({name: 'login', query: {username}});
+            return this.status = 'success';
           })
           .catch(res => {
-            const errors = R.view(R.lensPath(['body', 'errors']), res)
+            res.json()
+              .then(res => {
+                const errors = R.pipe(
+                  R.prop('errors'),
+                  parseErrors
+                )(res)
 
-            if (errors) {
-              R.map(key => {
-                this.errors[key] = R.prop(key, errors) || [];
-              }, R.keys(this.errors))
-            }
-            this.status = 'errored';
+                if (errors) {
+                  R.pipe(
+                    R.keys,
+                    R.map(key => {
+                      this.errors[key] = R.prop(key, errors) || [];
+                    })
+                  )(this.errors)
+                }
+
+                this.status = 'errored';
+              })
           })
       }
     }
