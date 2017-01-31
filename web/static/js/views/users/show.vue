@@ -35,7 +35,9 @@
           <article v-for="org in organizations" class="media">
             <div class="media-content">
               <div class="content">
-                <i class="fa fa-group" />&nbsp;
+                <div class="icon is-small">
+                  <i class="fa fa-group" />&nbsp;
+                </div>
                 <strong>{{org.displayName}}</strong>
                 <p>{{org.info}}</p>
               </div>
@@ -45,7 +47,9 @@
                 <figure class="media-left"><p class="image is-48x48"></p></figure>
 
                 <div class="media-content">
-                  <i class="fa fa-list-alt" />&nbsp;
+                  <div class="icon is-small">
+                    <i class="fa fa-list-alt" />&nbsp;
+                  </div>
                   <strong>{{proj.displayName}}</strong>
                   <p>{{proj.info}}</p>
                 </div>
