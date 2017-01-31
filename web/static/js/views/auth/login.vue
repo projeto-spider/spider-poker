@@ -1,51 +1,58 @@
-<template lang="pug">
-  div
-    p(class='login-box-msg', v-if='status === "not-asked"') Sign in to start your session
+<template>
+  <div>
+    <div v-if="status == 'errored'" class="callout callout-danger">
+      <h4>Login fail</h4>
+      <p>Verify your data</p>
+    </div>
 
-    .progress.progress-sm.active(v-if='status == "loading"')
-      .progress-bar.progress-bar-success.progress-bar-striped(
-        role='progressbar',
-        aria-valuenow='100',
-        aria-valuemin='0',
-        aria-valuemax="100",
-        style="width: 100%"
-      )
-        span.sr-only Loading
+    <div v-if="status == 'success'" class="callout callout-success">
+      <h4>Login success</h4>
+      <p>Redirecting you to the homepage</p>
+    </div>
 
-    .callout.callout-danger(v-if="status == 'errored'")
-      h4 Login fail
-      p Verify your username/email and password
+    <form
+      method="post"
+      @submit.prevent="submit"
+      @keyup.13="submit"
+    >
+      <errorable-input
+        v-model="username"
+        :errors="[]"
+        icon="user"
+        placeholder="Username"
+      />
 
-    .callout.callout-success(v-if="status == 'success'")
-      h4 Login success
-      p Redirecting you to the dashboard
+      <errorable-input
+        v-model="password"
+        :errors="[]"
+        icon="lock"
+        placeholder="Password"
+        type="password"
+      />
 
-    form(method="post", '@submit.prevent'='submit', '@keyup.13'='submit')
-      errorable-input(
-        v-model="username",
-        ':errors'="[]",
-        icon='user',
-        placeholder="Username or Email"
-      )
-      errorable-input(
-        v-model="password",
-        ':errors'="[]",
-        icon='lock',
-        placeholder="Password",
-        type='password'
-      )
-      button(
-        type="submit",
-        class="btn btn-primary btn-block btn-flat"
-        ':disabled'="status === 'loading'"
-      ) Sign In
-    .social-auth-links.text-center
-      p - OR -
-    router-link(':to'="{name: 'register'}") Register a new membership
+      <div class="control is-grouped has-addons has-addons-centered">
+        <p class="control">
+          <router-link :to="{name: 'register'}" class='button is-link'>
+            Sign up
+          </router-link>
+        </p>
+
+        <p class="control">
+          <button
+            type="submit"
+            :disabled="status === 'loading'"
+            class="button is-primary"
+          >
+            Sign In
+          </button>
+        </p>
+      </div>
+    </form>
+  </div>
 </template>
 
 <script>
-  import {R} from 'app/utils';
+  import R from 'ramda';
   import {Auth} from 'app/api';
   import store from 'app/store';
   import {ErrorableInput} from 'app/components';
