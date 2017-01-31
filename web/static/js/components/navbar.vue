@@ -8,19 +8,6 @@
           </router-link>
         </div>
 
-        <div class="nav-center">
-          <a class="nav-item" href="https://github.com/lubien/vue-brunch-boilerplate" target="_blank">
-            <span class="icon">
-              <i class="fa fa-github"></i>
-            </span>
-          </a>
-          <a class="nav-item" href="https://twitter.com/@joao_lubien" target="_blank">
-            <span class="icon">
-              <i class="fa fa-twitter"></i>
-            </span>
-          </a>
-        </div>
-
         <span class="nav-toggle" @click='toggleNav'>
           <span></span>
           <span></span>
@@ -31,6 +18,45 @@
           <router-link :to='{name: "home"}' class="nav-item">
             Home
           </router-link>
+
+          <span class="nav-item">
+            <router-link
+              v-if="!loggedin"
+              :to="{name: 'login'}"
+              class="button is-info is-inverted is-outlined"
+            >
+              <span class="icon is-small">
+                <i class="fa fa-sign-in"></i>
+              </span>
+              <span>Sign In</span>
+            </router-link>
+          </span>
+
+          <span class="nav-item">
+            <router-link
+              v-if="!loggedin"
+              :to="{name: 'register'}"
+              class="button is-info is-inverted is-outlined"
+            >
+              <span class="icon is-small">
+                <i class="fa fa-group"></i>
+              </span>
+              <span>Sign up</span>
+            </router-link>
+          </span>
+
+          <span class="nav-item">
+            <router-link
+              v-if="loggedin"
+              :to="{name: 'logout'}"
+              class="button is-danger"
+            >
+              <span class="icon is-small">
+                <i class="fa fa-sign-out"></i>
+              </span>
+              <span>Logout</span>
+            </router-link>
+          </span>
         </div>
       </nav>
     </div>
@@ -38,6 +64,8 @@
 </template>
 
 <script>
+  import {mapState} from 'vuex'
+
   export default {
     name: 'Navbar',
 
@@ -45,6 +73,12 @@
       return {
         navOpen: false
       }
+    },
+
+    computed: {
+      ...mapState({
+        loggedin: state => state.auth.user !== null
+      })
     },
 
     methods: {
@@ -58,10 +92,4 @@
 <style lang="sass" scoped>
 nav
   padding: 0 73px
-
-  .nav-left
-    padding-left: 0
-
-  .nav-right a:last-child
-    padding-right: 0
 </style>
