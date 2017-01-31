@@ -1,14 +1,26 @@
-import Vue from 'vue';
+import {http, resource} from './http'
+import parse from './parse'
+import parseErrors from './parse-errors'
+
+const users = resource('users{/id}')
 
 export default {
   all() {
-    return Vue.http.get('/api/users')
-      .then(r => r.json());
+    return users.query()
+      .then(res => res.json())
+      .then(parse)
   },
 
   show(username) {
-    return Vue.http.get(`/api/users/${username}`)
-      .then(r => r.json());
+    return users.query({'filter[username]': username})
+      .then(r => r.json())
+      .then(parse)
+  },
+
+  create(user) {
+    return users.save({}, {data: {attributes: user}})
+      .then(r => r.json())
+      .then(parse)
   },
 
   notifications: {
