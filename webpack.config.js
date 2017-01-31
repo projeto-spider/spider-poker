@@ -3,9 +3,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const environment = process.env.NODE_ENV
 
 module.exports = {
-  entry: [
-    './web/static/js/app.js'
-  ],
+  entry: './web/static/js/app.js',
 
   output: {
     path: './priv/static',
