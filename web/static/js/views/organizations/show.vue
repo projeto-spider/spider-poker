@@ -1,35 +1,52 @@
-<template lang='pug'>
-  div
-    .row(v-if='organization !== null')
-      .col-md-3
-        .box.box-primary
-          .box-body.box-profile
-            h3.profile-username.text-center {{organization.display_name || organization.name}}
-            p.text-muted.text-center {{organization.name}}
-            ul.list-group.list-group-unbordered
-              li.list-group-item
-                b Projects
-                a.pull-right {{projects.length}}
-      .col-md-9
-        .box
-          .box-body.table-responsive.no-padding
-            table.table.table-hover
-              tbody
-                tr
-                  th Name
-                  th Description
-                  th Private
-                  th Actions
-                tr(v-for='proj in projects')
-                  td {{proj.display_name || proj.name}}
-                  td {{proj.description || '-'}}
-                  td {{proj.private ? 'Yes' : 'No'}}
-                  td
-                    router-link(':to'='{name: "organization", params: {id: proj.name}}').label.label-success View
+<template>
+  <div>
+    <div v-if="organization !== null" class="row">
+      <div class="col-md-3">
+        <div class="box box-primary">
+          <div class="box-body box-profile">
+            <h3 class="profile-username text-center">{{organization.display_name || organization.name}}</h3>
+            <p class="text-muted text-center">{{organization.name}}</p>
+            <ul class="list-group list-group-unbordered">
+              <li class="list-group-item"><b>Projects</b><a class="pull-right">{{projects.length}}</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <div class="box">
+          <div class="box-body table-responsive no-padding">
+            <table class="table table-hover">
+              <tbody>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Private</th>
+                  <th>Actions</th>
+                </tr>
+                <tr v-for="proj in projects">
+                  <td>{{proj.display_name || proj.name}}</td>
+                  <td>{{proj.description || '-'}}</td>
+                  <td>{{proj.private ? 'Yes' : 'No'}}</td>
+                  <td>
+                    <router-link
+                      :to="{name: 'organization', params: {id: proj.name}}"
+                      class="label label-success"
+                    >
+                      View
+                    </router-link>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import {R} from 'app/utils';
+import R from 'ramda';
 import store from 'app/store';
 import {Organizations} from 'app/api';
 
