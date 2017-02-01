@@ -1,17 +1,24 @@
-<template lang="pug">
-  .box
-    .box-body.table-responsive.no-padding
-      table.table.table-hover
-        tbody
-          tr
-            th Name
-            th Email
-            th Actions
-          tr(v-for='user in users')
-            td {{user.profile.name || user.username}}
-            td {{user.email}}
-            td
-              router-link(':to'='{name: "user", params: {username: user.username}}').label.label-success View
+<template>
+  <div class="box">
+    <div class="box-body table-responsive no-padding">
+      <table class="table table-hover">
+        <tbody>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr>
+          <tr v-for="user in users">
+            <td>{{user.profile.name || user.username}}</td>
+            <td>{{user.email}}</td>
+            <td>
+              <router-link :to="{name: 'user', params: {username: user.username}}" class="label label-success">View</router-link>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </template>
 
 <script>

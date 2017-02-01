@@ -1,15 +1,20 @@
-<template lang='pug'>
-  li.dropdown.notifications-menu(':class'='{open: open}')
-    a.dropdown-toggle(href='#', data-toggle='dropdown', '@click'='open = !open')
-      i.fa.fa-bell-o
-      span.label.label-warning(v-if='notifications.length > 0') {{notifications.length}}
-    ul.dropdown-menu
-      li.header You have {{notifications.length}} notification(s)
-      li
-        // inner menu: contains the actual data
-        ul.menu
-          li(v-for='notification in notifications')
-            a(href='#', '@click.prevent'='check(notification.id)') {{notification.content}}
+<template >
+  <li :class="{open: open}" class="dropdown notifications-menu">
+    <a href="#" data-toggle="dropdown" @click="open = !open" class="dropdown-toggle">
+      <i class="fa fa-bell-o"></i>
+        <span v-if="notifications.length > 0" class="label label-warning">{{notifications.length}}</span>
+    </a>
+    <ul class="dropdown-menu">
+      <li class="header">You have {{notifications.length}} notification(s)</li>
+      <li>
+        <ul class="menu">
+          <li v-for="notification in notifications">
+            <a href="#" @click.prevent="check(notification.id)">{{notification.content}}</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
 </template>
 
 <script>
