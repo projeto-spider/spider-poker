@@ -1,19 +1,31 @@
-<template lang="pug">
-  .box
-    .box-body.table-responsive.no-padding
-      table.table.table-hover
-        tbody
-          tr
-            th Name
-            th Description
-            th Private
-            th Actions
-          tr(v-for='org in organizations')
-            td {{org.display_name || org.name}}
-            td {{org.description || '-'}}
-            td {{org.private ? 'Yes' : 'No'}}
-            td
-              router-link(':to'='{name: "organization", params: {id: org.name}}').label.label-success View
+<template>
+  <div class="box">
+    <div class="box-body table-responsive no-padding">
+      <table class="table table-hover">
+        <tbody>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Private</th>
+            <th>Actions</th>
+          </tr>
+          <tr v-for="org in organizations">
+            <td>{{org.display_name || org.name}}</td>
+            <td>{{org.description || '-'}}</td>
+            <td>{{org.private ? 'Yes' : 'No'}}</td>
+            <td>
+              <router-link
+                :to="{name: 'organization', params: {id: org.name}}"
+                class="label label-success"
+              >
+                View
+              </router-link>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </template>
 
 <script>
