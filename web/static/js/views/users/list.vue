@@ -22,7 +22,7 @@
 </template>
 
 <script>
-  import {R} from 'app/utils';
+  import R from 'ramda';
   import store from 'app/store';
   import {Users} from 'app/api';
 

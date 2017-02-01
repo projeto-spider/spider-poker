@@ -21,7 +21,8 @@
 
 <script>
   import {mapState} from 'vuex';
-  import {R, gravatarUrl} from 'app/utils';
+  import R from 'ramda'
+  import {gravatarUrl} from 'app/utils';
 
   const userView = R.view(R.lensPath(['auth', 'user']));
 

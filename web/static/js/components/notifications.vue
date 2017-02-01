@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import {R} from 'app/utils';
+import R from 'ramda'
 import {Users} from 'app/api';
 import {mapState} from 'vuex';
 
