@@ -12,7 +12,9 @@ import UserEdit from './users/edit'
 import UsersList from './users/list'
 
 // Organizations
+import OrganizationCreate from './organizations/create'
 import OrganizationShow from './organizations/show'
+import OrganizationsEdit from './organizations/edit'
 import OrganizationsList from './organizations/list'
 
 // Errors
@@ -36,6 +38,8 @@ export default {
   },
 
   Organizations: {
+    Create: OrganizationCreate,
+    Edit: OrganizationsEdit,
     Show: OrganizationShow,
     List: OrganizationsList
   },

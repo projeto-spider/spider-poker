@@ -39,38 +39,50 @@
         </div>
 
         <div v-if='loggedin' class="column is-one-third">
-          <nav class="panel">
-            <p class="panel-heading">
-              Quick Links
-            </p>
+          <router-link
+            :to="{name: 'organizationCreate'}"
+            class="button is-primary is-outlined is-fullwidth"
+          >
+            <span class="icon is-small">
+              <i class="fa fa-building"></i>
+            </span>
+            <span>Create a new organization</span>
+          </router-link>
 
-            <div class="panel-block">
-              <p class="control has-icon">
-                <input class="input is-small" type="text" placeholder="Search"/>
+          <br />
 
-                <span class="icon is-small">
-                  <i class="fa fa-search"/>
-                </span>
+            <nav class="panel">
+              <p class="panel-heading">
+                Quick Links
               </p>
-            </div>
 
-            <p class="panel-tabs">
-              <a
-                v-for="(tab, index) in tabs"
-                :class="{'is-active': currentTab === index}"
-                @click="changeTab(index)"
-              >
-                {{tab}}
+              <div class="panel-block">
+                <p class="control has-icon">
+                  <input class="input is-small" type="text" placeholder="Search"/>
+
+                  <span class="icon is-small">
+                    <i class="fa fa-search"/>
+                  </span>
+                </p>
+              </div>
+
+              <p class="panel-tabs">
+                <a
+                  v-for="(tab, index) in tabs"
+                  :class="{'is-active': currentTab === index}"
+                  @click="changeTab(index)"
+                >
+                  {{tab}}
+                </a>
+              </p>
+
+              <a v-for="item in items" class="panel-block">
+                <span class="panel-icon">
+                  <i class="fa" :class="itemClasses[item.type]" />
+                </span>
+                {{item.name}}
               </a>
-            </p>
-
-            <a v-for="item in items" class="panel-block">
-              <span class="panel-icon">
-                <i class="fa" :class="itemClasses[item.type]" />
-              </span>
-              {{item.name}}
-            </a>
-          </nav>
+            </nav>
         </div>
       </div>
     </div>
