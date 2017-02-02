@@ -39,9 +39,18 @@
         </div>
 
         <div v-if='loggedin' class="column is-one-third">
-          <button class="button is-fullwidth"><i class="icon is-small fa fa-building">
-            creat a new organization
-          </button></i>
+          <router-link
+            :to="{name: 'organizationCreate'}"
+            class="button is-primary is-outlined is-fullwidth"
+          >
+            <span class="icon is-small">
+              <i class="fa fa-building"></i>
+            </span>
+            <span>Create a new organization</span>
+          </router-link>
+
+          <br />
+
             <nav class="panel">
               <p class="panel-heading">
                 Quick Links
