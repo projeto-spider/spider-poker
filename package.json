@@ -21,7 +21,6 @@
     "yayson": "^2.0.3"
   },
   "devDependencies": {
-    "admin-lte": "^2.3.8",
     "babel-core": "^6.21.0",
     "babel-loader": "^6.2.10",
     "babel-plugin-module-alias": "^1.6.0",
