@@ -72,9 +72,22 @@ export default [
 
       // Organizations
       {
+        name: 'organizationCreate',
+        path: 'organization/create',
+        component: Organizations.Create,
+      },
+
+      {
         name: 'organizationShow',
-        path: 'organization/:id',
+        path: 'organization/:organization',
         component: Organizations.Show
+      },
+
+      {
+        name: 'organizationEdit',
+        path: 'organization/edit',
+        component: Organizations.Edit,
+        beforeEnter: requireAuth()
       },
 
       {
