@@ -1,18 +1,18 @@
 const state = {
   token: recover('token') || '',
-  user: recover('user') || null,
-};
+  user: recover('user') || null
+}
 
 const mutations = {
   set_token(state, token) {
-    state.token = token;
-    persist('token', token);
+    state.token = token
+    persist('token', token)
   },
   set_user(state, user) {
-    state.user = user;
-    persist('user', user);
-  },
-};
+    state.user = user
+    persist('user', user)
+  }
+}
 
 export default {
   namespaced: 'true',
@@ -24,20 +24,20 @@ export default {
 
 function recover(key) {
   if (!hasLocalStorage()) {
-    return false;
+    return false
   }
 
-  return JSON.parse(localStorage.getItem(key));
+  return JSON.parse(localStorage.getItem(key))
 }
 
 function persist(key, value) {
   if (!hasLocalStorage()) {
-    return;
+    return
   }
 
-  localStorage.setItem(key, JSON.stringify(value));
+  localStorage.setItem(key, JSON.stringify(value))
 }
 
 function hasLocalStorage() {
-  return window && window.localStorage;
+  return window && window.localStorage
 }

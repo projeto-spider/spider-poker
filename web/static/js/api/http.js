@@ -1,7 +1,6 @@
-import Vue from 'vue';
-import VueResource from 'vue-resource';
-import store from 'app/store';
-import parse from './parse'
+import Vue from 'vue'
+import VueResource from 'vue-resource'
+import store from 'app/store'
 
 Vue.use(VueResource)
 

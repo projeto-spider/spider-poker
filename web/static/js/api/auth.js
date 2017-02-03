@@ -10,6 +10,6 @@ export default {
 
   signin(username, password) {
     return http.post('/api/sessions/create', {username, password})
-      .then(r => r.json());
+      .then(r => r.json())
   }
 }

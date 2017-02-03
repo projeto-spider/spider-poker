@@ -1,8 +1,8 @@
-import store from 'app/store';
+import store from 'app/store'
 import {
   AuthPanel, BaseLayout
-} from 'app/layouts';
-import views from '../views';
+} from 'app/layouts'
+import views from '../views'
 
 const {
   Auth,
@@ -35,7 +35,7 @@ export default [
         name: 'logout',
         path: 'logout',
         component: Auth.Logout
-      },
+      }
     ]
   },
 
@@ -74,7 +74,7 @@ export default [
       {
         name: 'organizationCreate',
         path: 'organization/create',
-        component: Organizations.Create,
+        component: Organizations.Create
       },
 
       {
@@ -94,7 +94,7 @@ export default [
         name: 'organizationsList',
         path: 'organizations',
         component: Organizations.List
-      },
+      }
     ]
   },
 
@@ -102,34 +102,34 @@ export default [
     path: '*',
     name: 'error404',
     component: ErrorViews.Error404
-  },
+  }
 ]
 
 // Helpers
 
 function requireAuthStatus(should) {
   return (to, from, next) => {
-    const token = store.state.auth.token;
+    const token = store.state.auth.token
 
     if (should === 'on' && !token) {
       next({
         path: '/auth/login',
         query: { redirect: to.fullPath }
-      });
+      })
     } else if (should === 'off' && token) {
       next({
-        path: '/',
-      });
+        path: '/'
+      })
     } else {
-      next();
+      next()
     }
   }
 }
 
 function requireAuth() {
-  return requireAuthStatus('on');
+  return requireAuthStatus('on')
 }
 
 function requireLoggedOff() {
-  return requireAuthStatus('off');
+  return requireAuthStatus('off')
 }

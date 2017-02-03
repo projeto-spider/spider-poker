@@ -1,6 +1,5 @@
 import {http, resource} from './http'
 import parse from './parse'
-import parseErrors from './parse-errors'
 
 const users = resource('users{/id}')
 
@@ -35,13 +34,13 @@ export default {
 
   notifications: {
     all(username) {
-      return Vue.http.get(`/api/users/${username}/notifications`)
-        .then(r => r.json());
+      return http.get(`/api/users/${username}/notifications`)
+        .then(r => r.json())
     },
 
     update(username, id, notification) {
-      return Vue.http.put(`/api/users/${username}/notifications/${id}`, {notification})
-        .then(r => r.json());
-    },
-  },
+      return http.put(`/api/users/${username}/notifications/${id}`, {notification})
+        .then(r => r.json())
+    }
+  }
 }
