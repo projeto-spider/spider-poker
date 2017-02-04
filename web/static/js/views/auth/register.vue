@@ -114,9 +114,7 @@
           this.$router.push({name: 'login', query: {username}})
 
           this.status = 'success'
-        } catch (raw) {
-          const res = await raw.json()
-
+        } catch (res) {
           this.errors = insertChangesetErrors(res.errors)(emptyErrors)
 
           this.status = 'errored'
