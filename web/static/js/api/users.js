@@ -1,6 +1,6 @@
 import {http, resource} from './http'
 import parse from './parse'
-import {resolveAsJson, resolveErrorAsJson} from './resolvers'
+import {resolveAsJson, resolveErrorAsJson} from 'app/utils'
 
 const users = resource('users{/id}')
 
