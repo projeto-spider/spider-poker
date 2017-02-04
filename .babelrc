@@ -10,6 +10,8 @@
       { "src": "./web/static/js/state/store.js", "expose": "app/store" },
       { "src": "./web/static/js/utils.js", "expose": "app/utils" }
     ]],
-    "transform-object-rest-spread"
+    "transform-object-rest-spread",
+    "transform-async-to-generator",
+    "transform-async-generator-functions"
   ]
 }
