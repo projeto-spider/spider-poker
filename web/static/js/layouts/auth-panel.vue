@@ -22,7 +22,7 @@
 
 <script>
   export default {
-    name: 'AuthPanel'
+    name: 'AuthPanelLayout'
   }
 </script>
 

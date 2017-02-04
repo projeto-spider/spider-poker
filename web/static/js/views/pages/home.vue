@@ -124,9 +124,9 @@
         currentTab: TAB.all,
 
         tabs: [
-          "All",
-          "Organizations",
-          "Projects"
+          'All',
+          'Organizations',
+          'Projects'
         ],
 
         itemClasses: {
@@ -142,10 +142,10 @@
       }),
 
       items() {
-        const currentTab = this.currentTab;
+        const currentTab = this.currentTab
 
         if (currentTab === TAB.all) {
-          return mockItems;
+          return mockItems
         }
 
         return mockItems
@@ -157,15 +157,12 @@
       gravatar: gravatar.url,
 
       changeTab(index) {
-        this.currentTab = index;
+        this.currentTab = index
       }
     },
 
-    created() {
-      Users.all()
-        .then(list => {
-          this.users = list
-        })
+    async created() {
+      this.users = await Users.all()
     }
   }
 </script>

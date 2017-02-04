@@ -65,10 +65,9 @@
                 <button
                   type="submit"
                   :disabled="status === 'loading'"
-                  class="button is-danger"
-                  @click.prevent="deleteUser"
+                  class="button is-primary"
                 >
-                  Delete
+                  Update
                 </button>
               </p>
 
@@ -76,11 +75,13 @@
                 <button
                   type="submit"
                   :disabled="status === 'loading'"
-                  class="button is-primary"
+                  class="button is-danger"
+                  @click.prevent="deleteUser"
                 >
-                  Update
+                  Delete
                 </button>
               </p>
+
             </div>
           </form>
         </div>
@@ -94,8 +95,19 @@
   import R from 'ramda'
   import gravatar from 'gravatar'
   import store from 'app/store'
-  import {Users, parseErrors} from 'app/api'
+  import {Users} from 'app/api'
+  import {insertChangesetErrors} from 'app/utils'
   import {HeroTitle, ErrorableInput} from 'app/components'
+
+  const emptyErrors = {
+    bio: [],
+    contact: [],
+    location: [],
+    name: [],
+    url: []
+  }
+
+  const userIdView = R.view(R.lensPath(['user', 'id']))
 
   export default {
     name: 'UserEditView',
@@ -106,78 +118,7 @@
       return {
         status: 'not-asked',
 
-        errors: {
-          bio: [],
-          contact: [],
-          location: [],
-          name: [],
-          url: [],
-        }
-      }
-    },
-
-    methods: {
-      gravatar(email) {
-        return gravatar.url(email, {size: 512})
-      },
-
-      submit() {
-        if (this.status === 'loading') {
-          return;
-        }
-
-        this.status = 'loading';
-
-        const id = this.user.id;
-        const attributes = R.pipe(
-          R.view(R.lensPath(['user', 'profile'])),
-          R.pick(['bio', 'contact', 'location', 'name', 'url'])
-        )(this)
-
-        Users.update(id, attributes)
-          .then(profile => {
-            this.status = 'success'
-
-            store.commit('auth/set_user', {
-              ...this.user,
-              profile
-            })
-
-            this.errors = R.mapObjIndexed(() => [], this.errors)
-          })
-          .catch(res => {
-            res.json()
-              .then(res => {
-                const errors = R.pipe(
-                  R.prop('errors'),
-                  parseErrors
-                )(res)
-
-                if (errors) {
-                  R.pipe(
-                    R.keys,
-                    R.map(key => {
-                      this.errors[key] = R.prop(key, errors) || [];
-                    })
-                  )(this.errors)
-                }
-
-                this.status = 'errored';
-              })
-          })
-      },
-
-      deleteUser() {
-        if (confirm('Are you sure you want to delete your account?')) {
-          const id = R.view(R.lensPath(['user', 'id']), this)
-
-          Users.delete(id)
-            .then(() => {
-              store.commit("auth/set_token", '');
-              store.commit("auth/set_user", null);
-              this.$router.push({name: 'home'});
-            })
-        }
+        errors: emptyErrors
       }
     },
 
@@ -188,6 +129,56 @@
           R.clone
         )
       })
+    },
+
+    methods: {
+      gravatar(email) {
+        return gravatar.url(email, {size: 512})
+      },
+
+      async submit() {
+        if (this.status === 'loading') {
+          return
+        }
+
+        this.status = 'loading'
+
+        const id = userIdView(this)
+
+        const attributes = R.pipe(
+          R.view(R.lensPath(['user', 'profile'])),
+          R.pick(['bio', 'contact', 'location', 'name', 'url'])
+        )(this)
+
+        try {
+          const profile = await Users.update(id, attributes)
+
+          this.status = 'success'
+
+          store.commit('auth/set_user', {
+            ...this.user,
+            profile
+          })
+
+          this.errors = emptyErrors
+        } catch (res) {
+          this.errors = insertChangesetErrors(res.errors)(emptyErrors)
+
+          this.status = 'errored'
+        }
+      },
+
+      async deleteUser() {
+        if (confirm('Are you sure you want to delete your account?')) {
+          const id = userIdView(this)
+
+          await Users.delete(id)
+
+          store.commit('auth/set_token', '')
+          store.commit('auth/set_user', null)
+          this.$router.push({name: 'home'})
+        }
+      }
     }
   }
 </script>

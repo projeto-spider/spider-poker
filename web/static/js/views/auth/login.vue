@@ -52,48 +52,44 @@
 </template>
 
 <script>
-  import R from 'ramda';
-  import {Auth} from 'app/api';
-  import store from 'app/store';
-  import {ErrorableInput} from 'app/components';
+  import R from 'ramda'
+  import {Auth} from 'app/api'
+  import store from 'app/store'
+  import {ErrorableInput} from 'app/components'
 
   export default {
-    name: 'Login',
+    name: 'LoginView',
 
-    components: {
-      'errorable-input': ErrorableInput,
-    },
+    components: {ErrorableInput},
 
     data() {
       return {
         username: R.view(R.lensPath(['$route', 'query', 'username']), this) || '',
         password: '',
-        status: 'not-asked',
-      };
+        status: 'not-asked'
+      }
     },
 
     methods: {
-      submit() {
+      async submit() {
         if (this.status === 'loading') {
-          return;
+          return
         }
 
-        this.status = 'loading';
+        this.status = 'loading'
 
-        Auth.signin(this.username, this.password)
-          .then(({token}) => {
-            store.commit('auth/set_token', token);
-            this.status = 'success';
-            this.$router.push({name: 'home'});
+        try {
+          const {token} = await Auth.signin(this.username, this.password)
 
-            return Auth.me();
-          })
-          .then(user => {
-            this.$store.commit('auth/set_user', user);
-          })
-          .catch(e => {
-            this.status = 'errored';
-          });
+          store.commit('auth/set_token', token)
+          const user = await Auth.me()
+          this.$store.commit('auth/set_user', user)
+
+          this.status = 'success'
+          this.$router.push({name: 'home'})
+        } catch (res) {
+          this.status = 'errored'
+        }
       }
     }
   }

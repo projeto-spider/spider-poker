@@ -149,18 +149,19 @@
       }
     },
 
-    created() {
+    async created() {
       this.status = 'loading'
 
-      Users.show(this.$route.params.username)
-        .then(res => {
-          if (res.length === 0) {
-            return this.status = 'errored'
-          }
+      const users = await Users.show(this.$route.params.username)
 
-          this.status = 'success'
-          this.user = res[0]
-        })
+      if (users.length === 0) {
+        this.status = 'errored'
+        return
+      }
+
+      this.status = 'success'
+
+      this.user = users[0]
     }
   }
 </script>

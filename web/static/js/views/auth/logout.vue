@@ -8,15 +8,15 @@
 </template>
 
 <script>
-  import store from 'app/store';
+  import store from 'app/store'
 
   export default {
-    name: 'Logout',
+    name: 'LogoutView',
 
     created() {
-      store.commit("auth/set_token", '');
-      store.commit("auth/set_user", null);
-      this.$router.push({name: 'home'});
+      store.commit('auth/set_token', '')
+      store.commit('auth/set_user', null)
+      this.$router.push({name: 'home'})
     }
   }
 </script>

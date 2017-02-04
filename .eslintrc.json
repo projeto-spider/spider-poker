@@ -1,0 +1,18 @@
+{
+    "extends": [
+      "standard"
+    ],
+    "plugins": [
+        "vue",
+        "standard",
+        "promise"
+    ],
+    "rules": {
+        "space-before-function-paren": 0
+    },
+    "globals": {
+      "window": true,
+      "localStorage": true,
+      "confirm": true
+    }
+}
