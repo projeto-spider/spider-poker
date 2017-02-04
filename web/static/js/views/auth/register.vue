@@ -67,16 +67,22 @@
 </template>
 
 <script>
-  import R from 'ramda';
-  import {Users, parseErrors} from 'app/api';
-  import {ErrorableInput} from 'app/components';
+  import R from 'ramda'
+  import {Users} from 'app/api'
+  import {ErrorableInput} from 'app/components'
+  import {insertChangesetErrors} from 'app/utils'
+
+  const emptyErrors = {
+    username: [],
+    email: [],
+    password: [],
+    password_confirmation: []
+  }
 
   export default {
-    name: 'Register',
+    name: 'RegisterView',
 
-    components: {
-      'errorable-input': ErrorableInput,
-    },
+    components: {ErrorableInput},
 
     data() {
       return {
@@ -85,51 +91,36 @@
         password: '',
         password_confirmation: '',
         status: 'not-asked',
-        errors: {
-          username: [],
-          email: [],
-          password: [],
-          password_confirmation: []
-        },
-      };
+        errors: emptyErrors
+      }
     },
 
     methods: {
-      submit() {
+      async submit() {
         if (this.status === 'loading') {
-          return;
+          return
         }
 
-        this.status = 'loading';
+        this.status = 'loading'
 
-        Users.create(R.pick([
+        const attributes = R.pick([
           'username', 'email', 'password', 'password_confirmation'
-        ])(this))
-          .then(res => {
-            const username = R.view(R.lensPath(['data', 'attributes', 'username']), res)
-            this.$router.push({name: 'login', query: {username}});
-            return this.status = 'success';
-          })
-          .catch(res => {
-            res.json()
-              .then(res => {
-                const errors = R.pipe(
-                  R.prop('errors'),
-                  parseErrors
-                )(res)
+        ], this)
 
-                if (errors) {
-                  R.pipe(
-                    R.keys,
-                    R.map(key => {
-                      this.errors[key] = R.prop(key, errors) || [];
-                    })
-                  )(this.errors)
-                }
+        try {
+          const res = await Users.create(attributes)
 
-                this.status = 'errored';
-              })
-          })
+          const username = R.view(R.lensPath(['data', 'attributes', 'username']), res)
+          this.$router.push({name: 'login', query: {username}})
+
+          this.status = 'success'
+        } catch (raw) {
+          const res = await raw.json()
+
+          this.errors = insertChangesetErrors(res.errors)(emptyErrors)
+
+          this.status = 'errored'
+        }
       }
     }
   }
