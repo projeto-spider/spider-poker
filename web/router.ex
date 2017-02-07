@@ -42,6 +42,9 @@ defmodule Poker.Router do
     get "/*path", PageController, :index
   end
 
+  defp handle_errors(conn, %{reason: %Bodyguard.NotAuthorizedError{reason: :bad_request}}) do
+    send_resp conn, 400, ""
+  end
   defp handle_errors(conn, %{reason: %Bodyguard.NotAuthorizedError{}}) do
     send_resp conn, conn.status, ""
   end
