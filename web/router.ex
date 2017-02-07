@@ -43,7 +43,7 @@ defmodule Poker.Router do
   end
 
   defp handle_errors(conn, %{reason: %Bodyguard.NotAuthorizedError{}}) do
-    send_resp conn, 403, ""
+    send_resp conn, conn.status, ""
   end
   defp handle_errors(conn, _reason) do
     send_resp conn, conn.status, ""
