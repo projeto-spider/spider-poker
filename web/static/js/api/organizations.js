@@ -6,7 +6,7 @@ const organizations = resource('organizations{/id}')
 
 export default {
   all() {
-     return organizations.query()
+    return organizations.query()
       .then(r => r.json())
       .then(parse)
   },
