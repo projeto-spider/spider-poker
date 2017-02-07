@@ -11,15 +11,32 @@ defmodule Poker.ProjectController do
   # Scope
 
   def records(conn) do
-    scope conn, Project
+    default = scope conn, Project
+
+    case nested_resource(conn) do
+      {"organizations", id} ->
+        from p in default,
+          join: o in assoc(p, :organization),
+          where: o.id == ^id
+
+      _ ->
+        default
+    end
   end
 
   # Handlers
 
   def handle_create(conn, attributes) do
-    authorize! conn, %Project{organization_id: attributes["organization_id"]}
+    organization_id = case nested_resource(conn) do
+      {"organizations", id} ->
+        id
+      _ ->
+        attributes["organization_id"]
+    end
 
-    organization = Repo.get! Organization, attributes["organization_id"]
+    authorize! conn, %Project{organization_id: organization_id}
+
+    organization = Repo.get! Organization, organization_id
 
     attributes = attributes
                  |> Map.put("organization", organization)

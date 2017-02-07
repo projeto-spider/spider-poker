@@ -26,7 +26,7 @@ defmodule Poker.OrganizationController do
                       "user_id" => owner.id,
                       "role" => "owner"}
 
-      role = OrganizationUser.registration_changeset %OrganizationUser{}, role_params
+      role = OrganizationUser.create_changeset %OrganizationUser{}, role_params
 
       Repo.insert! role
 

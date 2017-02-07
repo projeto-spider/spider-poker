@@ -27,9 +27,16 @@ defmodule Poker.Router do
         only: [:show, :update]
       resources "/relationships/messages", MessageController, only: [:index, :update]
     end
+    resources "/organizations", OrganizationController, except: [:new, :edit] do
+      resources "/relationships/users", UserController, except: [:new, :edit, :create, :delete]
+      post "/relationships/users", UserController, :add_to_organization
+      # TODO: update membership
+      delete "/relationships/users/:user_id", UserController, :remove_from_organization
+
+      resources "/relationships/projects", ProjectController, except: [:new, :edit]
+    end
     resources "/notifications", NotificationController, only: [:index, :update]
     resources "/messages", MessageController, only: [:create]
-    resources "/organizations", OrganizationController, except: [:new, :edit]
     resources "/projects", ProjectController, except: [:new, :edit]
 
     get "/sessions/me", SessionController, :me

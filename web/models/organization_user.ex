@@ -17,7 +17,7 @@ defmodule Poker.OrganizationUser do
     |> validate_inclusion(:role, ["owner", "member"])
   end
 
-  def registration_changeset(struct, params \\ %{}) do
+  def create_changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:role, :user_id, :organization_id])
     |> changeset(params)
