@@ -11,26 +11,4 @@ defmodule Poker.Helpers do
   def email_regex do
     @email_regex
   end
-
-  defmacro filterable_by(fields) do
-    fields
-    |> Enum.map(&generic_filter/1)
-  end
-
-  defp generic_filter(field) do
-    quote do
-      def filter(_conn, query, unquote(field), values)
-      when is_list(values) do
-        key = unquote(String.to_atom(field))
-
-        from ref in query, where: field(ref, ^key) in ^values
-      end
-
-      def filter(_conn, query, unquote(field), value) do
-        key = unquote(String.to_atom(field))
-
-        from ref in query, where: field(ref, ^key) == ^value
-      end
-    end
-  end
 end
