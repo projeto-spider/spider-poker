@@ -11,7 +11,7 @@ defmodule Poker.User do
     field :password_confirmation, :string, virtual: true
     field :password_hash, :string
     has_one :profile, Poker.Profile, on_replace: :update, on_delete: :delete_all
-    has_many :organizations_users, Poker.OrganizationUser
+    has_many :organizations_users, Poker.OrganizationMembership
     has_many :organizations, through: [:organizations_users, :organization]
     has_many :notifications, Poker.Notification, on_delete: :delete_all
 
