@@ -7,7 +7,7 @@ defmodule Poker.ProfileController do
   plug :preload_session when action in [:update]
   plug JaResource, only: [:show, :update]
 
-  def record(conn, foo) do
+  def record(conn, _conn) do
     user_id = conn.params["user_id"]
 
     Profile

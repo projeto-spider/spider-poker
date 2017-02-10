@@ -2,6 +2,8 @@ defmodule Poker.Router do
   use Poker.Web, :router
   use Plug.ErrorHandler
 
+  @non_rest [:new, :edit]
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -21,23 +23,19 @@ defmodule Poker.Router do
   scope "/api", Poker do
     pipe_through :api
 
-    resources "/users", UserController, except: [:new, :edit] do
+    resources "/users", UserController, except: @non_rest do
       resources "/relationships/profile", ProfileController,
         singleton: true,
         only: [:show, :update]
       resources "/relationships/messages", MessageController, only: [:index, :update]
     end
-    resources "/organizations", OrganizationController, except: [:new, :edit] do
-      resources "/relationships/users", UserController, except: [:new, :edit, :create, :delete]
-      post "/relationships/users", UserController, :add_to_organization
-      # TODO: update membership
-      delete "/relationships/users/:user_id", UserController, :remove_from_organization
-
-      resources "/relationships/projects", ProjectController, except: [:new, :edit]
+    resources "/organizations", OrganizationController, except: @non_rest do
+      resources "/relationships/memberships", OrganizationMembershipController, excepct: @non_rest
+      resources "/relationships/projects", ProjectController, except: @non_rest
     end
     resources "/notifications", NotificationController, only: [:index, :update]
     resources "/messages", MessageController, only: [:create]
-    resources "/projects", ProjectController, except: [:new, :edit]
+    resources "/projects", ProjectController, except: @non_rest
 
     get "/sessions/me", SessionController, :me
     post "/sessions/create", SessionController, :create

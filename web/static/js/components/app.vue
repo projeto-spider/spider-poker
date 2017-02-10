@@ -10,7 +10,9 @@
 
 <style lang="sass">
 @import '~font-awesome/css/font-awesome.css'
-@import '~bulma'
+//$primary: #00346F // blue
+$primary: #88C139 // green
+@import '~bulma/bulma'
 @import '~nprogress/nprogress.css'
 
 main > .container

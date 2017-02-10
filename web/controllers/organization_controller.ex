@@ -2,7 +2,7 @@ defmodule Poker.OrganizationController do
   use Poker.Web, :controller
   use JaResource
 
-  alias Poker.{User, Organization, OrganizationUser}
+  alias Poker.{User, Organization, OrganizationMembership}
 
   plug :ensure_authenticated when action in [:create, :update, :delete]
   plug :preload_session
@@ -26,7 +26,7 @@ defmodule Poker.OrganizationController do
                       "user_id" => owner.id,
                       "role" => "owner"}
 
-      role = OrganizationUser.create_changeset %OrganizationUser{}, role_params
+      role = OrganizationMembership.create_changeset %OrganizationMembership{}, role_params
 
       Repo.insert! role
 
