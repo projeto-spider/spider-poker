@@ -1,17 +1,25 @@
 import R from 'ramda'
 import yayson from 'yayson'
-import casefy from 'object-keys-to-case'
+import objectKeysToCase from 'object-keys-to-case'
 import camelCase from 'camel-case'
 import snakeCase from 'snake-case'
 
 const {Store} = yayson()
 const store = new Store()
 
-export const camelize = str =>
-  casefy(str, camelCase)
+export const casefy = fn => data => {
+  if (Array.isArray(data)) {
+    return data.map(obj => objectKeysToCase(obj, fn))
+  }
 
-export const snakefy = str =>
-  casefy(str, snakeCase)
+  return objectKeysToCase(data, fn)
+}
+
+export const camelize =
+  casefy(camelCase)
+
+export const snakefy =
+  casefy(snakeCase)
 
 const jsonApiField = ({pointer}) => {
   const fieldRegex = /\/data\/attributes\/(.*)/
@@ -47,10 +55,13 @@ export const parseJsonApi = data =>
 export const resolveAsJson = async res => {
   const json = await res.json()
 
-  return R.pipe(
+  const x = R.pipe(
     parseJsonApi,
     camelize
   )(json)
+  console.log(x, parseJsonApi(json))
+  console.log(camelize({'foo-bar': 1}))
+  return x
 }
 
 export const resolveErrorAsJson = async res => {
