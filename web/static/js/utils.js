@@ -1,13 +1,48 @@
 import R from 'ramda'
-import {parseErrors} from 'app/api'
+import yayson from 'yayson'
+import camelize from 'camelize'
+
+const {Store} = yayson()
+const store = new Store()
+
+const jsonApiField = ({pointer}) => {
+  const fieldRegex = /\/data\/attributes\/(.*)/
+  const [, field] = fieldRegex.exec(pointer)
+  return field
+    .replace('-', '_')
+}
+
+const simplifyJsonApiError = ({title, source, detail}) => ({
+  field: jsonApiField(source),
+  title,
+  detail
+})
+
+const aggregateJsonApiErrorsFromSameField = (acc, error) => {
+  if (!acc[error.field]) {
+    acc[error.field] = []
+  }
+
+  acc[error.field].push(error)
+
+  return acc
+}
+
+export const parseErrors = errors =>
+  errors
+    .map(simplifyJsonApiError)
+    .reduce(aggregateJsonApiErrorsFromSameField, {})
+
+export const parseJsonApi = data =>
+  store.sync(data)
 
 export const resolveAsJson = async res => {
   const json = await res.json()
 
   return R.pipe(
-    R.dissoc('body'),
-    R.merge(json)
-  )(res)
+    parseJsonApi,
+    camelize
+  )(json)
 }
 
 export const resolveErrorAsJson = async res => {
@@ -16,3 +51,8 @@ export const resolveErrorAsJson = async res => {
 
 export const insertChangesetErrors = errors =>
   R.mergeWith(R.concat, parseErrors(errors))
+
+export const jsonApiRequest = request =>
+  request
+    .then(resolveAsJson)
+    .catch(resolveErrorAsJson)

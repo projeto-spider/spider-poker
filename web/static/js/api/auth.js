@@ -1,11 +1,11 @@
 import {http} from './http'
-import parse from './parse'
+import {jsonApiRequest} from 'app/utils'
 
 export default {
   me() {
-    return http.get('/api/sessions/me')
-      .then(r => r.json())
-      .then(parse)
+    return jsonApiRequest(
+      http.get('/api/sessions/me')
+    )
   },
 
   signin(username, password) {
