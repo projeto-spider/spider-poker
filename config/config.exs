@@ -37,7 +37,7 @@ config :mime, :types, %{
 }
 
 config :ja_serializer,
-  :key_format, {:custom, Macro, nil, :underscore}
+  key_format: {:custom, Macro, nil, :underscore}
 
 config :ja_resource,
   repo: Poker.Repo
