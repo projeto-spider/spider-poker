@@ -42,5 +42,6 @@ defmodule Poker.Organization do
   def update_changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:display_name, :description, :location, :url, :private])
+    |> validate_required([:display_name])
   end
 end
