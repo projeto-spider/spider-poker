@@ -85,9 +85,8 @@ export default [
 
       {
         name: 'organizationEdit',
-        path: 'organization/edit',
-        component: Organizations.Edit,
-        beforeEnter: requireAuth()
+        path: 'organization/:organization/edit',
+        component: Organizations.Edit
       },
 
       {

@@ -113,7 +113,7 @@
         userInfoIconClasses: {
           location: {'fa-map-marker': true},
           email: {'fa-envelope': true},
-          url: {'fa-globe': true},
+          url: {'fa-globe': true}
         }
       }
     },
@@ -126,7 +126,7 @@
 
     computed: {
       ...mapState({
-        loggedinId: R.view(R.lensPath(['auth', 'user', 'id'])),
+        loggedinId: R.view(R.lensPath(['auth', 'user', 'id']))
       }),
 
       currentUserIsSelf() {

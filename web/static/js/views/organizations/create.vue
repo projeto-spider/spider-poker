@@ -1,140 +1,161 @@
 <template>
-  <div>
-    <div v-if="status == 'errored'" class="callout callout-danger">
-      <h4>Register organization fail</h4>
-      <p>Verify your organization data</p>
-    </div>
+  <main>
+    <hero-title
+      text="Creating organization"
+    />
 
-    <div v-if="status == 'success'" class="callout callout-success">
-      <h4>Register success</h4>
-      <p>Redirecting you to the organization page</p>
-    </div>
-    <form
-      method="post"
-      @submit.prevent="submit"
-      @keyup.13="submit"
-    >
-      <errorable-input
-        v-model="name"
-        :errors="errors.name"
-        icon="user"
-        placeholder="Organization name"
-      />
+    <div class="row">
+      <div class="column is-half is-offset-one-quarter">
+        <div class="box">
+          <div v-if="status == 'errored'">
+            <div class="callout callout-danger cotainer has-text-centered">
+              <h4>Register organization fail</h4>
+              <p>Verify your organization data</p>
+            </div>
+          </div>
 
-      <errorable-input
-        v-model="description"
-        :errors="errors.description"
-        icon="envelope"
-        placeholder="Description"
-      />
+          <div v-if="status == 'success'">
+            <div class="callout callout-success cotainer has-text-centered">
+              <h4>Register success</h4>
+              <p>Redirecting you to the organization page</p>
+            </div>
+          </div>
 
-      <errorable-input
-        v-model="location"
-        :errors="errors.location"
-        icon="lock"
-        placeholder="Location"
-      />
+          <form
+            method="post"
+            @submit.prevent="submit"
+            @keyup.13="submit"
+          >
 
-       <errorable-input
-        v-model="url"
-        :errors="errors.url"
-        icon="lock"
-        placeholder="Url"
-      />
+            <errorable-input
+              v-model="name"
+              :errors="errors.name"
+              icon="building-o"
+              placeholder="Organization name"
+            />
 
-      <label class="label">Organization type</label>
-      <p class="control">
-        <span class="select">
-          <select>
-            <option>Private</option>
-            <option>Public</option>
-          </select>
-        </span>
-      </p>
+            <errorable-input
+              v-model="displayName"
+              :errors="errors.displayName"
+              icon="briefcase"
+              placeholder="Display name"
+            />
 
-      <div class="control is-grouped has-addons has-addons-centered">
-        <p class="control">
-          <button class='button is is-primary'>
-            Register
-          </button>
-        </p>
+            <errorable-input
+              v-model="description"
+              :errors="errors.description"
+              icon="id-card"
+              placeholder="Description"
+            />
 
-        <p class="control">
-          <button class="is-link">
-            Cancel
-          </button>
-        </p>
+            <errorable-input
+              v-model="location"
+              :errors="errors.location"
+              icon="map-marker"
+              placeholder="Location"
+            />
+
+           <errorable-input
+              v-model="url"
+              :errors="errors.url"
+              icon="link"
+              placeholder="Url"
+            />
+
+            <label class="label">Organization type</label>
+
+             <p class="control">
+              <label class="radio">
+                <input v-model="private" value="0" type="radio">
+                  Public
+              </label>
+              <label class="radio">
+                <input v-model="private" value="1" type="radio">
+                  Private
+              </label>
+            </p>
+
+            <div class="control is-grouped has-addons has-addons-centered">
+             <p class="control">
+                <button type="submit" class="button is-primary">
+                  Register
+                </button>
+
+              <p class="control">
+                <router-link :to="{name: 'home'}" class="button is-primary">
+                  Cancel
+                </router-link>
+              </p>
+              </p>
+            </div>
+          </form>
+        </div>
       </div>
-    </form>
-  </div>
+    </div>
+  </main>
 </template>
 
 <script>
-  import R from 'ramda';
-  import {Organizations, parseErrors} from 'app/api';
-  import {ErrorableInput} from 'app/components';
+  import R from 'ramda'
+  import {Organizations} from 'app/api'
+  import {HeroTitle, ErrorableInput} from 'app/components'
+  import {insertChangesetErrors} from 'app/utils'
+
+  const emptyErrors = {
+    name: [],
+    displayName: [],
+    description: [],
+    location: [],
+    url: [],
+    private: []
+  }
 
   export default {
-    name: 'Create',
+    name: 'OrganizationsCreateView',
 
     components: {
-      'errorable-input': ErrorableInput,
+      HeroTitle, ErrorableInput
     },
 
     data() {
       return {
         name: '',
+        displayName: '',
         description: '',
         location: '',
         url: '',
+        private: '0',
         status: 'not-asked',
-        errors: {
-          name: [],
-          description: [],
-          location: [],
-          url: []
-        },
-      };
+        errors: emptyErrors
+      }
     },
 
     methods: {
-      submit() {
+      async submit() {
         if (this.status === 'loading') {
-          return;
+          return
         }
 
-        this.status = 'loading';
+        this.status = 'loading'
 
-        Organizations.create(R.pick([
-          'name', 'description', 'location', 'url'
-        ])(this))
-          .then(res => {
-            const username = R.view(R.lensPath(['data', 'attributes', 'username']), res)
-            this.$router.push({name: 'login', query: {username}});
-            return this.status = 'success';
-          })
-          .catch(res => {
-            res.json()
-              .then(res => {
-                const errors = R.pipe(
-                  R.prop('errors'),
-                  parseErrors
-                )(res)
+        const attributes = R.pick([
+          'name', 'displayName', 'description', 'location', 'url', 'private'
+        ], this)
 
-                if (errors) {
-                  R.pipe(
-                    R.keys,
-                    R.map(key => {
-                      this.errors[key] = R.prop(key, errors) || [];
-                    })
-                  )(this.errors)
-                }
+        try {
+          const org = await Organizations.create(attributes)
 
-                this.status = 'errored';
-              })
-          })
+          const name = R.prop('name', org)
+
+          this.$router.push({name: 'organizationShow', params: {organization: name}})
+
+          this.status = 'success'
+        } catch (res) {
+          this.errors = insertChangesetErrors(res.errors)(emptyErrors)
+
+          this.status = 'errored'
+        }
       }
     }
   }
 </script>
-
