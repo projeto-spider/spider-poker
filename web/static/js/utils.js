@@ -11,7 +11,7 @@ export const camelize = str =>
   casefy(str, camelCase)
 
 export const snakefy = str =>
-  casefy(str, casefy)
+  casefy(str, snakeCase)
 
 const jsonApiField = ({pointer}) => {
   const fieldRegex = /\/data\/attributes\/(.*)/
