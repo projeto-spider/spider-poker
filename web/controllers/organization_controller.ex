@@ -24,7 +24,7 @@ defmodule Poker.OrganizationController do
 
       role_params = %{"organization_id" => organization.id,
                       "user_id" => owner.id,
-                      "role" => "owner"}
+                      "role" => "admin"}
 
       role = OrganizationMember.create_changeset %OrganizationMember{}, role_params
 
