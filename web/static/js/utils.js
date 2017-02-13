@@ -1,9 +1,17 @@
 import R from 'ramda'
 import yayson from 'yayson'
-import camelize from 'camelize'
+import casefy from 'object-keys-to-case'
+import camelCase from 'camel-case'
+import snakeCase from 'snake-case'
 
 const {Store} = yayson()
 const store = new Store()
+
+export const camelize = str =>
+  casefy(str, camelCase)
+
+export const snakefy = str =>
+  casefy(str, casefy)
 
 const jsonApiField = ({pointer}) => {
   const fieldRegex = /\/data\/attributes\/(.*)/
