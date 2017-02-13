@@ -1,4 +1,4 @@
-defmodule Poker.OrganizationMembershipView do
+defmodule Poker.OrganizationMemberView do
   use Poker.Web, :view
   use JaSerializer.PhoenixView
 

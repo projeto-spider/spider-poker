@@ -1,12 +1,12 @@
 defmodule Poker.Organization.Policy do
   import Ecto.Query, only: [from: 2, where: 2]
-  alias Poker.{Repo, User, Organization, OrganizationMembership}
+  alias Poker.{Repo, User, Organization, OrganizationMember}
 
   def can?(%User{id: user_id}, action, resource)
   when action in [:update, :delete] do
     gt_zero = fn x -> x > 0 end
 
-    from(ref in OrganizationMembership, select: count(ref.id))
+    from(ref in OrganizationMember, select: count(ref.id))
     |> where(user_id: ^user_id, organization_id: ^resource.id)
     |> Repo.one!
     |> gt_zero.()

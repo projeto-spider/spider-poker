@@ -1,7 +1,7 @@
 defmodule Poker.OrganizationControllerTest do
   use Poker.ConnCase
 
-  alias Poker.{Organization, OrganizationMembership, User}
+  alias Poker.{Organization, OrganizationMember, User}
 
   setup %{conn: conn} do
     sample_setup
@@ -76,7 +76,7 @@ defmodule Poker.OrganizationControllerTest do
     user = Repo.insert! User.registration_changeset %User{}, user_params
 
     role_params = %{"organization_id" => spider.id, "user_id" => user.id, "role" => "owner"}
-    Repo.insert! OrganizationMembership.registration_changeset %OrganizationMembership{}, role_params
+    Repo.insert! OrganizationMember.registration_changeset %OrganizationMember{}, role_params
   end
 
   defp with_token(conn) do

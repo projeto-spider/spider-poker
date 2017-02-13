@@ -1,7 +1,7 @@
-defmodule Poker.OrganizationMembership do
+defmodule Poker.OrganizationMember do
   use Poker.Web, :model
 
-  schema "organizations_memberships" do
+  schema "organizations_members" do
     field :role, :string
     belongs_to :organization, Poker.Organization
     belongs_to :user, Poker.User

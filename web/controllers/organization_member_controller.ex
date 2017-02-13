@@ -1,8 +1,8 @@
-defmodule Poker.OrganizationMembershipController do
+defmodule Poker.OrganizationMemberController do
   use Poker.Web, :controller
   use JaResource
 
-  alias Poker.{User, OrganizationMembership, UserView}
+  alias Poker.{User, OrganizationMember, UserView}
 
   plug :preload_session when action in [:create, :update, :delete, :add_to_organization,
                                         :remove_from_organization]
@@ -11,7 +11,7 @@ defmodule Poker.OrganizationMembershipController do
   # Scope
 
   def records(conn) do
-    default = scope conn, OrganizationMembership
+    default = scope conn, OrganizationMember
 
     case nested_resource(conn) do
       {"organizations", id} ->
@@ -41,10 +41,10 @@ defmodule Poker.OrganizationMembershipController do
         role: "member"
       }
 
-      to_validate = Map.merge %OrganizationMembership{}, attributes
+      to_validate = Map.merge %OrganizationMember{}, attributes
       authorize! conn, to_validate
 
-      changeset = OrganizationMembership.create_changeset %OrganizationMembership{}, attributes
+      changeset = OrganizationMember.create_changeset %OrganizationMember{}, attributes
 
       membership = repo.insert! changeset
 
@@ -59,13 +59,13 @@ defmodule Poker.OrganizationMembershipController do
   def handle_update(conn, membership, attributes) do
     authorize! conn, membership
 
-    OrganizationMembership.update_changeset membership, attributes
+    OrganizationMember.update_changeset membership, attributes
   end
 
   def handle_delete(conn, nil), do: nil # 404
   def handle_delete(conn, %{user_id: user_id}) do
     with {"organizations", org_id} <- nested_resource(conn) do
-      membership = OrganizationMembership
+      membership = OrganizationMember
                    |> Repo.get_by(user_id: user_id, organization_id: org_id)
 
       authorize! conn, membership
