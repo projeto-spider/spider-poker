@@ -30,7 +30,7 @@ defmodule Poker.Router do
       resources "/relationships/messages", MessageController, only: [:index, :update]
     end
     resources "/organizations", OrganizationController, except: @non_rest do
-      resources "/relationships/memberships", OrganizationMemberController, excepct: @non_rest
+      resources "/relationships/members", OrganizationMemberController, excepct: @non_rest
       resources "/relationships/projects", ProjectController, except: @non_rest
     end
     resources "/notifications", NotificationController, only: [:index, :update]
