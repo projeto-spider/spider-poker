@@ -10,6 +10,11 @@ defmodule Poker.OrganizationController do
 
   # Scope
 
+  def record(conn, org_id) do
+    scope(conn, Organization, org_id: org_id)
+    |> Repo.one!
+  end
+
   def records(conn) do
     scope conn, Organization
   end
