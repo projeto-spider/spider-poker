@@ -1,85 +1,238 @@
 <template>
-  <div>
-    <div v-if="organization !== null" class="row">
-      <div class="col-md-3">
-        <div class="box box-primary">
-          <div class="box-body box-profile">
-            <h3 class="profile-username text-center">{{organization.display_name || organization.name}}</h3>
-            <p class="text-muted text-center">{{organization.name}}</p>
-            <ul class="list-group list-group-unbordered">
-              <li class="list-group-item"><b>Projects</b><a class="pull-right">{{projects.length}}</a></li>
-            </ul>
+  <main>
+    <hero-title
+      v-if='organization'
+      :text="organization.displayName"
+      :subtitle="`${organization.name}`"
+    />
+
+    <hero-title
+      v-if="status.organization === 'errored'"
+      text="Organization does not exist"
+      color="danger"
+    />
+
+    <div v-if='organization' class="container">
+      <div class="columns">
+        <div class="column is-half is-offset-one-quarter has-text-centered">
+          <p v-if="organization.description">{{organization.description}}</p>
+
+          <div class="panel">
+            <p v-if="organization.location" class="panel-block">
+              <span class="panel-icon">
+                <i class="fa fa-map-marker" />
+              </span>
+              {{organization.location}}
+            </p>
+
+            <p v-if="organization.url" class="panel-block">
+              <span class="panel-icon">
+                <i class="fa fa-globe" />
+              </span>
+              {{organization.url}}
+            </p>
+
+
+            <p class="panel-block">
+              <span class="panel-icon">
+                <i class="fa" />
+              </span>
+              {{organization.private ? 'Private' : 'Public'}}
+            </p>
           </div>
+
+          <router-link
+            v-if="isAdmin"
+            :to="{name: 'organizationEdit', params: {organization: organization.name}}"
+            class="button is-info is-outlined is-fullwidth"
+          >
+            <span class="icon is-small">
+              <i class="fa fa-cog"></i>
+            </span>
+
+            <span>Edit organization</span>
+          </router-link>
         </div>
       </div>
-      <div class="col-md-9">
-        <div class="box">
-          <div class="box-body table-responsive no-padding">
-            <table class="table table-hover">
-              <tbody>
-                <tr>
-                  <th>Name</th>
-                  <th>Description</th>
-                  <th>Private</th>
-                  <th>Actions</th>
-                </tr>
-                <tr v-for="proj in projects">
-                  <td>{{proj.display_name || proj.name}}</td>
-                  <td>{{proj.description || '-'}}</td>
-                  <td>{{proj.private ? 'Yes' : 'No'}}</td>
-                  <td>
+    </div>
+    <br />
+    <div v-if='organization' class="container">
+      <div class="columns">
+        <div class="column is-two-thirds is-offset-2 has-text-centered">
+          <span class="tag is-spider is-medium is-centered">Members</span>
+
+          <br />
+          <br />
+
+          <div class="panel">
+            <div v-if="status.addMember === 'errored'" class="notification is-danger">
+              <button @click="status.addMember = 'not-asked'" class="delete"></button>
+              Something went wrong
+            </div>
+
+            <p v-if="isAdmin" class="control has-addons">
+              <form @submit.prevent="submit" @keyup.13="submit">
+                <input v-model="memberToAdd" type="text" class="input" placeholder="Member name">
+
+                <button class="button is-info" type="submit">
+                  Add member
+                </button>
+              </form>
+            </p>
+
+            <article v-for="member in memberships" class="media">
+              <router-link
+                :to="{name: 'userShow', params: {username: member.user.username}}"
+              >
+              </router-link>
+
+              <div class="media-content">
+                <p>
+                  <router-link
+                    :to="{name: 'userShow', params: {username: member.user.username}}"
+                  >
+                    {{member.user.profile.name}}
+                  </router-link>
+                  <p>
                     <router-link
-                      :to="{name: 'organization', params: {id: proj.name}}"
-                      class="label label-success"
+                      :to="{name: 'userShow', params: {username: member.user.username}}"
+                      class="is-primary"
                     >
-                      View
+                      @{{member.user.username}}
                     </router-link>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                  </p>
+                </p>
+              </div>
+              <p v-if="member.user.id !== loggedinId" class="control has-addons has-addons-centered">
+                <button @click="removeMember(member.user.id)" class="button is-danger">
+                  Delete
+                </button>
+              </p>
+            </article>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>
-import R from 'ramda';
-import store from 'app/store';
-import {Organizations} from 'app/api';
+import {mapState} from 'vuex'
+import R from 'ramda'
+import {HeroTitle} from 'app/components'
+import {Organizations, Users} from 'app/api'
 
 export default {
-  name: 'OrganizationShow',
+  name: 'OrganizationShowView',
 
-  created() {
-    store.commit('page/set', {title: 'Organizations'});
-    this.loadOrganization();
-  },
+  components: {HeroTitle},
 
   data() {
     return {
+      memberships: [],
+
+      status: {
+        organization: 'not-asked',
+        members: 'not-asked',
+        addMember: 'not-asked'
+      },
+
+      memberToAdd: '',
       organization: null,
-      projects: [],
-    };
+      projects: []
+    }
+  },
+
+  computed: {
+    ...mapState({
+      loggedinId: R.view(R.lensPath(['auth', 'user', 'id']))
+    }),
+
+    isAdmin() {
+      if (!this.loggedinId) {
+        return false
+      }
+
+      if (this.memberships.length === 0) {
+        return false
+      }
+
+      return !!this.memberships
+        .filter(member => member.role === 'admin' && member.user.id === this.loggedinId)
+        .length
+    }
+  },
+
+  async created() {
+    this.status.organization = 'loading'
+
+    const orgs = await Organizations.show(this.$route.params.organization)
+
+    if (orgs.length === 0) {
+      this.status.organization = 'errored'
+      return
+    }
+
+    this.status.organization = 'success'
+
+    this.organization = orgs[0]
+
+    this.status.members = 'loading'
+
+    this.memberships = await Organizations.members.all(this.organization.id)
+
+    this.status.members = 'success'
   },
 
   methods: {
-    loadOrganization() {
-      Organizations.show(this.$route.params.id)
-        .then(({data}) => {
-          this.organization = data;
+    async submit() {
+      if (this.status.addMember === 'loading') {
+        return
+      }
 
-          return Organizations.projects.all(data.name);
-        })
-        .then(({data}) => {
-          this.projects = data;
-        })
-        .catch(() => {
-          this.$router.replace({name: 'error'})
-        });
+      this.status.addMember = 'loading'
+
+      const users = await Users.show(this.memberToAdd)
+
+      if (users.length === 0) {
+        this.status.addMember = 'errored'
+        return
+      }
+
+      const userId = R.prop('id', users[0])
+
+      const orgId = R.prop('id', this.organization)
+
+      try {
+        const newMember = await Organizations.members.create(orgId, userId, 'member')
+
+        this.memberships.push(newMember)
+
+        this.status.addMember = 'success'
+
+        this.memberToAdd = ''
+      } catch (res) {
+        this.status.addMember = 'errored'
+      }
     },
-  },
+
+    async removeMember(userId) {
+      if (confirm('Are you sure you want to remove this member?')) {
+        const orgId = this.organization.id
+
+        await Organizations.members.delete(orgId, userId)
+
+        this.memberships = this.memberships
+        .filter(member => member.user.id !== userId)
+      }
+    }
+  }
 }
+
 </script>
+
+<style lang="sass" scoped>
+  .is-spider
+    background-color: #1C336E
+    color: white !important
+</style>

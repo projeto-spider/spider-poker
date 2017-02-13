@@ -1,141 +1,185 @@
 <template>
-  <div>
-    <div v-if="status == 'errored'" class="callout callout-danger">
-      <h4>Register organization fail</h4>
-      <p>Verify your organization data</p>
-    </div>
+  <main>
+    <hero-title
+      text="Updating organization"
+    />
 
-    <div v-if="status == 'success'" class="callout callout-success">
-      <h4>Register success</h4>
-      <p>Redirecting you to the organization page</p>
-    </div>
-    <form
-      method="post"
-      @submit.prevent="submit"
-      @keyup.13="submit"
+    <hero-title
+      v-if="status === 'errored'"
+      text="Failed to update"
+      color="danger"
+    />
+
+    <div v-if="organization !== null" class="column is-half is-offset-one-quarter">
+      <form
+        method="post"
+        @submit.prevent="submit"
+        @keyup.13="submit"
       >
-      <errorable-input
-        v-model="Name"
-        :errors="errors.Name"
-        icon="user"
-        placeholder="Organization name"
-      />
+        <errorable-input
+          v-model="organization['display-name']"
+          :errors="errors['display-name']"
+          icon="briefcase"
+          placeholder="Display name"
+        />
 
-      <errorable-input
-        v-model="description"
-        :errors="errors.description"
-        icon="envelope"
-        placeholder="Description"
-      />
+        <errorable-input
+          v-model="organization.description"
+          :errors="errors.description"
+          icon="id-card"
+          placeholder="Description"
+        />
 
-      <errorable-input
-        v-model="location"
-        :errors="errors.location"
-        icon="lock"
-        placeholder="Location"
-      />
+        <errorable-input
+          v-model="organization.contact"
+          :errors="errors.contact"
+          icon="phone"
+          placeholder="Contact"
+        />
 
-       <errorable-input
-        v-model="url"
-        :errors="errors.url"
-        icon="lock"
-        placeholder="Url"
-      />
+        <errorable-input
+          v-model="organization.location"
+          :errors="errors.location"
+          icon="map-marker"
+          placeholder="Location"
+        />
 
-      <label class="label">Organization type</label>
-      <p class="control">
-        <span class="select">
-          <select>
-            <option>Private</option>
-            <option>Public</option>
-            <option>NGO</option>
-          </select>
-        </span>
-      </p>
+        <errorable-input
+          v-model="organization.url"
+          :errors="errors.url"
+          icon="link"
+          placeholder="URL"
+        />
 
-      <div class="control is-grouped has-addons has-addons-centered">
-        <p class="control">
-          <button class='button is is-primary'>
-            Register
-          </button>
+        <label class="label">Organization type</label>
+
+         <p class="control">
+          <label class="radio">
+            <input v-model="private" value="0" type="radio">
+              Public
+          </label>
+          <label class="radio">
+            <input v-model="private" value="1" type="radio">
+              Private
+          </label>
         </p>
 
-        <p class="control">
-          <button class="is-link">
-            Cancel
-          </button>
-        </p>
-      </div>
-    </form>
-  </div>
+        <div class="control is-grouped has-addons has-addons-centered">
+
+          <p class="control">
+            <button
+              type="submit"
+              :disabled="status === 'loading'"
+              class="button is-primary"
+            >
+              Update
+            </button>
+          </p>
+
+          <p class="control">
+            <button
+              type="submit"
+              :disabled="status === 'loading'"
+              class="button is-danger"
+              @click.prevent="deleteOrganization"
+            >
+              Delete
+            </button>
+          </p>
+        </div>
+      </form>
+    </div>
+  </main>
 </template>
 
 <script>
-  import R from 'ramda';
-  import {Organizations, parseErrors} from 'app/api';
-  import {ErrorableInput} from 'app/components';
+  import R from 'ramda'
+  import {Organizations} from 'app/api'
+  import {insertChangesetErrors} from 'app/utils'
+  import {HeroTitle, ErrorableInput} from 'app/components'
+
+  const emptyErrors = {
+    'display-name': [],
+    description: [],
+    contact: [],
+    location: [],
+    url: [],
+    private: []
+  }
+
+  const organizationIdView = R.view(R.lensPath(['organization', 'id']))
 
   export default {
-    name: 'Create',
+    name: 'OrganizationEditView',
 
     components: {
-      'errorable-input': ErrorableInput,
+      HeroTitle, ErrorableInput
     },
 
     data() {
       return {
-        name: '',
-        description: '',
-        location: '',
-        url: '',
         status: 'not-asked',
-        errors: {
-          name: [],
-          description: [],
-          location: [],
-          url: []
-        },
-      };
+        organization: null,
+        private: '0',
+
+        errors: emptyErrors
+      }
+    },
+
+    async created() {
+      this.status = 'loading'
+
+      const orgs = await Organizations.show(this.$route.params.organization)
+
+      if (orgs.length === 0) {
+        this.status = 'errored'
+        return
+      }
+      this.status = 'success'
+
+      this.organization = orgs[0]
     },
 
     methods: {
-      submit() {
+      async submit() {
         if (this.status === 'loading') {
-          return;
+          return
         }
 
-        this.status = 'loading';
+        this.status = 'loading'
 
-        Organizations.create(R.pick([
-          'name', 'description', 'location', 'url'
-        ])(this))
-          .then(res => {
-            const username = R.view(R.lensPath(['data', 'attributes', 'username']), res)
-            this.$router.push({name: 'login', query: {username}});
-            return this.status = 'success';
-          })
-          .catch(res => {
-            res.json()
-              .then(res => {
-                const errors = R.pipe(
-                  R.prop('errors'),
-                  parseErrors
-                )(res)
+        const id = organizationIdView(this)
 
-                if (errors) {
-                  R.pipe(
-                    R.keys,
-                    R.map(key => {
-                      this.errors[key] = R.prop(key, errors) || [];
-                    })
-                  )(this.errors)
-                }
+        const attributes = R.pipe(
+          R.view(R.lensPath(['organization'])),
+          R.pick(['display-name', 'contact', 'location', 'url', 'private'])
+        )(this)
 
-                this.status = 'errored';
-              })
-          })
+        attributes.display_name = attributes['display-name']
+
+        try {
+          await Organizations.update(id, attributes)
+
+          this.status = 'success'
+
+          this.errors = emptyErrors
+        } catch (res) {
+          console.log(res)
+          this.errors = insertChangesetErrors(res.errors)(emptyErrors)
+
+          this.status = 'errored'
+        }
+      },
+
+      async deleteOrganization() {
+        if (confirm('Are you sure you want to delete this organization?')) {
+          const id = organizationIdView(this)
+
+          await Organizations.delete(id)
+
+          this.$router.push({name: 'home'})
+        }
       }
     }
   }
 </script>
-
