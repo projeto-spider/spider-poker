@@ -1,7 +1,8 @@
-import {http, resource} from './http'
+import {resource} from './http'
 import {jsonApiRequest, snakefy} from 'app/utils'
 
 const organizations = resource('organizations{/id}')
+const members = resource('organizations{/orgId}/relationships/members{/userId}')
 
 export default {
   all() {
@@ -24,7 +25,7 @@ export default {
 
   update(id, attributes) {
     return jsonApiRequest(
-      http.put(`organizations/${id}`, {data: {attribute: snakefy(attributes)}})
+      organizations.update({id}, {data: {attribute: snakefy(attributes)}})
     )
   },
 
@@ -35,15 +36,23 @@ export default {
   members: {
     all(orgId) {
       return jsonApiRequest(
-        http.get(`/api/organizations/${orgId}/memberships/users`)
+        members.query({orgId})
       )
     },
 
-    create(userId, orgId, role = 'member') {
-      const opts = {data: {attributes: snakefy({userId, role})}}
+    create(orgId, userId, role = 'member') {
+      const body = {data: {attributes: snakefy({userId, role})}}
 
       return jsonApiRequest(
-        http.post(`/api/organizations/${orgId}/memberships/users`, opts)
+        members.save({orgId}, body)
+      )
+    },
+
+    update(orgId, userId, member) {
+      const body = {data: {attributes: snakefy(member)}}
+
+      return jsonApiRequest(
+        members.update({orgId, userId}, body)
       )
     }
   }
