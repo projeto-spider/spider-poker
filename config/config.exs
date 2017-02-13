@@ -36,6 +36,9 @@ config :mime, :types, %{
   "application/vnd.api+json" => ["json-api"]
 }
 
+config :ja_serializer,
+  :key_format, {:custom, Macro, nil, :underscore}
+
 config :ja_resource,
   repo: Poker.Repo
 
