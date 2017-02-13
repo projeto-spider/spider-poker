@@ -2,6 +2,9 @@ defmodule Poker.Organization.Policy do
   import Ecto.Query, only: [from: 2, where: 2]
   alias Poker.{Repo, User, Organization, OrganizationMember}
 
+  def can?(nil, action, resource)
+  when action == :create, do: false
+
   def can?(%User{id: user_id}, action, resource)
   when action in [:update, :delete] do
     gt_zero = fn x -> x > 0 end

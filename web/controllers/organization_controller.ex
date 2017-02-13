@@ -24,6 +24,8 @@ defmodule Poker.OrganizationController do
   def handle_create(conn, attributes) do
     changeset = Organization.create_changeset %Organization{}, attributes
 
+    authorize! conn, Organization
+
     with {:ok, organization} <- Repo.insert(changeset) do
       owner = conn.assigns.current_user
 
