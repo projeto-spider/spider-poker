@@ -54,6 +54,10 @@ export default {
       return jsonApiRequest(
         members.update({orgId, userId}, body)
       )
+    },
+
+    delete(orgId, userId) {
+      return members.delete({orgId, userId})
     }
   }
 }
