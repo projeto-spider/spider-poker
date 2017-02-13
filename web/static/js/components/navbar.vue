@@ -19,6 +19,10 @@
             Home
           </router-link>
 
+          <router-link :to='{name: "organizationsList"}' class="nav-item">
+            Organizations
+          </router-link>
+
           <span v-if="!loggedin" class="nav-item">
             <router-link
               :to="{name: 'login'}"
