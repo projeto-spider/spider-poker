@@ -78,6 +78,8 @@ module.exports = {
     }
   },
 
+  stats: environment === 'production' ? 'verbose' : 'errors-only',
+
   devServer: {
     historyApiFallback: true,
     noInfo: true
