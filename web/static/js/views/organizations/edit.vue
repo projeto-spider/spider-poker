@@ -17,8 +17,8 @@
         @keyup.13="submit"
       >
         <errorable-input
-          v-model="organization['display-name']"
-          :errors="errors['display-name']"
+          v-model="organization.displayName"
+          :errors="errors.displayName"
           icon="briefcase"
           placeholder="Display name"
         />
@@ -92,7 +92,7 @@
   import {HeroTitle, ErrorableInput} from 'app/components'
 
   const emptyErrors = {
-    'display-name': [],
+    displayName: [],
     description: [],
     contact: [],
     location: [],
@@ -145,7 +145,7 @@
 
         const attributes = R.pipe(
           R.view(R.lensPath(['organization'])),
-          R.pick(['display-name', 'contact', 'location', 'url', 'private'])
+          R.pick(['displayName', 'description', 'location', 'url', 'private'])
         )(this)
 
         attributes.display_name = attributes['display-name']
