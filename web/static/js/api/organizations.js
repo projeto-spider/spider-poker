@@ -25,7 +25,7 @@ export default {
 
   update(id, attributes) {
     return jsonApiRequest(
-      organizations.update({id}, {data: {attribute: snakefy(attributes)}})
+      organizations.update({id}, {data: {attributes: snakefy(attributes)}})
     )
   },
 
