@@ -55,13 +55,10 @@ export const parseJsonApi = data =>
 export const resolveAsJson = async res => {
   const json = await res.json()
 
-  const x = R.pipe(
+  return R.pipe(
     parseJsonApi,
     camelize
   )(json)
-  console.log(x, parseJsonApi(json))
-  console.log(camelize({'foo-bar': 1}))
-  return x
 }
 
 export const resolveErrorAsJson = async res => {
