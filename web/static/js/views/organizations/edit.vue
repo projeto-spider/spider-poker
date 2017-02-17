@@ -31,13 +31,6 @@
         />
 
         <errorable-input
-          v-model="organization.contact"
-          :errors="errors.contact"
-          icon="phone"
-          placeholder="Contact"
-        />
-
-        <errorable-input
           v-model="organization.location"
           :errors="errors.location"
           icon="map-marker"
