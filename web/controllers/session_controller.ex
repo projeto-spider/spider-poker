@@ -1,7 +1,7 @@
 defmodule Poker.SessionController do
   use Poker.Web, :controller
 
-  alias Poker.{User, Profile, UserView}
+  alias Poker.{User, Profile, UserView, ErrorView}
   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
 
   plug :preload_session when action in [:me]
@@ -33,13 +33,18 @@ defmodule Poker.SessionController do
       user && checkpw(password, user.password_hash) ->
         {:ok, jwt, _} = encode_and_sign(user, :api)
         render(conn, "token.json", token: jwt)
+
       user ->
         conn
-        |> send_resp(:unauthorized, "Wrong password")
+        |> put_status(401)
+        |> render(ErrorView, "401.json-api", message: "Wrong password")
+
       true ->
-        dummy_checkpw
+        dummy_checkpw()
+
         conn
-        |> send_resp(:unauthorized, "User doesn't exist")
+        |> put_status(401)
+        |> render(ErrorView, "401.json-api", message: "User doesn't exists")
     end
   end
 end
