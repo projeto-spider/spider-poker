@@ -37,8 +37,8 @@ defmodule Poker.Router do
     resources "/messages", MessageController, only: [:create]
     resources "/projects", ProjectController, except: @non_rest
 
-    get "/sessions/me", SessionController, :me
-    post "/sessions/create", SessionController, :create
+    get "/sessions", SessionController, :show
+    post "/sessions", SessionController, :create
   end
 
   scope "/", Poker do

@@ -4,10 +4,10 @@ defmodule Poker.SessionController do
   alias Poker.{User, Profile, UserView, ErrorView}
   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
 
-  plug :preload_session when action in [:me]
-  plug :ensure_authenticated when action in [:me]
+  plug :preload_session when action in [:show]
+  plug :ensure_authenticated when action in [:show]
 
-  def me(conn, _params) do
+  def show(conn, _params) do
     user = conn.assigns.current_user
 
     profile = from(p in Profile, where: p.user_id == ^user.id)
