@@ -3,8 +3,8 @@ defmodule Poker.Plugs.SessionPlug do
   import Guardian.Plug, only: [current_resource: 1]
   import Plug.Conn
 
-  def ensure_authenticated(conn, opts \\ %{}) do
-    EnsureAuthenticated.call conn, EnsureAuthenticated.init(opts)
+  def ensure_authenticated(conn, _opts \\ %{}) do
+    EnsureAuthenticated.call conn, EnsureAuthenticated.init(handler: App.ErrorHandler)
   end
 
   def preload_session(conn, opts \\ %{}) do
