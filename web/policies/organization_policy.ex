@@ -17,28 +17,19 @@ defmodule Poker.Organization.Policy do
 
   def can?(_user, _action, _resource), do: true
 
-  def scope(nil, _action, _query) do
+  def scope(%User{id: user_id}, action, _org)
+  when action in [:update, :delete] do
+    Organization
+    |> Organization.where_user_is_admin(user_id)
+  end
+
+  def scope(%User{id: user_id}, _action, _org) do
+    Organization
+    |> Organization.where_user_can_see(user_id)
+  end
+
+  def scope(nil, _action, _org) do
     Organization
     |> where(private: false)
-  end
-
-  def scope(%User{id: user_id}, action, [org_id: org_id])
-  when action == :show do
-    from org in Organization, join: org_user in assoc(org, :organizations_users),
-                              where: (org_user.user_id == ^user_id),
-                              where: (org.id == ^org_id)
-  end
-
-  def scope(%User{id: user_id}, action, [org_id: org_id])
-  when action in [:update, :delete] do
-    from org in Organization, join: org_user in assoc(org, :organizations_users),
-                              where: (org_user.user_id == ^user_id and org_user.role == "admin"),
-                              where: (org.id == ^org_id)
-  end
-
-  def scope(%User{id: user_id}, _action, _query) do
-    from org in Organization, join: org_user in assoc(org, :organizations_users),
-                              where: (org.private == false) or
-                                     (org_user.user_id == ^user_id)
   end
 end

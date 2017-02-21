@@ -10,7 +10,7 @@ defmodule Poker.Organization do
     field :location, :string
     field :url, :string
     field :private, :boolean, default: false
-    has_many :projects, Poker.Project
+    has_many :projects, Poker.Project, on_delete: :delete_all
     has_many :organizations_users, Poker.OrganizationMember, on_delete: :delete_all
     has_many :users, through: [:organizations_users, :user]
 
@@ -43,5 +43,19 @@ defmodule Poker.Organization do
     struct
     |> cast(params, [:display_name, :description, :location, :url, :private])
     |> validate_required([:display_name])
+  end
+
+  # Query composers
+
+  def where_user_is_admin(query, user_id) do
+    from org in query,
+      join: org_user in assoc(org, :organizations_users),
+      where: (org_user.user_id == ^user_id and org_user.role == "admin")
+  end
+
+  def where_user_can_see(query, user_id) do
+    from org in query,
+      join: org_user in assoc(org, :organizations_users),
+      where: (org.private == false) or (org_user.user_id == ^user_id)
   end
 end
