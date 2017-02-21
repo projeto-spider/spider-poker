@@ -5,21 +5,10 @@ defmodule Poker.OrganizationMember.Policy do
   def can?(nil, action, _resource)
   when action in [:create, :update, :delete], do: false
 
-  def can?(%User{id: user_id}, action, resource)
+  def can?(%User{id: user_id}, action, %{organization_id: org_id})
   when action in [:create] do
-    gt_zero = fn x -> x > 0 end
-
-    admin? = from(ref in OrganizationMember, select: count(ref.id))
-    |> where(user_id: ^user_id, organization_id: ^resource.organization_id, role: "admin")
-    |> Repo.one!
-    |> gt_zero.()
-
-    if admin? do
-      count = from(ref in OrganizationMember, select: count(ref.id))
-      |> where(user_id: ^resource.user_id, organization_id: ^resource.organization_id)
-      |> Repo.one!
-
-      if count == 0 do
+    if OrganizationMember.admin?(org_id, user_id) do
+      if not OrganizationMember.member?(org_id, user_id) do
         true
       else
         {:error, :bad_request}
@@ -29,14 +18,9 @@ defmodule Poker.OrganizationMember.Policy do
     end
   end
 
-  def can?(%User{id: user_id}, action, resource)
+  def can?(%User{id: user_id}, action, %{organization_id: org_id})
   when action in [:update, :delete] do
-    gt_zero = fn x -> x > 0 end
-
-    admin? = from(ref in OrganizationMember, select: count(ref.id))
-    |> where(user_id: ^user_id, organization_id: ^resource.organization_id, role: "admin")
-    |> Repo.one!
-    |> gt_zero.()
+    OrganizationMember.admin?(org_id, user_id)
   end
 
   def can?(_user, _action, _resource), do: false

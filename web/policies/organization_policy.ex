@@ -5,14 +5,9 @@ defmodule Poker.Organization.Policy do
   def can?(nil, action, resource)
   when action == :create, do: false
 
-  def can?(%User{id: user_id}, action, resource)
+  def can?(%User{id: user_id}, action, %{id: org_id})
   when action in [:update, :delete] do
-    gt_zero = fn x -> x > 0 end
-
-    from(ref in OrganizationMember, select: count(ref.id))
-    |> where(user_id: ^user_id, organization_id: ^resource.id)
-    |> Repo.one!
-    |> gt_zero.()
+    OrganizationMember.admin?(org_id, user_id)
   end
 
   def can?(_user, _action, _resource), do: true
