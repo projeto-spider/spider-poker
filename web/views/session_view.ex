@@ -2,7 +2,7 @@ defmodule Poker.SessionView do
   use Poker.Web, :view
 
   def render("token.json", %{token: token}) do
-    %{token: token}
+    %{data: %{token: token}}
   end
 
   def render("show.json", %{session: session}) do
