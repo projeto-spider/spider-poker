@@ -1,32 +1,31 @@
 defmodule Poker.Project.Policy do
   import Ecto.Query, only: [from: 2, where: 2, preload: 2]
-  alias Poker.{Repo, User, Project, OrganizationMember}
+  alias Poker.{Repo, User, Project, ProjectMember, OrganizationMember}
 
   def can?(nil, action, _resource)
   when action in [:create, :update, :delete], do: false
 
-  def can?(%User{id: user_id}, action, resource)
-  when action in [:create, :update, :delete] do
-    gt_zero = fn x -> x > 0 end
+  def can?(%User{id: user_id}, action, %{organization_id: org_id})
+  when action == :create do
+    OrganizationMember.member?(org_id, user_id)
+  end
 
-    from(ref in OrganizationMember, select: count(ref.id))
-    |> where(user_id: ^user_id, organization_id: ^resource.organization_id)
-    |> Repo.one!
-    |> gt_zero.()
+  def can?(%User{id: user_id}, action, %{id: proj_id})
+  when action in [:update, :delete] do
+    ProjectMember.member?(proj_id, user_id)
   end
 
   def can?(_user, _action, _resource), do: true
 
   def scope(nil, _action, _query) do
     Project
-    |> where(private: false)
+    |> Project.where_is_public
     |> preload([:organization])
   end
 
   def scope(%User{id: user_id}, _action, _query) do
-    from proj in Project, join: user in assoc(proj, :users),
-                          where: (proj.private == false) or
-                                 (user.id == ^user_id),
-                          preload: [:organization]
+    Project
+    |> Project.where_user_can_see(user_id)
+    |> preload([:organization])
   end
 end

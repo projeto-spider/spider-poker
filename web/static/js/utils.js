@@ -72,3 +72,13 @@ export const jsonApiRequest = request =>
   request
     .then(resolveAsJson)
     .catch(resolveErrorAsJson)
+
+export const apiRequest = request =>
+  request
+    .then(async res => {
+      const json = await res.json()
+      return {...json, data: camelize(json.data)}
+    })
+    .catch(async res => {
+      throw (await res.json().then(camelize))
+    })

@@ -18,7 +18,8 @@ defmodule Poker.Organization.Policy do
     |> Organization.where_user_is_admin(user_id)
   end
 
-  def scope(%User{id: user_id}, _action, _org) do
+  def scope(%User{id: user_id}, action, _org)
+  when action in [:index, :show] do
     Organization
     |> Organization.where_user_can_see(user_id)
   end

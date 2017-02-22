@@ -9,7 +9,8 @@ defmodule Poker.Project do
     field :description, :string
     field :private, :boolean, default: false
     belongs_to :organization, Poker.Organization
-    has_many :users, through: [:organization, :users]
+    has_many :projects_members, Poker.ProjectMember, on_delete: :delete_all
+    has_many :users, through: [:projects_members, :users]
 
     timestamps()
   end
@@ -37,5 +38,22 @@ defmodule Poker.Project do
     struct
     |> cast(params, [:display_name, :description, :private])
     |> changeset(params)
+  end
+
+  # Query composers
+
+  def where_is_public(query) do
+    from proj in query,
+      join: org in assoc(proj, :organization),
+      where: org.private == false and proj.private == false
+  end
+
+  def where_user_can_see(query, user_id) do
+    from proj in query,
+      join: org in assoc(proj, :organization),
+      join: org_user in assoc(org, :organizations_members),
+      join: proj_user in assoc(proj, :projects_members),
+      where: (org.private == false and proj.private == false) or
+             (org_user.user_id == ^user_id and proj_user.user_id == ^user_id)
   end
 end

@@ -5,10 +5,11 @@ defmodule Poker.OrganizationMember.Policy do
   def can?(nil, action, _resource)
   when action in [:create, :update, :delete], do: false
 
-  def can?(%User{id: user_id}, action, %{organization_id: org_id})
+  def can?(%User{id: user_id}=user, action, %{organization_id: org_id,
+                                              user_id: new_member_id})
   when action in [:create] do
     if OrganizationMember.admin?(org_id, user_id) do
-      if not OrganizationMember.member?(org_id, user_id) do
+      if not OrganizationMember.member?(org_id, new_member_id) do
         true
       else
         {:error, :bad_request}
@@ -25,8 +26,14 @@ defmodule Poker.OrganizationMember.Policy do
 
   def can?(_user, _action, _resource), do: false
 
-  def scope(_user, _action, _query) do
+  def scope(nil, _action, _query) do
     OrganizationMember
+    |> OrganizationMember.where_is_public
+  end
+
+  def scope(%User{id: user_id}, _action, _query) do
+    OrganizationMember
+    |> OrganizationMember.where_user_can_see(user_id)
     |> preload([user: :profile])
   end
 end

@@ -4,14 +4,25 @@ defmodule Poker.ProfileController do
 
   alias Poker.Profile
 
-  plug :preload_session when action in [:update]
-  plug JaResource, only: [:show, :update]
+  def show(conn, %{"user_id" => user_id}) do
+    profile =
+      Profile
+      |> Repo.get_by!(user_id: user_id)
 
-  def record(conn, _conn) do
-    user_id = conn.params["user_id"]
+    render(conn, "show.json", data: profile)
+  end
 
-    Profile
-    |> where(user_id: ^user_id)
-    |> Repo.one
+  def update(conn, %{"user_id" => user_id, "data" => params}) do
+    profile = Repo.get_by!(Profile, user_id: user_id)
+    changeset = Profile.changeset(profile, params)
+
+    case Repo.update(changeset) do
+      {:ok, profile} ->
+        render(conn, "show.json", data: profile)
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(Poker.ChangesetView, "error.json", changeset: changeset)
+    end
   end
 end

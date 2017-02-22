@@ -11,8 +11,8 @@ defmodule Poker.Organization do
     field :url, :string
     field :private, :boolean, default: false
     has_many :projects, Poker.Project, on_delete: :delete_all
-    has_many :organizations_users, Poker.OrganizationMember, on_delete: :delete_all
-    has_many :users, through: [:organizations_users, :user]
+    has_many :organizations_members, Poker.OrganizationMember, on_delete: :delete_all
+    has_many :users, through: [:organizations_members, :user]
 
     timestamps()
   end
@@ -48,14 +48,20 @@ defmodule Poker.Organization do
   # Query composers
 
   def where_user_is_admin(query, user_id) do
-    from org in query,
-      join: org_user in assoc(org, :organizations_users),
-      where: (org_user.user_id == ^user_id and org_user.role == "admin")
+    from(
+      org in query,
+        join: org_user in assoc(org, :organizations_members),
+        where: (org_user.user_id == ^user_id and org_user.role == "admin")
+    )
+    |> distinct(true)
   end
 
   def where_user_can_see(query, user_id) do
-    from org in query,
-      join: org_user in assoc(org, :organizations_users),
-      where: (org.private == false) or (org_user.user_id == ^user_id)
+    from(
+      org in query,
+        join: org_user in assoc(org, :organizations_members),
+        where: (org.private == false) or (org_user.user_id == ^user_id)
+    )
+    |> distinct(true)
   end
 end

@@ -1,29 +1,29 @@
 import {http, resource} from './http'
-import {jsonApiRequest} from 'app/utils'
+import {apiRequest} from 'app/utils'
 
 const users = resource('users{/id}')
 
 export default {
   all() {
-    return jsonApiRequest(
+    return apiRequest(
       users.query()
     )
   },
 
   show(username) {
-    return jsonApiRequest(
+    return apiRequest(
       users.query({'filter[username]': username})
     )
   },
 
   create(user) {
-    return jsonApiRequest(
+    return apiRequest(
       users.save({}, {data: {attributes: user}})
     )
   },
 
   update(id, attributes) {
-    return jsonApiRequest(
+    return apiRequest(
       http.put(`users/${id}/relationships/profile`, {data: {attributes}})
     )
   },
@@ -34,13 +34,13 @@ export default {
 
   notifications: {
     all(username) {
-      return jsonApiRequest(
+      return apiRequest(
         http.get(`/api/users/${username}/notifications`)
       )
     },
 
     update(username, id, notification) {
-      return jsonApiRequest(
+      return apiRequest(
         http.put(`/api/users/${username}/notifications/${id}`, {notification})
       )
     }

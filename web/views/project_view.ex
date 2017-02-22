@@ -1,15 +1,18 @@
 defmodule Poker.ProjectView do
   use Poker.Web, :view
-  use JaSerializer.PhoenixView
 
-  location "/projects/:id"
+  alias Poker.ProjectView
 
-  attributes [:name, :display_name, :description, :private]
+  def render("index.json", %{data: data}) do
+    %{data: render_many(data, ProjectView, "single.json")}
+  end
 
-  has_one :organization,
-    serializer: Poker.OrganizationView,
-    include: true,
-    links: [
-      self: "/projects/:id/relationships/organization"
-    ]
+  def render("show.json", %{data: data}) do
+    %{data: render_one(data, ProjectView, "single.json")}
+  end
+
+  def render("single.json", %{project: project}) do
+    project
+    |> Map.take([:id, :name, :display_name, :description, :private])
+  end
 end

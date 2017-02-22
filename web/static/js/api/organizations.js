@@ -1,31 +1,31 @@
 import {resource} from './http'
-import {jsonApiRequest, snakefy} from 'app/utils'
+import {apiRequest, snakefy} from 'app/utils'
 
 const organizations = resource('organizations{/id}')
 const members = resource('organizations{/orgId}/relationships/members{/userId}')
 
 export default {
   all() {
-    return jsonApiRequest(
+    return apiRequest(
       organizations.query()
     )
   },
 
   create(organization) {
-    return jsonApiRequest(
-      organizations.save({}, {data: {attributes: snakefy(organization)}})
+    return apiRequest(
+      organizations.save({}, {data: snakefy(organization)})
     )
   },
 
   show(name) {
-    return jsonApiRequest(
+    return apiRequest(
       organizations.query({'filter[name]': name})
     )
   },
 
   update(id, attributes) {
-    return jsonApiRequest(
-      organizations.update({id}, {data: {attributes: snakefy(attributes)}})
+    return apiRequest(
+      organizations.update({id}, {data: snakefy(attributes)})
     )
   },
 
@@ -35,23 +35,23 @@ export default {
 
   members: {
     all(orgId) {
-      return jsonApiRequest(
+      return apiRequest(
         members.query({orgId})
       )
     },
 
     create(orgId, userId, role = 'member') {
-      const body = {data: {attributes: snakefy({userId, role})}}
+      const body = {data: snakefy({userId, role})}
 
-      return jsonApiRequest(
+      return apiRequest(
         members.save({orgId}, body)
       )
     },
 
     update(orgId, userId, member) {
-      const body = {data: {attributes: snakefy(member)}}
+      const body = {data: snakefy(member)}
 
-      return jsonApiRequest(
+      return apiRequest(
         members.update({orgId, userId}, body)
       )
     },

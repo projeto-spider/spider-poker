@@ -36,6 +36,25 @@ defmodule Poker.OrganizationMember do
   def where_is_member(query, org_id, user_id) do
     query
     |> where(user_id: ^user_id, organization_id: ^org_id)
+    |> distinct(true)
+  end
+
+  def where_user_can_see(query, user_id) do
+    from(
+      m in query,
+        join: org in assoc(m, :organization),
+        join: org_user in assoc(org, :organizations_members),
+        where: (org.private == false) or (org_user.user_id == ^user_id)
+    )
+  end
+
+  def where_is_public(query) do
+    from(
+      m in query,
+        join: org in assoc(m, :organization),
+        join: org_user in assoc(org, :organizations_members),
+        where: org.private == true
+    )
   end
 
   def member?(org_id, user_id) do

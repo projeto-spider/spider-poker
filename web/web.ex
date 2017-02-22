@@ -40,7 +40,7 @@ defmodule Poker.Web do
       import Poker.Plugs.SessionPlug
       import Poker.Plugs.AuthorizationPlug
       import Bodyguard.Controller
-      import Poker.Helpers.Controller, only: [filterable_by: 1, nested_resource: 1]
+      import Poker.Helpers.Controller
     end
   end
 
@@ -64,6 +64,7 @@ defmodule Poker.Web do
   def router do
     quote do
       use Phoenix.Router
+      import Poker.Plugs.SessionPlug, only: [preload_session: 2]
     end
   end
 

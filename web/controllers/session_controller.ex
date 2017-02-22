@@ -7,21 +7,21 @@ defmodule Poker.SessionController do
   plug :preload_session when action in [:show]
   plug :ensure_authenticated when action in [:show]
 
-  def show(conn, _params) do
-    user = conn.assigns.current_user
-
-    profile = from(p in Profile, where: p.user_id == ^user.id)
-              |> Repo.one!
+  def show(%{assigns: %{current_user: user}} = conn, _params)
+  when user != nil do
+    profile =
+      from(p in Profile, where: p.user_id == ^user.id)
+      |> Repo.one!
 
     user = Map.put(user, :profile, profile)
-    render conn, UserView, "show.json-api", data: user
+    render conn, UserView, "show.json", data: user
   end
 
-  def create(conn, %{"username" => username, "password" => password}) do
+  def create(conn, %{"data" => %{"username" => username, "password" => password}}) do
     user = Repo.get_by User, username: username
     check_user(conn, user, password)
   end
-  def create(conn, %{"email" => email, "password" => password}) do
+  def create(conn, %{"data" => %{"email" => email, "password" => password}}) do
     user = Repo.get_by User, email: email
     check_user(conn, user, password)
   end
@@ -37,14 +37,14 @@ defmodule Poker.SessionController do
       user ->
         conn
         |> put_status(401)
-        |> render(ErrorView, "401.json-api", message: "Wrong password")
+        |> render(ErrorView, "401.json", message: "Wrong password")
 
       true ->
         dummy_checkpw()
 
         conn
         |> put_status(401)
-        |> render(ErrorView, "401.json-api", message: "User doesn't exists")
+        |> render(ErrorView, "401.json", message: "User doesn't exists")
     end
   end
 end
