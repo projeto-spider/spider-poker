@@ -2,7 +2,7 @@ import {resource} from './http'
 import {apiRequest, snakefy} from 'app/utils'
 
 const organizations = resource('organizations{/id}')
-const members = resource('organizations{/orgId}/relationships/members{/userId}')
+const members = resource('organizations{/orgId}/members{/userId}')
 
 export default {
   all() {

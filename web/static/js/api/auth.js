@@ -1,15 +1,16 @@
 import {http} from './http'
-import {jsonApiRequest} from 'app/utils'
+import {apiRequest} from 'app/utils'
 
 export default {
   me() {
-    return jsonApiRequest(
+    return apiRequest(
       http.get('/api/sessions')
     )
   },
 
   signin(username, password) {
-    return http.post('/api/sessions', {username, password})
-      .then(r => r.json())
+    return apiRequest(
+      http.post('/api/sessions', {data: {username, password}})
+    )
   }
 }

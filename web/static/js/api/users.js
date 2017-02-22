@@ -18,13 +18,13 @@ export default {
 
   create(user) {
     return apiRequest(
-      users.save({}, {data: {attributes: user}})
+      users.save({}, {data: user})
     )
   },
 
-  update(id, attributes) {
+  update(id, data) {
     return apiRequest(
-      http.put(`users/${id}/relationships/profile`, {data: {attributes}})
+      http.put(`users/${id}/profile`, {data})
     )
   },
 
