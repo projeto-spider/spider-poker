@@ -8,13 +8,13 @@ defmodule Poker.ErrorView do
     "Bad request"
   end
 
-  def render("400.json-api", assigns) do
+  def render("400.json", assigns) do
     api_error(assigns, 400, "Bad request")
   end
 
   # 401
 
-  def render("401.json-api", assigns) do
+  def render("401.json", assigns) do
     api_error(assigns, 401, "Unauthorized")
   end
 
@@ -24,7 +24,7 @@ defmodule Poker.ErrorView do
 
   # 403
 
-  def render("403.json-api", assigns) do
+  def render("403.json", assigns) do
     api_error(assigns, 403, "Forbidden")
   end
 
@@ -38,13 +38,13 @@ defmodule Poker.ErrorView do
     "Page not found"
   end
 
-  def render("404.json-api", assigns) do
+  def render("404.json", assigns) do
     api_error(assigns, 404, "Not Found")
   end
 
   # 406
 
-  def render("406.json-api", assigns) do
+  def render("406.json", assigns) do
     api_error(assigns, 406, "Not acceptable")
   end
 
@@ -57,14 +57,13 @@ defmodule Poker.ErrorView do
   # Helpers
 
   defp api_error(assigns, status, default_message) do
-    message =
-      assigns
-      |> Map.get(:message, default_message)
+    message = Map.get(assigns, :message, default_message)
 
     %{
-      status: status,
-      title: message
+      error: %{
+        status: status,
+        title: message
+      }
     }
-    |> format
   end
 end

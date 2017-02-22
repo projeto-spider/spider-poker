@@ -10,12 +10,12 @@ defmodule App.ErrorHandler do
   end
 
   # It's a special case where plug doesn't negotiate content type so I explictly
-  # render json-api views
+  # render json views
   def handle_errors(conn, %{reason: %{plug_status: status}})
   when status in [404, 406] do
     conn
     |> put_status(status)
-    |> render(ErrorView, "#{status}.json-api", %{})
+    |> render(ErrorView, "#{status}.json", %{})
   end
 
   def handle_errors(conn, %{reason: reason}) do
