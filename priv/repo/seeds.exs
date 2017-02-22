@@ -29,7 +29,7 @@ defmodule CLI do
 end
 
 defmodule Poker.Seeder do
-  alias Poker.{Repo, User, Organization, OrganizationMember}
+  alias Poker.{Repo, User, Organization, OrganizationMember, Project, ProjectMember}
 
   def seed do
     users = [
@@ -43,7 +43,7 @@ defmodule Poker.Seeder do
     orgs = [
       org_factory("projeto-spider"),
       org_factory("federal-university-of-para"),
-      org_factory("nihon-hikikomori-kyokai"),
+      org_factory("nihon-hikikomori-kyokai", true),
     ]
 
     org_memberships = [
@@ -54,6 +54,23 @@ defmodule Poker.Seeder do
       {"leochrisis", "federal-university-of-para", "member"},
       {"foobar", "nihon-hikikomori-kyokai", "admin"},
       {"quxbar", "nihon-hikikomori-kyokai", "member"}
+    ]
+
+    projs = [
+      {"planning-poker", "projeto-spider", false},
+      {"cacc-ufpa", "federal-university-of-para", false},
+      {"casi-ufpa", "federal-university-of-para", false},
+      {"inboou", "nihon-hikikomori-kyokai", true},
+    ]
+
+    proj_memberships = [
+      {"administer", "planning-poker", "po"},
+      {"lubien", "planning-poker", "manager"},
+      {"leochrisis", "planning-poker", "team"},
+      {"lubien", "cacc-ufpa", "team"},
+      {"leochrisis", "cacc-ufpa", "manager"},
+      {"foobar", "inboou", "po"},
+      {"quxbar", "inboou", "manager"}
     ]
 
     users
@@ -87,12 +104,41 @@ defmodule Poker.Seeder do
       end
     end)
     |> Task.yield_many
+
+    projs
+    |> Enum.map(fn {name, org_name, private?} ->
+      Task.async fn ->
+        org = Repo.get_by(Organization, name: org_name)
+
+        project = proj_factory(name, org, private?)
+
+        Project.create_changeset(%Project{}, project)
+        |> Repo.insert!
+      end
+    end)
+    |> Task.yield_many
+
+    proj_memberships
+    |> Enum.map(fn {username, proj_name, role} ->
+      Task.async fn ->
+        %{id: user_id} = Repo.get_by(User, username: username)
+        %{id: proj_id} = Repo.get_by(Project, name: proj_name)
+
+        membership = proj_membership_factory(user_id, proj_id, role)
+
+        ProjectMember.create_changeset(%ProjectMember{}, membership)
+        |> Repo.insert!
+      end
+    end)
+    |> Task.yield_many
   end
 
   def unseed do
     Repo.delete_all OrganizationMember
     Repo.delete_all Organization
     Repo.delete_all User
+    Repo.delete_all Project
+    Repo.delete_all ProjectMember
   end
 
   # Helpers
@@ -103,13 +149,23 @@ defmodule Poker.Seeder do
       "password" => "123456", "password_confirmation" => "123456"}
   end
 
-  def org_factory(name) do
+  def org_factory(name, private? \\ false) do
     %{"name" => name, "display_name" => Macro.camelize(name), "url" => "https://#{name}.example.dot",
-      "description" => "Lorem ipsum dolor sit amet"}
+      "description" => "Lorem ipsum dolor sit amet", "private" => private?}
   end
 
   def org_membership_factory(user_id, org_id, role \\ "member") do
     %{"user_id" => user_id, "organization_id" => org_id, "role" => role}
+  end
+
+  def proj_factory(name, org, private?) do
+    %{"organization" => org, "name" => name,
+      "display_name" => name, "private" => private?,
+      "description" => "Lorem ipsum dolor sit amet"}
+  end
+
+  def proj_membership_factory(user_id, proj_id, role \\ "team") do
+    %{"user_id" => user_id, "project_id" => proj_id, "role" => role}
   end
 end
 
