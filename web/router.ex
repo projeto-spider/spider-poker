@@ -13,30 +13,31 @@ defmodule Poker.Router do
   end
 
   pipeline :api do
-    plug :accepts, ["json-api"]
-    plug JaSerializer.ContentTypeNegotiation
-    plug JaSerializer.Deserializer
+    plug :accepts, ["json"]
     plug Guardian.Plug.VerifyHeader
     plug Guardian.Plug.LoadResource
+    plug :preload_session
   end
 
   scope "/api", Poker do
     pipe_through :api
 
     resources "/users", UserController, except: @non_rest do
-      resources "/relationships/profile", ProfileController,
+      resources "/profile", ProfileController,
         singleton: true,
         only: [:show, :update]
-      resources "/relationships/messages", MessageController, only: [:index, :update]
+      resources "/messages", MessageController, only: [:index, :update]
     end
     resources "/organizations", OrganizationController, except: @non_rest do
-      resources "/relationships/members", OrganizationMemberController, excepct: @non_rest,
-                                                                        as: "member"
-      resources "/relationships/projects", ProjectController, except: @non_rest
+      resources "/members", OrganizationMemberController, excepct: @non_rest,
+                                                          as: "member"
+      resources "/projects", ProjectController, except: @non_rest
     end
     resources "/notifications", NotificationController, only: [:index, :update]
     resources "/messages", MessageController, only: [:create]
-    resources "/projects", ProjectController, except: @non_rest
+    resources "/projects", ProjectController, except: @non_rest do
+      resources "/members", ProjectMemberController, except: @non_rest, as: "member"
+    end
 
     get "/sessions", SessionController, :show
     post "/sessions", SessionController, :create
