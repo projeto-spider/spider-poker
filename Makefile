@@ -19,7 +19,7 @@ reset-db: ;@echo "Reseting database"; \
 seed: ;@echo "Seeding database"; \
 	mix run priv/repo/seeds.exs --seed
 
-unseed: ;@echo "Seeding database"; \
+unseed: ;@echo "Unseeding database"; \
 	mix run priv/repo/seeds.exs --unseed
 
 reseed: ;@echo "Reseeding database"; \
