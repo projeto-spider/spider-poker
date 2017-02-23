@@ -17,6 +17,12 @@ export default {
     )
   },
 
+  byId(id) {
+    return apiRequest(
+      projects.get({id})
+    )
+  },
+
   show(name) {
     return apiRequest(
       projects.query({'filter[name]': name})

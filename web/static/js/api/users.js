@@ -10,6 +10,12 @@ export default {
     )
   },
 
+  byId(id) {
+    return apiRequest(
+      users.get({id})
+    )
+  },
+
   show(username) {
     return apiRequest(
       users.query({'filter[username]': username})

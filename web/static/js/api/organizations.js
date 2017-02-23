@@ -18,6 +18,12 @@ export default {
     )
   },
 
+  byId(id) {
+    return apiRequest(
+      organizations.get({id})
+    )
+  },
+
   show(name) {
     return apiRequest(
       organizations.query({'filter[name]': name})
