@@ -21,34 +21,6 @@ export const camelize =
 export const snakefy =
   casefy(snakeCase)
 
-const jsonApiField = ({pointer}) => {
-  const fieldRegex = /\/data\/attributes\/(.*)/
-  const [, field] = fieldRegex.exec(pointer)
-  return field
-    .replace('-', '_')
-}
-
-const simplifyJsonApiError = ({title, source, detail}) => ({
-  field: jsonApiField(source),
-  title,
-  detail
-})
-
-const aggregateJsonApiErrorsFromSameField = (acc, error) => {
-  if (!acc[error.field]) {
-    acc[error.field] = []
-  }
-
-  acc[error.field].push(error)
-
-  return acc
-}
-
-export const parseErrors = errors =>
-  errors
-    .map(simplifyJsonApiError)
-    .reduce(aggregateJsonApiErrorsFromSameField, {})
-
 export const parseJsonApi = data =>
   store.sync(data)
 
@@ -66,7 +38,7 @@ export const resolveErrorAsJson = async res => {
 }
 
 export const insertChangesetErrors = errors =>
-  R.mergeWith(R.concat, parseErrors(errors))
+  R.mergeWith(R.concat, errors)
 
 export const jsonApiRequest = request =>
   request
