@@ -13,6 +13,6 @@ defmodule Poker.ProjectView do
 
   def render("single.json", %{project: project}) do
     project
-    |> Map.take([:id, :name, :display_name, :description, :private])
+    |> Map.take([:id, :organization_id, :name, :display_name, :description, :private])
   end
 end
