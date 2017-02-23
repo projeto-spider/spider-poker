@@ -1,4 +1,5 @@
 export {default as Auth} from './auth'
 export {default as Users} from './users'
 export {default as Organizations} from './organizations'
+export {default as Projects} from './projects'
 export {http, resource} from './http'

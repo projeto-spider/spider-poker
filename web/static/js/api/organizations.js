@@ -3,6 +3,7 @@ import {apiRequest, snakefy} from 'app/utils'
 
 const organizations = resource('organizations{/id}')
 const members = resource('organizations{/orgId}/members{/userId}')
+const projects = resource('organizations{/orgId}/projects{/projId}')
 
 export default {
   all() {
@@ -58,6 +59,34 @@ export default {
 
     delete(orgId, userId) {
       return members.delete({orgId, userId})
+    }
+  },
+
+  projects: {
+    all(orgId) {
+      return apiRequest(
+        projects.query({orgId})
+      )
+    },
+
+    create(orgId, data) {
+      const body = {data: snakefy(data)}
+
+      return apiRequest(
+        projects.save({orgId}, body)
+      )
+    },
+
+    update(orgId, projId, data) {
+      const body = {data: snakefy(data)}
+
+      return apiRequest(
+        projects.update({orgId, projId}, body)
+      )
+    },
+
+    delete(orgId, projId) {
+      return projects.delete({orgId, projId})
     }
   }
 }
