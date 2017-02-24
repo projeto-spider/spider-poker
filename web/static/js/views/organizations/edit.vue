@@ -26,6 +26,7 @@
         <errorable-input
           v-model="organization.description"
           :errors="errors.description"
+          type="textarea"
           icon="id-card"
           placeholder="Description"
         />

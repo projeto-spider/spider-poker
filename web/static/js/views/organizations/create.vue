@@ -43,6 +43,7 @@
 
             <errorable-input
               v-model="description"
+              type="textarea"
               :errors="errors.description"
               icon="id-card"
               placeholder="Description"
