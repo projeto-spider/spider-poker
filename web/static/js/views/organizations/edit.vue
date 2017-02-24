@@ -158,7 +158,6 @@
 
           this.errors = emptyErrors
         } catch (res) {
-          console.log(res)
           this.errors = insertChangesetErrors(res.errors)(emptyErrors)
 
           this.status = 'errored'
