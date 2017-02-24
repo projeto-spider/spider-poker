@@ -123,15 +123,15 @@
     async created() {
       this.status = 'loading'
 
-      const orgs = await Organizations.show(this.$route.params.organization)
+      const res = await Organizations.show(this.$route.params.organization)
 
-      if (orgs.length === 0) {
+      if (res.data.length === 0) {
         this.status = 'errored'
         return
       }
       this.status = 'success'
 
-      this.organization = orgs[0]
+      this.organization = res.data[0]
     },
 
     methods: {

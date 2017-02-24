@@ -46,9 +46,8 @@
     created() {
       store.commit('page/set', {title: 'Organizations'})
       Organizations.all()
-        .then((data) => {
-          console.log(data)
-          this.organizations = data
+        .then(res => {
+          this.organizations = res.data
         })
     },
 

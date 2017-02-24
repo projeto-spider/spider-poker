@@ -166,20 +166,22 @@ export default {
   async created() {
     this.status.organization = 'loading'
 
-    const orgs = await Organizations.show(this.$route.params.organization)
+    const res = await Organizations.show(this.$route.params.organization)
 
-    if (orgs.length === 0) {
+    if (res.data.length === 0) {
       this.status.organization = 'errored'
       return
     }
 
     this.status.organization = 'success'
 
-    this.organization = orgs[0]
+    this.organization = res.data[0]
 
     this.status.members = 'loading'
 
-    this.memberships = await Organizations.members.all(this.organization.id)
+    const resMemberships = await Organizations.members.all(this.organization.id)
+
+    this.memberships = resMemberships.data
 
     this.status.members = 'success'
   },
@@ -192,21 +194,21 @@ export default {
 
       this.status.addMember = 'loading'
 
-      const users = await Users.show(this.memberToAdd)
+      const res = await Users.show(this.memberToAdd)
 
-      if (users.length === 0) {
+      if (res.data.length === 0) {
         this.status.addMember = 'errored'
         return
       }
 
-      const userId = R.prop('id', users[0])
+      const userId = R.prop('id', res.data[0])
 
       const orgId = R.prop('id', this.organization)
 
       try {
-        const newMember = await Organizations.members.create(orgId, userId, 'member')
+        const resNewMember = await Organizations.members.create(orgId, userId, 'member')
 
-        this.memberships.push(newMember)
+        this.memberships.push(resNewMember.data)
 
         this.status.addMember = 'success'
 
