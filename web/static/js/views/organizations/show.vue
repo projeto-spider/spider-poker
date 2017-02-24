@@ -70,13 +70,15 @@
               Something went wrong
             </div>
 
-            <p v-if="isAdmin" class="control has-addons">
+             <p v-if="isAdmin" class="control has-addons">
               <form @submit.prevent="submit" @keyup.13="submit">
-                <input v-model="memberToAdd" type="text" class="input" placeholder="Member name">
-
+                <p class="control has-addons">
+                <input v-model="memberToAdd" type="text" class="input is-expanded" placeholder="Member name">
                 <button class="button is-info" type="submit">
                   Add member
                 </button>
+                </p>
+                <br />
               </form>
             </p>
 
@@ -100,11 +102,12 @@
                     >
                       @{{member.user.username}}
                     </router-link>
+                    <p>{{roleToText(member.role)}}</p>
                   </p>
                 </p>
               </div>
-              <p v-if="member.user.id !== loggedinId" class="control has-addons has-addons-centered">
-                <button @click="removeMember(member.user.id)" class="button is-danger">
+              <p  v-if="member.user.id !== loggedinId" class="control has-addons has-addons-centered">
+                <button v-if="isAdmin" @click="removeMember(member.user.id)" class="button is-danger">
                   Delete
                 </button>
               </p>
@@ -160,6 +163,20 @@ export default {
       return !!this.memberships
         .filter(member => member.role === 'admin' && member.user.id === this.loggedinId)
         .length
+    },
+
+    isMember() {
+      if (!this.loggedinId) {
+        return false
+      }
+
+      if (this.memberships.length === 0) {
+        return false
+      }
+
+      return !!this.memberships
+        .filter(member => member.user.id === this.loggedinId)
+        .length
     }
   },
 
@@ -187,6 +204,16 @@ export default {
   },
 
   methods: {
+    roleToText(role) {
+      switch (role) {
+        case 'admin':
+          return 'Adiminister'
+
+        default:
+          return 'Member'
+      }
+    },
+
     async submit() {
       if (this.status.addMember === 'loading') {
         return
@@ -230,7 +257,6 @@ export default {
     }
   }
 }
-
 </script>
 
 <style lang="sass" scoped>
