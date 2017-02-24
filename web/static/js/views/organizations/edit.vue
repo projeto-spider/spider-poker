@@ -49,11 +49,11 @@
 
          <p class="control">
           <label class="radio">
-            <input v-model="private" value="0" type="radio">
+            <input :checked="organization.private === false" @click="organization.private = false" type="radio">
               Public
           </label>
           <label class="radio">
-            <input v-model="private" value="1" type="radio">
+            <input :checked="organization.private === true" @click="organization.private = true" type="radio">
               Private
           </label>
         </p>
@@ -114,7 +114,7 @@
       return {
         status: 'not-asked',
         organization: null,
-        private: '0',
+        private: '',
 
         errors: emptyErrors
       }
