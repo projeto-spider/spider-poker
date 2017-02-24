@@ -79,11 +79,11 @@
         this.status = 'loading'
 
         try {
-          const {token} = await Auth.signin(this.username, this.password)
+          const res = await Auth.signin(this.username, this.password)
 
-          store.commit('auth/set_token', token)
-          const user = await Auth.me()
-          this.$store.commit('auth/set_user', user)
+          store.commit('auth/set_token', res.data.token)
+          const userRes = await Auth.me()
+          this.$store.commit('auth/set_user', userRes.data)
 
           this.status = 'success'
           this.$router.push({name: 'home'})
