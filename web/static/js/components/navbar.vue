@@ -23,6 +23,10 @@
             Organizations
           </router-link>
 
+          <router-link :to='{name: "projectsList"}' class="nav-item">
+            Projects
+          </router-link>
+
           <span v-if="!loggedin" class="nav-item">
             <router-link
               :to="{name: 'login'}"
