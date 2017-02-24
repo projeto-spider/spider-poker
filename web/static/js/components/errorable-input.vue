@@ -30,7 +30,17 @@
       :placeholder="placeholder"
     />
 
-    <span class="icon is-small">
+    <textarea
+      v-if="type === 'textarea'"
+      class="textarea"
+      :class="inputClass"
+      v-model="inputValue"
+      @input="input"
+      :placeholder="placeholder"
+    >
+    </textarea>
+
+    <span v-if="type !== 'textarea'" class="icon is-small">
       <i class="fa" :class="iconClass"></i>
     </span>
 
