@@ -48,7 +48,6 @@
             </span>
             <span>Create a new organization</span>
           </router-link>
-
           <br />
 
             <nav class="panel">
@@ -83,6 +82,7 @@
                 {{item.name}}
               </a>
             </nav>
+            <br />
         </div>
       </div>
     </div>
@@ -162,7 +162,9 @@
     },
 
     async created() {
-      this.users = await Users.all()
+      const res = await Users.all()
+      console.log(res)
+      this.users = res.data
     }
   }
 </script>
