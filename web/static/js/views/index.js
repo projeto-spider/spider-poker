@@ -17,6 +17,12 @@ import OrganizationShow from './organizations/show'
 import OrganizationsEdit from './organizations/edit'
 import OrganizationsList from './organizations/list'
 
+// Projects
+import ProjectCreate from './projects/create'
+import ProjectShow from './projects/show'
+import ProjectEdit from './projects/edit'
+import ProjectsList from './projects/list'
+
 // Errors
 import Error404 from './errors/404'
 
@@ -42,6 +48,13 @@ export default {
     Edit: OrganizationsEdit,
     Show: OrganizationShow,
     List: OrganizationsList
+  },
+
+  Projects: {
+    Create: ProjectCreate,
+    Edit: ProjectEdit,
+    Show: ProjectShow,
+    List: ProjectsList
   },
 
   ErrorViews: {
