@@ -12,9 +12,9 @@ export default {
     )
   },
 
-  create(organization) {
+  create(data) {
     return apiRequest(
-      organizations.save({}, {data: snakefy(organization)})
+      organizations.save({}, {data: snakefy(data)})
     )
   },
 
