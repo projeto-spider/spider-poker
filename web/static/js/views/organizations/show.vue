@@ -41,17 +41,44 @@
             </p>
           </div>
 
-          <router-link
-            v-if="isAdmin"
-            :to="{name: 'organizationEdit', params: {organization: organization.name}}"
-            class="button is-info is-outlined is-fullwidth"
-          >
-            <span class="icon is-small">
-              <i class="fa fa-cog"></i>
-            </span>
+          <div class="control is-grouped">
+            <router-link
+              v-if="isAdmin"
+              :to="{name: 'organizationEdit', params: {organization: organization.name}}"
+              class="button is-info is-outlined is-fullwidth"
+            >
+              <span class="icon is-small">
+                <i class="fa fa-cog"></i>
+              </span>
 
-            <span>Edit organization</span>
-          </router-link>
+              <span>Edit organization</span>
+            </router-link>
+
+            <router-link
+                v-if="isMember"
+                :to="{name: 'projectCreate'}"
+                class="button is-info is-outlined is-fullwidth"
+              >
+                <span class="icon is-small">
+                  <i class="fa fa-bolt"></i>
+                </span>
+
+                <span>Start a new project</span>
+              </router-link>
+
+            <br />
+              <router-link
+                :to="{name: 'organizationProjectsList', params: {organization: organization.name}}"
+                class="button is-info is-outlined is-fullwidth"
+              >
+                <span class="icon is-small">
+                  <i class="fa fa-list"></i>
+                </span>
+
+                <span>Projects list</span>
+              </router-link>
+            </div>
+          <br />
         </div>
       </div>
     </div>
