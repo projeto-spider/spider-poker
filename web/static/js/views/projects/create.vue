@@ -1,20 +1,20 @@
 <template>
   <main>
     <hero-title
-      text="Creating organization"
+      text="Starting a new project"
     />
 
-    <div class="row">
+    <div  v-if="organization !== null" class="row">
       <div class="column is-half is-offset-one-quarter">
         <div class="box">
-          <div v-if="status == 'errored'">
+          <div v-if="status.project == 'errored'">
             <div class="callout callout-danger cotainer has-text-centered">
-              <h4>Register organization fail</h4>
+              <h4>Starting project fail</h4>
               <p>Verify your organization data</p>
             </div>
           </div>
 
-          <div v-if="status == 'success'">
+          <div v-if="status.project == 'success'">
             <div class="callout callout-success cotainer has-text-centered">
               <h4>Register success</h4>
               <p>Redirecting you to the organization page</p>
@@ -30,40 +30,26 @@
             <errorable-input
               v-model="name"
               :errors="errors.name"
-              icon="building-o"
-              placeholder="Organization name"
+              icon="bookmark"
+              placeholder="Project name"
             />
 
             <errorable-input
               v-model="displayName"
               :errors="errors.displayName"
-              icon="briefcase"
+              icon="sticky-note"
               placeholder="Display name"
             />
 
             <errorable-input
               v-model="description"
-              type="textarea"
               :errors="errors.description"
-              icon="id-card"
+              type="textarea"
+              icon="comment-o"
               placeholder="Description"
             />
 
-            <errorable-input
-              v-model="location"
-              :errors="errors.location"
-              icon="map-marker"
-              placeholder="Location"
-            />
-
-           <errorable-input
-              v-model="url"
-              :errors="errors.url"
-              icon="link"
-              placeholder="Url"
-            />
-
-            <label class="label">Organization type</label>
+            <label class="label">Project type</label>
 
              <p class="control">
               <label class="radio">
@@ -106,13 +92,13 @@
     name: [],
     displayName: [],
     description: [],
-    location: [],
-    url: [],
     private: []
   }
 
+  const organizationIdView = R.view(R.lensPath(['organization', 'id']))
+
   export default {
-    name: 'OrganizationsCreateView',
+    name: 'projectCreateView',
 
     components: {
       HeroTitle, ErrorableInput
@@ -123,38 +109,61 @@
         name: '',
         displayName: '',
         description: '',
-        location: '',
-        url: '',
         private: '0',
-        status: 'not-asked',
+        status: {
+          organization: 'not-asked',
+          project: 'not-asked'
+        },
+        organization: null,
         errors: emptyErrors
       }
     },
 
+    async created() {
+      this.status.organization = 'loading'
+
+      const res = await Organizations.show(this.$route.params.organization)
+
+      if (res.data.length === 0) {
+        this.status.organization = 'errored'
+        return
+      }
+
+      this.status.organization = 'success'
+
+      this.organization = res.data[0]
+    },
+
     methods: {
       async submit() {
-        if (this.status === 'loading') {
+        if (this.status.project === 'loading') {
           return
         }
 
-        this.status = 'loading'
+        if (this.organization === null) {
+          this.status.organization = 'errored'
+        }
+
+        this.status.project = 'loading'
+
+        const orgId = organizationIdView(this)
 
         const attributes = R.pick([
-          'name', 'displayName', 'description', 'location', 'url', 'private'
+          'name', 'displayName', 'description', 'private'
         ], this)
 
         try {
-          const org = await Organizations.create(attributes)
+          const res = await Organizations.projects.create(orgId, attributes)
 
-          const name = R.prop('name', org)
+          const name = R.prop('name', res.data)
 
-          this.$router.push({name: 'organizationShow', params: {organization: name}})
+          this.$router.push({name: 'projectShow', params: {project: name}})
 
-          this.status = 'success'
+          this.status.project = 'success'
         } catch (res) {
           this.errors = insertChangesetErrors(res.errors)(emptyErrors)
 
-          this.status = 'errored'
+          this.status.project = 'errored'
         }
       }
     }

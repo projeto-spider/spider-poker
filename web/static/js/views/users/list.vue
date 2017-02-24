@@ -33,8 +33,8 @@
       store.commit('page/set', {title: 'Users'});
 
       Users.all()
-        .then(({data}) => {
-          this.users = data;
+        .then(res => {
+          this.users = res.data;
         });
     },
 

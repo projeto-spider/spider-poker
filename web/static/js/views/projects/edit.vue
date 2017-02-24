@@ -1,7 +1,7 @@
 <template>
   <main>
     <hero-title
-      text="Updating organization"
+      text="Updating project"
     />
 
     <hero-title
@@ -10,50 +10,36 @@
       color="danger"
     />
 
-    <div v-if="organization !== null" class="column is-half is-offset-one-quarter">
+    <div v-if="project !== null" class="column is-half is-offset-one-quarter">
       <form
         method="post"
         @submit.prevent="submit"
         @keyup.13="submit"
       >
         <errorable-input
-          v-model="organization.displayName"
+          v-model="project.displayName"
           :errors="errors.displayName"
-          icon="briefcase"
+          icon="sticky-note"
           placeholder="Display name"
         />
 
         <errorable-input
-          v-model="organization.description"
-          :errors="errors.description"
           type="textarea"
-          icon="id-card"
+          v-model="project.description"
+          :errors="errors.description"
+          icon="comment-o"
           placeholder="Description"
         />
 
-        <errorable-input
-          v-model="organization.location"
-          :errors="errors.location"
-          icon="map-marker"
-          placeholder="Location"
-        />
-
-        <errorable-input
-          v-model="organization.url"
-          :errors="errors.url"
-          icon="link"
-          placeholder="URL"
-        />
-
-        <label class="label">Organization type</label>
+        <label class="label">Project type</label>
 
          <p class="control">
           <label class="radio">
-            <input :checked="organization.private === false" @click="organization.private = false" type="radio">
+            <input :checked="project.private === false" @click="project.private = false" type="radio">
               Public
           </label>
           <label class="radio">
-            <input :checked="organization.private === true" @click="organization.private = true" type="radio">
+            <input :checked="project.private === true" @click="project.private = true" type="radio">
               Private
           </label>
         </p>
@@ -75,7 +61,7 @@
               type="submit"
               :disabled="status === 'loading'"
               class="button is-danger"
-              @click.prevent="deleteOrganization"
+              @click.prevent="deleteProject"
             >
               Delete
             </button>
@@ -88,23 +74,20 @@
 
 <script>
   import R from 'ramda'
-  import {Organizations} from 'app/api'
+  import {Projects} from 'app/api'
   import {insertChangesetErrors} from 'app/utils'
   import {HeroTitle, ErrorableInput} from 'app/components'
 
   const emptyErrors = {
     displayName: [],
     description: [],
-    contact: [],
-    location: [],
-    url: [],
     private: []
   }
 
-  const organizationIdView = R.view(R.lensPath(['organization', 'id']))
+  const projectIdView = R.view(R.lensPath(['project', 'id']))
 
   export default {
-    name: 'OrganizationEditView',
+    name: 'ProjectEditView',
 
     components: {
       HeroTitle, ErrorableInput
@@ -113,7 +96,7 @@
     data() {
       return {
         status: 'not-asked',
-        organization: null,
+        project: null,
         private: '',
 
         errors: emptyErrors
@@ -123,7 +106,7 @@
     async created() {
       this.status = 'loading'
 
-      const res = await Organizations.show(this.$route.params.organization)
+      const res = await Projects.show(this.$route.params.project)
 
       if (res.data.length === 0) {
         this.status = 'errored'
@@ -131,7 +114,7 @@
       }
       this.status = 'success'
 
-      this.organization = res.data[0]
+      this.project = res.data[0]
     },
 
     methods: {
@@ -142,21 +125,20 @@
 
         this.status = 'loading'
 
-        const id = organizationIdView(this)
+        const projId = projectIdView(this)
 
         const attributes = R.pipe(
-          R.view(R.lensPath(['organization'])),
-          R.pick(['displayName', 'description', 'location', 'url', 'private'])
+          R.view(R.lensPath(['project'])),
+          R.pick(['displayName', 'description', 'private'])
         )(this)
 
-        attributes.display_name = attributes['display-name']
-
         try {
-          await Organizations.update(id, attributes)
+          await Projects.update(projId, attributes)
 
           this.status = 'success'
 
           this.errors = emptyErrors
+          this.$router.push({name: 'projectShow'})
         } catch (res) {
           this.errors = insertChangesetErrors(res.errors)(emptyErrors)
 
@@ -164,11 +146,11 @@
         }
       },
 
-      async deleteOrganization() {
-        if (confirm('Are you sure you want to delete this organization?')) {
-          const id = organizationIdView(this)
+      async deleteProject() {
+        if (confirm('Are you sure you want to delete this project?')) {
+          const projId = projectIdView(this)
 
-          await Organizations.delete(id)
+          await Projects.delete(projId)
 
           this.$router.push({name: 'home'})
         }

@@ -1,89 +1,47 @@
 <template>
   <main>
     <hero-title
-      v-if='organization'
-      :text="organization.displayName"
-      :subtitle="`${organization.name}`"
+      v-if='project'
+      :text="project.displayName"
+      :subtitle="`${project.name}`"
     />
 
     <hero-title
-      v-if="status.organization === 'errored'"
-      text="Organization does not exist"
+      v-if="status.project === 'errored'"
+      text="Project does not exist"
       color="danger"
     />
 
-    <div v-if='organization' class="container">
+    <div v-if='project' class="container">
       <div class="columns">
         <div class="column is-half is-offset-one-quarter has-text-centered">
-          <p v-if="organization.description">{{organization.description}}</p>
+          <p v-if="project.description">{{project.description}}</p>
 
           <div class="panel">
-            <p v-if="organization.location" class="panel-block">
-              <span class="panel-icon">
-                <i class="fa fa-map-marker" />
-              </span>
-              {{organization.location}}
-            </p>
-
-            <p v-if="organization.url" class="panel-block">
-              <span class="panel-icon">
-                <i class="fa fa-globe" />
-              </span>
-              {{organization.url}}
-            </p>
-
 
             <p class="panel-block">
               <span class="panel-icon">
                 <i class="fa" />
               </span>
-              {{organization.private ? 'Private' : 'Public'}}
+              {{project.private ? 'Private' : 'Public'}}
             </p>
           </div>
 
-          <div class="control is-grouped">
-            <router-link
-              v-if="isAdmin"
-              :to="{name: 'organizationEdit', params: {organization: organization.name}}"
-              class="button is-info is-outlined is-fullwidth"
-            >
-              <span class="icon is-small">
-                <i class="fa fa-cog"></i>
-              </span>
+          <router-link
+            :to="{name: 'projectEdit', params: {project: project.name}}"
+            class="button is-info is-outlined is-fullwidth"
+          >
+            <span class="icon is-small">
+              <i class="fa fa-cog"></i>
+            </span>
 
-              <span>Edit organization</span>
-            </router-link>
-
-            <router-link
-                v-if="isMember"
-                :to="{name: 'projectCreate'}"
-                class="button is-info is-outlined is-fullwidth"
-              >
-                <span class="icon is-small">
-                  <i class="fa fa-bolt"></i>
-                </span>
-
-                <span>Start a new project</span>
-              </router-link>
-
-            <br />
-              <router-link
-                :to="{name: 'organizationProjectsList', params: {organization: organization.name}}"
-                class="button is-info is-outlined is-fullwidth"
-              >
-                <span class="icon is-small">
-                  <i class="fa fa-list"></i>
-                </span>
-
-                <span>Projects list</span>
-              </router-link>
-            </div>
-          <br />
+            <span>Edit project</span>
+          </router-link>
         </div>
       </div>
     </div>
     <br />
-    <div v-if='organization' class="container">
+    <div v-if='project' class="container">
       <div class="columns">
         <div class="column is-two-thirds is-offset-2 has-text-centered">
           <span class="tag is-spider is-medium is-centered">Members</span>
@@ -97,17 +55,24 @@
               Something went wrong
             </div>
 
-             <p v-if="isAdmin" class="control has-addons">
+            <p v-if="isManager" class="control has-addons">
               <form @submit.prevent="submit" @keyup.13="submit">
                 <p class="control has-addons">
+                  <span class="select">
+                    <select v-model="memberToAddRole">
+                      <option value="team">Team</option>
+                      <option v-if="hasPo === 0" value="po">Product owner</option>
+                    </select>
+                  </span>
                 <input v-model="memberToAdd" type="text" class="input is-expanded" placeholder="Member name">
                 <button class="button is-info" type="submit">
                   Add member
                 </button>
                 </p>
-                <br />
               </form>
             </p>
+
+            <br />
 
             <article v-for="member in memberships" class="media">
               <router-link
@@ -134,7 +99,7 @@
                 </p>
               </div>
               <p  v-if="member.user.id !== loggedinId" class="control has-addons has-addons-centered">
-                <button v-if="isAdmin" @click="removeMember(member.user.id)" class="button is-danger">
+                <button v-if="isManager" @click="removeMember(member.user.id)" class="button is-danger">
                   Delete
                 </button>
               </p>
@@ -147,13 +112,13 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
 import R from 'ramda'
+import {mapState} from 'vuex'
 import {HeroTitle} from 'app/components'
-import {Organizations, Users} from 'app/api'
+import {Projects, Users} from 'app/api'
 
 export default {
-  name: 'OrganizationShowView',
+  name: 'ProjectShowView',
 
   components: {HeroTitle},
 
@@ -162,14 +127,14 @@ export default {
       memberships: [],
 
       status: {
-        organization: 'not-asked',
+        project: 'not-asked',
         members: 'not-asked',
         addMember: 'not-asked'
       },
 
       memberToAdd: '',
-      organization: null,
-      projects: []
+      memberToAddRole: 'team',
+      project: null
     }
   },
 
@@ -178,7 +143,7 @@ export default {
       loggedinId: R.view(R.lensPath(['auth', 'user', 'id']))
     }),
 
-    isAdmin() {
+    isManager() {
       if (!this.loggedinId) {
         return false
       }
@@ -188,44 +153,38 @@ export default {
       }
 
       return !!this.memberships
-        .filter(member => member.role === 'admin' && member.user.id === this.loggedinId)
+        .filter(member => member.role === 'manager' && member.user.id === this.loggedinId)
         .length
     },
 
-    isMember() {
-      if (!this.loggedinId) {
-        return false
-      }
-
-      if (this.memberships.length === 0) {
-        return false
-      }
-
-      return !!this.memberships
-        .filter(member => member.user.id === this.loggedinId)
+    hasPo() {
+      return this.memberships
+        .filter(member => member.role === 'po')
         .length
     }
   },
 
   async created() {
-    this.status.organization = 'loading'
+    this.status.project = 'loading'
 
-    const res = await Organizations.show(this.$route.params.organization)
+    const projectName = this.$route.params.project
+
+    const res = await Projects.show(projectName)
 
     if (res.data.length === 0) {
-      this.status.organization = 'errored'
+      this.status.project = 'errored'
       return
     }
 
-    this.status.organization = 'success'
+    this.status.project = 'success'
 
-    this.organization = res.data[0]
+    this.project = res.data[0]
 
     this.status.members = 'loading'
 
-    const resMemberships = await Organizations.members.all(this.organization.id)
+    const resMember = await Projects.members.all(this.project.id)
 
-    this.memberships = resMemberships.data
+    this.memberships = resMember.data
 
     this.status.members = 'success'
   },
@@ -233,11 +192,14 @@ export default {
   methods: {
     roleToText(role) {
       switch (role) {
-        case 'admin':
-          return 'Adiminister'
+        case 'po':
+          return 'Product owner'
+
+        case 'manager':
+          return 'Manager'
 
         default:
-          return 'Member'
+          return 'Team member'
       }
     },
 
@@ -257,16 +219,18 @@ export default {
 
       const userId = R.prop('id', res.data[0])
 
-      const orgId = R.prop('id', this.organization)
+      const projId = R.prop('id', this.project)
 
+      const role = R.prop('memberToAddRole', this)
       try {
-        const resNewMember = await Organizations.members.create(orgId, userId, 'member')
+        const resNewMember = await Projects.members.create(projId, userId, role)
 
         this.memberships.push(resNewMember.data)
 
         this.status.addMember = 'success'
 
         this.memberToAdd = ''
+        this.memberToAddRole = 'team'
       } catch (res) {
         this.status.addMember = 'errored'
       }
@@ -274,9 +238,9 @@ export default {
 
     async removeMember(userId) {
       if (confirm('Are you sure you want to remove this member?')) {
-        const orgId = this.organization.id
+        const projId = this.project.id
 
-        await Organizations.members.delete(orgId, userId)
+        await Projects.members.delete(projId, userId)
 
         this.memberships = this.memberships
         .filter(member => member.user.id !== userId)
@@ -284,10 +248,5 @@ export default {
     }
   }
 }
-</script>
 
-<style lang="sass" scoped>
-  .is-spider
-    background-color: #1C336E
-    color: white !important
-</style>
+</script>

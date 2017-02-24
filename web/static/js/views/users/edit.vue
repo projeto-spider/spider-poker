@@ -151,13 +151,14 @@
         )(this)
 
         try {
-          const profile = await Users.update(id, attributes)
+          const res = await Users.update(id, attributes)
+          const user = res.data
 
           this.status = 'success'
 
           store.commit('auth/set_user', {
             ...this.user,
-            profile
+            user
           })
 
           this.errors = emptyErrors

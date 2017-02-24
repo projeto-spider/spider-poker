@@ -152,16 +152,16 @@
     async created() {
       this.status = 'loading'
 
-      const users = await Users.show(this.$route.params.username)
+      const res = await Users.show(this.$route.params.username)
 
-      if (users.length === 0) {
+      if (res.data.length === 0) {
         this.status = 'errored'
         return
       }
 
       this.status = 'success'
 
-      this.user = users[0]
+      this.user = res.data[0]
     }
   }
 </script>

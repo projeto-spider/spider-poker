@@ -9,6 +9,7 @@ const {
   Pages,
   Users,
   Organizations,
+  Projects,
   ErrorViews
 } = views
 
@@ -93,6 +94,40 @@ export default [
         name: 'organizationsList',
         path: 'organizations',
         component: Organizations.List
+      },
+
+      // Projects
+      {
+        name: 'projectCreate',
+        path: 'organization/:organization/project/create',
+        component: Projects.Create,
+        beforeEnter: requireAuth()
+      },
+
+      {
+        name: 'projectShow',
+        path: 'project/:project',
+        component: Projects.Show,
+        beforeEnter: requireAuth()
+      },
+
+      {
+        name: 'projectEdit',
+        path: 'project/:project/edit',
+        component: Projects.Edit,
+        beforeEnter: requireAuth()
+      },
+
+      {
+        name: 'projectsList',
+        path: 'projects',
+        component: Projects.List
+      },
+
+      {
+        name: 'organizationProjectsList',
+        path: 'organization/:organization/projects',
+        component: Projects.List
       }
     ]
   },
