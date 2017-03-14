@@ -10,11 +10,11 @@ config :poker,
   ecto_repos: [Poker.Repo]
 
 # Configures the endpoint
-config :poker, Poker.Endpoint,
+config :poker, Poker.Web.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "PtZux+4wH0tbKSqKRcMNHUhNd4K1IADslG5lnUTTlNeDLr0LWuebNJWjfA9uPWfF",
-  render_errors: [view: Poker.ErrorView, accepts: ~w(html json json-api)],
-  pubsub: [name: Poker.PubSub,
+  render_errors: [view: Poker.Web.ErrorView, accepts: ~w(html json json-api)],
+  pubsub: [name: Poker.Web.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
@@ -27,7 +27,7 @@ config :guardian, Guardian,
   issuer: "Poker",
   ttl: {30, :days},
   verify_issuer: true,
-  serializer: Poker.GuardianSerializer
+  serializer: Poker.Web.Helpers.GuardianSerializer
 
 config :phoenix, :format_encoders,
   "json-api": Poison
