@@ -1,7 +1,5 @@
 defmodule Poker.Web.ProfileController do
   use Poker.Web, :controller
-  use JaResource
-
   alias Poker.Profile
 
   def show(conn, %{"user_id" => user_id}) do
