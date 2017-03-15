@@ -1,6 +1,5 @@
 defmodule Poker.Web.ErrorView do
   use Poker.Web, :view
-  import JaSerializer.ErrorSerializer, only: [format: 1]
 
   # 400
 
