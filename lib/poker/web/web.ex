@@ -12,6 +12,8 @@ defmodule Poker.Web do
   def controller do
     quote do
       use Phoenix.Controller, namespace: Poker.Web
+      use Poker.Web.Policy
+      use Poker.Web.Scope
 
       alias Poker.Repo
       import Ecto
@@ -57,6 +59,23 @@ defmodule Poker.Web do
       import Ecto
       import Ecto.Query
       import Poker.Web.Gettext
+    end
+  end
+
+  def policy do
+    quote do
+      alias Poker.Repo
+      import Ecto
+      import Ecto.Query
+    end
+  end
+
+  def scope do
+    quote do
+      alias Poker.Repo
+      import Ecto
+      import Ecto.Query
+      import Poker.Web.Helpers.Scope
     end
   end
 

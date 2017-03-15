@@ -11,4 +11,19 @@ defmodule Poker.Web.Helpers do
   def email_regex do
     @email_regex
   end
+
+  def module_for_controller(kind, controller) do
+    pieces =
+      controller
+      |> Module.split
+
+    with {:ok, name}          <- Enum.fetch(pieces, 2),
+         [_, controller_name] <- Regex.run(~r{(.+)Controller}, name)
+    do
+      pieces
+      |> Enum.take(2)
+      |> Enum.concat([kind, controller_name])
+      |> Module.concat
+    end
+  end
 end
