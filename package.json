@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "vuedraggable": "^2.9.0"
+  }
+}

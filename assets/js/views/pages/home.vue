@@ -5,37 +5,55 @@
     <div class="container">
       <div class="columns">
         <div class="column">
-          <article v-for="user in users" class="media">
-            <router-link
-              :to="{name: 'userShow', params: {username: user.username}}"
-            >
-              <figure class="media-left">
-                <p class="image is-64x64">
-                  <img :src="gravatar(user.email)">
-                </p>
-              </figure>
-            </router-link>
+          <paginate
+            name="profiles"
+            :list="users"
+            :per="4"
+            tag="div"
+            class="paginate-list"
+          >
+            <article v-for="user in paginated('profiles')" class="media">
+              <router-link
+                :to="{name: 'userShow', params: {username: user.username}}"
+              >
+                <figure class="media-left">
+                  <p class="image is-64x64">
+                    <img :src="gravatar(user.email)">
+                  </p>
+                </figure>
+              </router-link>
 
-            <div class="media-content">
-              <p>
-                <router-link
-                  :to="{name: 'userShow', params: {username: user.username}}"
-                >
-                  {{user.profile.name}}
-                </router-link>
+              <div class="media-content">
                 <p>
                   <router-link
                     :to="{name: 'userShow', params: {username: user.username}}"
-                    class="is-primary"
                   >
-                    @{{user.username}}
+                    {{user.profile.name}}
                   </router-link>
+                  <p>
+                    <router-link
+                      :to="{name: 'userShow', params: {username: user.username}}"
+                      class="is-primary"
+                    >
+                      @{{user.username}}
+                    </router-link>
+                  </p>
                 </p>
-              </p>
 
-              <p v-if='user.profile.bio'>{{user.profile.bio}}</p>
-            </div>
-          </article>
+                <p v-if='user.profile.bio'>{{user.profile.bio}}</p>
+              </div>
+            </article>
+          </paginate>
+          <br/>
+          <paginate-links
+            for="profiles"
+            class="column is-offset-5 control is-horizontal"
+            :simple="{
+            next: '|     Next »',
+            prev: '« Back   |'
+            }"
+          >
+          </paginate-links>
         </div>
 
         <div v-if='loggedin' class="column is-one-third">
@@ -92,8 +110,12 @@
 <script>
   import {mapState} from 'vuex'
   import gravatar from 'gravatar'
+  import Vue from 'vue'
   import {HeroTitle} from 'app/components'
   import {Users} from 'app/api'
+
+  var VuePaginate = require('vue-paginate')
+  Vue.use(VuePaginate)
 
   const TAB = {
     0: 'all',
@@ -120,6 +142,7 @@
     data() {
       return {
         users: [],
+        paginate: ['profiles'],
 
         currentTab: TAB.all,
 

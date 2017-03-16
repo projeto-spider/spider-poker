@@ -45,7 +45,7 @@
     </span>
 
     <span v-for="error in errors" class="help is-danger">
-      {{error.detail}}
+      {{error}}
     </span>
   </div>
 </template>
@@ -57,23 +57,23 @@
     props: {
       type: {
         type: String,
-        default: 'text',
+        default: 'text'
       },
 
       value: {
-        default: '',
+        default: ''
       },
 
       errors: Array,
 
       icon: String,
 
-      placeholder: String,
+      placeholder: String
     },
 
     data() {
       return {
-        inputValue: this.value,
+        inputValue: this.value
       }
     },
 
@@ -84,21 +84,21 @@
 
       inputClass() {
         return {
-          'is-danger': this.errored,
-        };
+          'is-danger': this.errored
+        }
       },
 
       iconClass() {
         return {
           [`fa-${this.icon}`]: true
-        };
+        }
       }
     },
 
     methods: {
       input() {
-        this.$emit('input', this.inputValue);
+        this.$emit('input', this.inputValue)
       }
-    },
+    }
   }
 </script>

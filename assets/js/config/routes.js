@@ -10,6 +10,7 @@ const {
   Users,
   Organizations,
   Projects,
+  Backlogs,
   ErrorViews
 } = views
 
@@ -128,6 +129,14 @@ export default [
         name: 'organizationProjectsList',
         path: 'organization/:organization/projects',
         component: Projects.List
+      },
+
+      // Backlogs
+
+      {
+        name: 'backlogShow',
+        path: 'project/:project/backlog',
+        component: Backlogs.Show
       }
     ]
   },
