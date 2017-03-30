@@ -23,6 +23,8 @@ defmodule Poker.Web do
       import Poker.Web.Gettext
       import Guardian, only: [encode_and_sign: 2]
       import Poker.Web.Helpers.Controller
+
+      action_fallback Poker.Web.FallbackController
     end
   end
 
