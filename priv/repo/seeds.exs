@@ -76,7 +76,7 @@ defmodule Poker.Seeder do
     users
     |> Enum.map(fn user ->
       Task.async fn ->
-        User.create_changeset(%User{}, user)
+        User.create_changeset(user)
         |> Repo.insert!
       end
     end)
@@ -85,7 +85,7 @@ defmodule Poker.Seeder do
     orgs
     |> Enum.map(fn org ->
       Task.async fn ->
-        Organization.create_changeset(%Organization{}, org)
+        Organization.create_changeset(org)
         |> Repo.insert!
       end
     end)
@@ -99,7 +99,7 @@ defmodule Poker.Seeder do
 
         membership = org_membership_factory(user_id, org_id, role)
 
-        OrganizationMember.create_changeset(%OrganizationMember{}, membership)
+        OrganizationMember.create_changeset(membership)
         |> Repo.insert!
       end
     end)
@@ -112,7 +112,7 @@ defmodule Poker.Seeder do
 
         project = proj_factory(name, org, private?)
 
-        Project.create_changeset(%Project{}, project)
+        Project.create_changeset(project)
         |> Repo.insert!
       end
     end)
@@ -126,7 +126,7 @@ defmodule Poker.Seeder do
 
         membership = proj_membership_factory(user_id, proj_id, role)
 
-        ProjectMember.create_changeset(%ProjectMember{}, membership)
+        ProjectMember.create_changeset(membership)
         |> Repo.insert!
       end
     end)
