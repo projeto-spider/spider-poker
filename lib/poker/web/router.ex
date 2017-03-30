@@ -1,6 +1,5 @@
 defmodule Poker.Web.Router do
   use Poker.Web, :router
-  use Plug.ErrorHandler
 
   @non_rest [:new, :edit]
 
