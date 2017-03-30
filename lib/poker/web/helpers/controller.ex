@@ -2,7 +2,7 @@ defmodule Poker.Web.Helpers.Controller do
   import Ecto.Query, only: [from: 2]
   import Phoenix.Controller, only: [scrub_params: 2]
 
-  def flatten_params(conn, key) do
+  def flatten_param(conn, key) do
     conn
     |> scrub_params(key)
     |> Map.update!(:params, fn params ->
