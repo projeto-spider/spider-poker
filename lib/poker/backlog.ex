@@ -1,6 +1,8 @@
 defmodule Poker.Backlog do
   use Poker.Web, :model
 
+  alias Poker.Backlog
+
   schema "backlogs" do
     field :content, :string
     field :position, :integer
@@ -13,8 +15,8 @@ defmodule Poker.Backlog do
 
   # Changesets
 
-  def create_changeset(struct, params \\ %{}) do
-    struct
+  def create_changeset(params \\ %{}) do
+    %Backlog{}
     |> cast(params, [:content, :position, :priority])
     |> validate_required([:content, :position, :priority])
   end

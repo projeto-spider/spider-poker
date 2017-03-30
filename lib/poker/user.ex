@@ -30,7 +30,7 @@ defmodule Poker.User do
     |> unique_constraint(:email)
   end
 
-  def create_changeset(struct, params \\ %{}) do
+  def create_changeset(params \\ %{}) do
     # Ensure the user will have a profile
     profile = if params["profile"] do
       # If provided, use it. It'll be validated by Profile.changeset/2
@@ -40,7 +40,7 @@ defmodule Poker.User do
       %Profile{name: params["username"]}
     end
 
-    struct
+    %User{}
     # Cast the main fields
     |> cast(params, [:username, :email, :password, :password_confirmation])
     # Before casting, you need to put it's profile

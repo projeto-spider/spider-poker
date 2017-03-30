@@ -1,7 +1,8 @@
 defmodule Poker.Organization do
   use Poker.Web, :model
 
-  alias Poker.Helpers
+  alias Poker.Organization
+  alias Poker.Web.Helpers
 
   schema "organizations" do
     field :name, :string
@@ -26,14 +27,14 @@ defmodule Poker.Organization do
     |> unique_constraint(:name)
   end
 
-  def create_changeset(struct, params \\ %{}) do
+  def create_changeset(params \\ %{}) do
     params = if params["display_name"] do
       params
     else
       Map.put(params, "display_name", params["name"])
     end
 
-    struct
+    %Organization{}
     |> cast(params, [:name, :display_name, :description, :location, :url, :private])
     |> validate_required([:name, :display_name])
     |> changeset(params)

@@ -17,10 +17,11 @@ defmodule Poker.OrganizationMember do
     struct
     |> validate_required([:role])
     |> validate_inclusion(:role, ["admin", "member"])
+    |> foreign_key_constraint(:user_id)
   end
 
-  def create_changeset(struct, params \\ %{}) do
-    struct
+  def create_changeset(params \\ %{}) do
+    %OrganizationMember{}
     |> cast(params, [:role, :user_id, :organization_id])
     |> changeset(params)
   end

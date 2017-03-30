@@ -18,8 +18,8 @@ defmodule Poker.ProjectMember do
     |> foreign_key_constraint(:user_id)
   end
 
-  def create_changeset(struct, params \\ %{}) do
-    struct
+  def create_changeset(params \\ %{}) do
+    %ProjectMember{}
     |> cast(params, [:role, :user_id, :project_id])
     |> changeset(params)
   end

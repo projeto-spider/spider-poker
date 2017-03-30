@@ -22,11 +22,11 @@ defmodule Poker.Message do
 
   # Changesets
 
-  def create_changeset(struct, params \\ %{}) do
+  def create_changeset(params \\ %{}) do
     from_user = params["from_user"]
     to_user = Repo.get_by User, username: (Map.get params, "to_user", "")
 
-    struct
+    %Message{}
     |> cast(params, [:content])
     |> put_assoc(:from_user, from_user)
     |> ensure_to_user_exists(to_user)
