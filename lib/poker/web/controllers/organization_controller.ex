@@ -3,88 +3,57 @@ defmodule Poker.Web.OrganizationController do
 
   alias Poker.{Organization, OrganizationMember}
 
-  # Scope
-
-  def records(conn) do
-    scope(conn, Organization)
-    |> filter_params(conn, ["name", "private"])
-    |> search_params(conn, ["name"])
-  end
-
-  # Actions
-
   def index(conn, _params) do
     organizations =
-      records(conn)
+      scope(conn)
       |> Repo.all
 
     render(conn, "index.json", data: organizations)
   end
 
   def create(conn, %{"data" => params}) do
-    changeset = Organization.create_changeset %Organization{}, params
+    changeset = Organization.create_changeset(params)
 
-    authorize! conn, Organization
-
-    case Repo.insert(changeset) do
-      {:ok, organization} ->
-        owner = conn.assigns.current_user
-
-        role_params = %{"organization_id" => organization.id,
-                        "user_id" => owner.id,
-                        "role" => "admin"}
-
-        role = OrganizationMember.create_changeset %OrganizationMember{}, role_params
-
-        Repo.insert! role
-
-        conn
-        |> put_status(:created)
-        |> put_resp_header("location", organization_path(conn, :show, organization))
-        |> render("show.json", data: organization)
-      {:error, changeset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(Poker.Web.ChangesetView, "error.json", changeset: changeset)
+    with :ok            <- authorize(conn, :create),
+         {:ok, org}     <- Repo.insert(changeset),
+         owner          <- conn.assings[:current_user],
+         role           <- %{"organization_id" => org.id,
+                             "user_id" => owner.id,
+                             "role" => "admin"},
+         role_changeset <- OrganizationMember.create_changeset(role),
+         {:ok, _role}   <- Repo.insert(role)
+    do
+      conn
+      |> put_status(:created)
+      |> put_resp_header("location", organization_path(conn, :show, org))
+      |> render("show.json", data: org)
     end
   end
 
   def show(conn, %{"id" => id}) do
-    organization =
-      records(conn)
-      |> Repo.get!(id)
-
-    render(conn, "show.json", data: organization)
+    with org <- Repo.get!(scope(conn), id),
+         :ok <- authorize(conn, :show, %{organization: org})
+    do
+      render(conn, "show.json", data: org)
+    end
   end
 
   def update(conn, %{"id" => id, "data" => params}) do
-    organization =
-      records(conn)
-      |> Repo.get!(id)
-
-    authorize! conn, organization
-
-    changeset = Organization.update_changeset(organization, params)
-
-    case Repo.update(changeset) do
-      {:ok, organization} ->
-        render(conn, "show.json", data: organization)
-      {:error, changeset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(Poker.Web.ChangesetView, "error.json", changeset: changeset)
+    with org        <- Repo.get!(scope(conn), id),
+         :ok        <- authorize(conn, :update, %{organization: org}),
+         changeset  <- Organization.update_changeset(org, params),
+         {:ok, org} <- Repo.update(changeset)
+    do
+      render(conn, "show.json", data: org)
     end
   end
 
   def delete(conn, %{"id" => id}) do
-    organization =
-      records(conn)
-      |> Repo.get!(id)
-
-    authorize! conn, organization
-
-    Repo.delete!(organization)
-
-    send_resp(conn, :no_content, "")
+    with org      <- Repo.get!(scope(conn), id),
+         :ok      <- authorize(conn, :delete, %{organization: org}),
+         {:ok, _} <- Repo.delete(org)
+    do
+      send_resp(conn, :no_content, "")
+    end
   end
 end

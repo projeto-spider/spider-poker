@@ -1,50 +1,52 @@
 defmodule Poker.Web.SessionController do
   use Poker.Web, :controller
 
-  alias Poker.{User, Profile, UserView, ErrorView}
   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
+  import Guardian, only: [encode_and_sign: 2]
+  alias Poker.{User, Profile}
+  alias Poker.Web.UserView
 
-  plug :preload_session when action in [:show]
-  plug :ensure_authenticated when action in [:show]
+  plug :flatten_param, "data"
+    when action == :create
 
-  def show(%{assigns: %{current_user: user}} = conn, _params)
-  when user != nil do
-    profile =
-      from(p in Profile, where: p.user_id == ^user.id)
-      |> Repo.one!
-
-    user = Map.put(user, :profile, profile)
-    render conn, UserView, "show.json", data: user
+  def show(conn, _params) do
+    with :ok <- authorize(conn, :show) do
+      user    = conn.assigns[:current_user]
+      profile = Repo.get_by(Profile, user_id: user.id)
+      user    = Map.put(user, :profile, profile)
+      render(conn, UserView, "show.json", data: user)
+    end
   end
 
-  def create(conn, %{"data" => %{"username" => username, "password" => password}}) do
-    user = Repo.get_by User, username: username
-    check_user(conn, user, password)
+  def create(conn, %{"username" => username, "password" => password}) do
+    user = Repo.get_by(User, username: username)
+    do_create(conn, user, password)
   end
-  def create(conn, %{"data" => %{"email" => email, "password" => password}}) do
-    user = Repo.get_by User, email: email
-    check_user(conn, user, password)
+  def create(conn, %{"email" => email, "password" => password}) do
+    user = Repo.get_by(User, email: email)
+    do_create(conn, user, password)
   end
 
-  # Helpers
+  defp do_create(conn, user, password) do
+    with :ok                  <- authorize(conn, :create),
+         {:ok, {jwt, expiry}} <- check_user(user, password)
+    do
+      render(conn, "token.json", token: jwt, expiry: expiry)
+    end
+  end
 
-  def check_user(conn, user, password) do
+  defp check_user(user, password) do
     cond do
       user && checkpw(password, user.password_hash) ->
-        {:ok, jwt, _} = encode_and_sign(user, :api)
-        render(conn, "token.json", token: jwt)
+        {:ok, jwt, %{"exp" => expiry}} = encode_and_sign(user, :api)
+        {:ok, {jwt, expiry}}
 
       user ->
-        conn
-        |> put_status(401)
-        |> render(ErrorView, "401.json", message: "Wrong password")
+        {:error, {:unauthorized, "Wrong Password"}}
 
-      true ->
+      :otherwise ->
         dummy_checkpw()
-
-        conn
-        |> put_status(401)
-        |> render(ErrorView, "401.json", message: "User doesn't exists")
+        {:error, {:unauthorized, "User doesn't exists"}}
     end
   end
 end

@@ -2,90 +2,86 @@ defmodule Poker.Web.OrganizationMemberController do
   use Poker.Web, :controller
 
   alias Poker.{User, OrganizationMember, UserView}
+  alias Poker.Web.Scope.Organization, as: OrganizationScope
+  alias Poker.Web.Scope.User, as: UserScope
 
-  # Scope
-
-  def records(%{params: %{"organization_id" => org_id}} = conn) do
-    scope(conn, OrganizationMember)
-    |> where(organization_id: ^org_id)
-    |> distinct(true)
+  def organization(%{params: %{"organization_id" => org_id}} = conn) do
+    try do
+      scoped = scope(conn, %{action: :show, scope: OrganizationScope})
+      {:ok, Repo.get!(scoped, org_id)}
+    rescue
+      err in Ecto.NoResultsError ->
+        {:error, {:bad_request, "organization does not exists"}}
+    end
   end
 
-  def record(conn, user_id) do
-    records(conn)
-    |> Repo.get_by(user_id: user_id)
+  def user(conn, user_id) do
+    try do
+      scoped = scope(conn, %{action: :show, scope: UserScope, unnest?: true})
+      {:ok, Repo.get!(scoped, user_id)}
+    rescue
+      err in Ecto.NoResultsError ->
+        {:error, {:bad_request, "user does not exists"}}
+    end
   end
 
-  # Actions
-
-  def index(conn, _params) do
-    members =
-      records(conn)
-      |> Repo.all
-
-    render(conn, "index.json", data: members)
+  def membership(%{params: %{"id" => user_id}} = conn) do
+    scoped = scope(conn)
+    Repo.get_by!(scoped, user_id: user_id)
   end
 
-  def create(conn, %{"organization_id" => org_id, "data" => %{"user_id" => user_id} = params}) do
+  def index(conn, %{"organization_id" => org_id}) do
+    with {:ok, org} <- organization(conn) do
+      members =
+        scope(conn)
+        |> Repo.all
+
+      render(conn, "index.json", data: members)
+    end
+  end
+
+  def create(conn, %{"data" => %{"user_id" => user_id} = params}) do
+    role = Map.get(params, "role", "member")
     params =
-      params
-      |> Map.put("organization_id", org_id)
-      |> Map.put_new("role", "member")
+      %{user_id: user_id, role: role}
 
-    to_validate =
-      %OrganizationMember{organization_id: org_id, user_id: user_id}
-      |> Map.merge(params)
-
-    authorize! conn, to_validate
-
-    changeset = OrganizationMember.create_changeset %OrganizationMember{}, params
-
-    case Repo.insert(changeset) do
-      {:ok, membership} ->
-        user =
-          User
-          |> preload([:profile])
-          |> Repo.get!(user_id)
-
-        conn
-        |> put_status(:created)
-        |> render("show.json", data: %{membership | user: user})
-      {:error, changeset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(Poker.Web.ChangesetView, "error.json", changeset: changeset)
+    with {:ok, org}        <- organization(conn),
+         {:ok, user}       <- user(conn, user_id),
+         params            <- Map.put(params, :organization_id, org.id),
+         params            <- Map.put(params, :user, user),
+         :ok               <- authorize(conn, :create, params),
+         changeset         <- OrganizationMember.create_changeset(params),
+         {:ok, membership} <- Repo.insert(changeset)
+    do
+      conn
+      |> put_status(:created)
+      |> render("show.json", data: %{membership | user: user})
     end
   end
 
   def show(conn, %{"id" => user_id}) do
-    membership = record(conn, user_id)
-    render(conn, "show.json", data: membership)
+    with membership <- membership(conn)
+    do
+      render(conn, "show.json", data: membership)
+    end
   end
 
-  def update(conn, %{"id" => user_id, "data" => params}) do
-    membership = record(conn, user_id)
-
-    authorize! conn, membership
-
-    changeset = OrganizationMember.update_changeset(membership, params)
-
-    case Repo.update(changeset) do
-      {:ok, membership} ->
-        render(conn, "show.json", data: membership)
-      {:error, changeset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(Poker.Web.ChangesetView, "error.json", changeset: changeset)
+  def update(conn, %{"organization_id" => org_id, "data" => params}) do
+    with membership        <- membership(conn),
+         :ok               <- authorize(conn, :update, %{organization_id: org_id}),
+         changeset         <- OrganizationMember.update_changeset(membership, params),
+         {:ok, membership} <- Repo.update(changeset)
+    do
+      render(conn, "show.json", data: membership)
     end
   end
 
   def delete(conn, %{"id" => user_id}) do
-    membership = record(conn, user_id)
-
-    authorize! conn, membership
-
-    Repo.delete!(membership)
-
-    send_resp(conn, :no_content, "")
+    with membership <- membership(conn),
+         :ok        <- authorize(conn, :delete, %{organization_id: membership.organization_id}),
+         {:ok, _} <- Repo.delete(membership)
+    do
+      send_resp(conn, :no_content, "")
+    end
   end
 end
