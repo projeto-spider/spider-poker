@@ -1,4 +1,4 @@
-defmodule Poker.Web.OrganizationMember.Policy do
+defmodule Poker.Web.Policy.OrganizationMember do
   import Ecto.Query, only: [from: 2, where: 2, preload: 2]
   alias Poker.{Repo, User, OrganizationMember}
 
@@ -12,7 +12,7 @@ defmodule Poker.Web.OrganizationMember.Policy do
       if not OrganizationMember.member?(org_id, new_member_id) do
         true
       else
-        {:error, :bad_request}
+        {:error, {:bad_request, "user already is a member"}}
       end
     else
       false
@@ -25,15 +25,4 @@ defmodule Poker.Web.OrganizationMember.Policy do
   end
 
   def can?(_user, _action, _resource), do: false
-
-  def scope(nil, _action, _query) do
-    OrganizationMember
-    |> OrganizationMember.where_is_public
-  end
-
-  def scope(%User{id: user_id}, _action, _query) do
-    OrganizationMember
-    |> OrganizationMember.where_user_can_see(user_id)
-    |> preload([user: :profile])
-  end
 end

@@ -1,4 +1,4 @@
-defmodule Poker.Web.ProjectMember.Policy do
+defmodule Poker.Web.Policy.ProjectMember do
   import Ecto.Query, only: [from: 2, where: 2, preload: 2]
   alias Poker.{Repo, User, Project, OrganizationMember, ProjectMember}
 
@@ -16,27 +16,17 @@ defmodule Poker.Web.ProjectMember.Policy do
       if not ProjectMember.member?(proj_id, new_member_id) do
         true
       else
-        {:error, :bad_request}
+        {:error, {:bad_request, "user already is a member"}}
       end
     else
       false
     end
   end
 
-  def can?(%User{id: user_id}, action, %{proj_id: proj_id})
+  def can?(%User{id: user_id}, action, %{project_id: proj_id})
   when action in [:update, :delete] do
     ProjectMember.member?(proj_id, user_id)
   end
 
   def can?(_user, _action, _member), do: true
-
-  def scope(%User{id: user_id}, _action, _opts) do
-    ProjectMember
-    |> ProjectMember.where_user_can_see(user_id)
-  end
-
-  def scope(nil, _action, _opts) do
-    ProjectMember
-    |> ProjectMember.where_is_public
-  end
 end

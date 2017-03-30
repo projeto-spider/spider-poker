@@ -1,16 +1,12 @@
 defmodule Poker.Web.Policy.User do
-  import Ecto.Query, only: [preload: 2]
+  use Poker.Web, :policy
+
   alias Poker.User
 
-  def can?(%User{id: id}, action, resource)
+  def can?(%User{id: user_id}, action, %{user: user})
   when action in [:update, :delete] do
-    id == resource.id
+    user_id == user.id
   end
 
-  def can?(_user, _action, _resource), do: true
-
-  def scope(_user, _action, _query) do
-    User
-    |> preload([:profile])
-  end
+  def can?(_user, _action, _data), do: true
 end

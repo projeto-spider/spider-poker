@@ -21,10 +21,10 @@ defmodule Poker.Web.Policy do
     user = conn.assigns[:current_user]
     args = [user, action, data]
 
-    if apply(policy_module, :can?, args) do
-      :ok
-    else
-      {:error, :unauthorized}
+    case apply(policy_module, :can?, args) do
+      true   -> :ok
+      false  -> {:error, :unauthorized}
+      custom -> custom
     end
   end
 end
