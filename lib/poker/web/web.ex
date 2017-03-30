@@ -22,7 +22,6 @@ defmodule Poker.Web do
       import Poker.Web.Router.Helpers
       import Poker.Web.Gettext
       import Guardian, only: [encode_and_sign: 2]
-      import Poker.Web.Plugs.SessionPlug
       import Poker.Web.Plugs.AuthorizationPlug
       import Poker.Web.Helpers.Controller
     end

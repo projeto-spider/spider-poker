@@ -16,7 +16,7 @@ defmodule Poker.Web.Router do
     plug :accepts, ["json"]
     plug Guardian.Plug.VerifyHeader
     plug Guardian.Plug.LoadResource
-    plug :preload_session
+    plug PreloadSession
   end
 
   scope "/api", Poker.Web do

@@ -3,11 +3,6 @@ defmodule Poker.Web.MessageController do
 
   alias Poker.{Message, User}
 
-  plug :ensure_authenticated
-  plug :preload_session
-  plug :ensure_param_is_logged_in_user, [param: "user_username"]
-    when not action in [:create]
-
   def index(conn, _params) do
     messages = Repo.all Message.with_from_user
     render(conn, "index.json", messages: messages)
