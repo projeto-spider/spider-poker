@@ -40,7 +40,6 @@ defmodule Poker.Web do
       import Poker.Web.Router.Helpers
       import Poker.Web.ErrorHelpers
       import Poker.Web.Gettext
-      import Bodyguard.ViewHelpers
     end
   end
 
