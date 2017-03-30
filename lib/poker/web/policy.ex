@@ -19,7 +19,7 @@ defmodule Poker.Web.Policy do
     controller = Phoenix.Controller.controller_module(conn)
     policy_module = data[:policy] || module_for_controller("Policy", controller)
     user = conn.assigns[:current_user]
-    args = [user, action, data[:resource]]
+    args = [user, action, data]
 
     if apply(policy_module, :can?, args) do
       :ok
