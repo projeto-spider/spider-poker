@@ -1,7 +1,8 @@
 defmodule Poker.User do
   use Poker.Web, :model
 
-  alias Poker.{User, Profile, Helpers}
+  alias Poker.{User, Profile}
+  alias Poker.Web.Helpers
   import Comeonin.Bcrypt, only: [hashpwsalt: 1]
 
   schema "users" do
