@@ -8,10 +8,10 @@
     <div class="container">
       <div class="columns">
         <div class="column is-6">
-          <draggable 
-            v-model="stories" 
-            :options="{group:'people'}" 
-            @start="drag=true" 
+          <draggable
+            v-model="stories"
+            :options="{group:'people'}"
+            @start="drag=true"
             @end="drag=false"
           >
             <div v-for="(story, i) in stories">
@@ -63,9 +63,9 @@
                     @keyup.13="moveTo"
                   >
                     <p class="control">
-                      <input 
-                        class="input" 
-                        type="text" 
+                      <input
+                        class="input"
+                        type="text"
                         placeholder="Move to..."
                         v-model="moveModal.newPosition"
                       >
