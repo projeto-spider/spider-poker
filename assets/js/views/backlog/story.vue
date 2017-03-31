@@ -17,9 +17,9 @@
               <small>
                 <a v-if="!hideUp" @click="upFunction"><i class="fa fa-caret-up"></i></a>
                 <a v-if="!hideDown" @click="downFunction"><i class="fa fa-caret-down"></i></a>
-                <a v-if="!isChild" @click="addFunction">Add</a> 
-                <a @click="moveToFunction">Move To</a>  
-                <a @click="editFunction">Edit</a> 
+                <a v-if="!isChild" @click="addFunction">Add</a>
+                <a @click="moveToFunction">Move To</a>
+                <a @click="editFunction">Edit</a>
                 <a @click="deleteFunction">Delete</a>
               </small>
             </div>
