@@ -11,20 +11,18 @@
               <th><span class="tag is-spider is-medium">Name</span></th>
               <th><span class="tag is-spider is-medium">Description</span></th>
               <th><span class="tag is-spider is-medium">Type</span></th>
-              <th><span class="tag is-spider is-medium">Actions</span></th>
             </tr>
             <tr v-for="proj in projects ">
-              <td>{{proj.displayName || proj.name}}</td>
-              <td>{{proj.description || '-'}}</td>
-              <td>{{proj.private ? 'Private' : 'Public'}}</td>
-              <td>
+             <td>
                 <router-link
                   :to="{name: 'projectShow', params: {project: proj.name}}"
                   class="label label-success"
                 >
-                  View
+                  {{proj.displayName || proj.name}}
                 </router-link>
               </td>
+              <td>{{proj.description || '-'}}</td>
+              <td>{{proj.private ? 'Private' : 'Public'}}</td>
             </tr>
           </tbody>
         </table>
