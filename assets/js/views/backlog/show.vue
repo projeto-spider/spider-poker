@@ -9,8 +9,7 @@
       <div class="columns">
         <div class="column is-6">
           <draggable
-            v-model="stories"
-            :options="{group:'people'}"
+            v-model="backlog"
             @start="drag=true"
             @end="drag=false"
           >
@@ -18,45 +17,51 @@
               <story
                 :name="story.name"
                 :description="story.description"
-                :editFunction="openEditModal(story, i)"
-                :addFunction="openAddModal(i)"
-                :moveToFunction="openMoveModal(i)"
-                :deleteFunction="deleteStory(i)"
-                :upFunction="move('up', i)"
-                :downFunction="move('down', i)"
+                :editFunction="() => openEditModal(story.id)"
+                :addFunction="() => openAddModal(story.id)"
+                :deleteFunction="() => deleteStory(story.id)"
+                :moveToFunction="() => openMoveModal(i)"
+                :upFunction="() => move('up', i)"
+                :downFunction="() => move('down', i)"
                 :hideUp="i === 0"
                 :hideDown="i === stories.length - 1"
               >
-                <div v-for="(child, j) in story.children">
-                  <story
-                    :name="child.name"
-                    :description="child.description"
-                    :isChild="true"
-                    :moveToFunction="openMoveModal(i, j)"
-                    :editFunction="openEditModal(child, i, j)"
-                    :deleteFunction="deleteStory(i, j)"
-                    :upFunction="move('up', i, j)"
-                    :downFunction="move('down', i, j)"
-                    :hideUp="j === 0"
-                    :hideDown="j === story.children.length - 1"
-                  />
-                </div>
+                <draggable
+                  v-model="db[story.id].children"
+                  @start="drag=true"
+                  @end="drag=false"
+                >
+                  <div v-for="(child, j) in story.children">
+                    <story
+                      :name="child.name"
+                      :description="child.description"
+                      :isChild="true"
+                      :moveToFunction="() => openMoveModal(j, story.id)"
+                      :editFunction="() => openEditModal(child.id)"
+                      :deleteFunction="() => deleteStory(child.id, story.id)"
+                      :upFunction="() => move('up', j, story.id)"
+                      :downFunction="() => move('down', j, story.id)"
+                      :hideUp="j === 0"
+                      :hideDown="j === story.children.length - 1"
+                    />
+                  </div>
+                </draggable>
               </story>
             </div>
           </draggable>
         </div>
 
-        <div v-if="moveModal.move">
+        <div v-if="modal.move.open">
           <div class="modal is-active">
             <div class="modal-background"></div>
             <div class="modal-card">
               <header class="modal-card-head">
                 <p class="modal-card-title">Moving story</p>
-                <button  @click="moveModal.move = false" class="delete"></button>
+                <button @click="() => closeModal('open')" class="delete"></button>
               </header>
               <section class="modal-card-body">
                 <div class="field">
-                  <label class="label">Current position: {{moveModal.index}}</label>
+                  <label class="label">Current position: {{modal.move.index + 1}}</label>
                   <form
                     method="post"
                     @submit.prevent="moveTo"
@@ -67,45 +72,48 @@
                         class="input"
                         type="text"
                         placeholder="Move to..."
-                        v-model="moveModal.newPosition"
+                        v-model="modal.move.newPosition"
+                        autofocus
                       >
                     </p>
                 </div>
               </section>
               <footer class="modal-card-foot">
                 <a @click="moveTo" class="button is-success">Move</a>
-                <a @click="moveModal.move = false" class="button">Cancel</a>
+                <a @click="() => closeModal('move')" class="button">Cancel</a>
               </footer>
             </div>
           </div>
         </div>
 
-        <div v-if="modal.open">
+        <div v-if="modal.editor.open">
           <div class="modal is-active">
             <div class="modal-background"></div>
             <div class="modal-card">
               <header class="modal-card-head">
-                <p class="modal-card-title">Add story</p>
-                <button class="delete" @click="closeModal"></button>
+                <p v-if="modal.editor.new" class="modal-card-title">Add story</p>
+                <p v-else class="modal-card-title">Edit story</p>
+
+                <button class="delete" @click="() => closeModal('editor')"></button>
               </header>
               <form
                 method="post"
-                @submit.prevent="submitModal"
-                @keyup.13="submitModal"
+                @submit.prevent="submitEditorForm"
+                @keyup.13="submitEditorForm"
               >
                 <section class="modal-card-body">
                   <div class="container">
                     <errorable-input
-                      v-model="modal.name"
-                      :errors="modal.errors.name"
+                      v-model="modal.editor.name"
+                      :errors="modal.editor.errors.name"
                       icon="bars"
                       placeholder="Story name"
                     />
 
                     <errorable-input
-                      v-model="modal.description"
+                      v-model="modal.editor.description"
                       type="textarea"
-                      :errors="modal.errors.description"
+                      :errors="modal.editor.errors.description"
                       icon="id-card"
                       placeholder="Description"
                     />
@@ -114,11 +122,10 @@
                 <footer class="modal-card-foot">
                   <button v-if="modal.new" class="button is-success" type="submit">Create story</button>
                   <button
-                    v-if="modal.new == false"
+                    type="submit"
                     class="button is-success"
-                    @click="editStory"
                   >
-                    Edit story
+                    Done
                   </button>
                 </footer>
               </form>
@@ -132,7 +139,7 @@
               <li>
               <button
                 class="button is-primary is-outlined is-fullwidth"
-                @click="openEmptyModal"
+                @click="openAddModal()"
               >
                 <span class="icon is-small">
                   <i class="fa fa-thumb-tack"></i>
@@ -152,55 +159,69 @@
 <script>
 import R from 'ramda'
 import {mapState} from 'vuex'
-import draggable from 'vuedraggable'
+import Draggable from 'vuedraggable'
 import {HeroTitle, ErrorableInput} from 'app/components'
 import Story from './story'
 import {Stories, Projects} from 'app/api'
 
+let idGenerator = 6
+
 const projectIdView = R.view(R.lensPath(['project', 'id']))
 
-const emptyErrors = {
+const emptyEditorErrors = {
   name: [],
   description: []
 }
 
-const emptyModal = {
-  id: false,
+const emptyEditorModal = {
   open: false,
   new: false,
+  id: -1,
+  parent: false,
   name: '',
   description: '',
-  errors: emptyErrors
+  errors: emptyEditorErrors
 }
 
-const emptymoveModal = {
+const emptyMoveModal = {
+  open: false,
   move: false,
-  newPosition: null
+  newPosition: -1
 }
 
 export default {
   name: 'BacklogShowView',
 
-  components: {draggable, HeroTitle, ErrorableInput, Story},
+  components: {Draggable, HeroTitle, ErrorableInput, Story},
 
   data() {
     return {
-      modal: emptyModal,
-      moveModal: emptymoveModal,
+      modal: {
+        editor: emptyEditorModal,
+        move: emptyMoveModal
+      },
 
       status: {
         project: 'not-asked',
-        story: 'not-asked',
-        subStory: 'not-asked'
+        backlog: 'not-asked'
       },
 
       project: null,
-      stories: [],
-      subStories: []
+      db: {},
+      backlog: []
     }
   },
 
   computed: {
+    stories() {
+      const idToStory = R.flip(R.prop)(this.db)
+
+      return R.map(R.pipe(
+        idToStory,
+        R.evolve({children: R.map(idToStory)})
+      ))(this.backlog)
+    },
+
     ...mapState({
       loggedinId: R.view(R.lensPath(['auth', 'user', 'id']))
     })
@@ -222,187 +243,185 @@ export default {
 
     this.project = projs[0]
 
-    this.stories = [
-      {
+    this.backlog = [1, 2, 3]
+
+    this.db = {
+      1: {
         id: 1,
-        name: 'lalala',
-        description: 'lala',
-        children: [
-          {
-            name: 'lalala',
-            description: 'lala'
-          },
-          {
-            name: 'la'
-          }
-        ]
+        name: 'First',
+        description: 'Lorem ipsum',
+        children: [4, 5]
       },
-      {
+      2: {
         id: 2,
-        name: 'la',
+        name: 'Second',
+        description: 'Lorem ipsum',
         children: []
       },
-      {
-        id: 23,
-        name: 'Xd',
+      3: {
+        id: 3,
+        name: 'Third',
+        description: 'Lorem ipsum',
+        children: []
+      },
+      4: {
+        id: 4,
+        name: 'Child One',
+        description: 'Lorem ipsum',
+        children: []
+      },
+      5: {
+        id: 5,
+        name: 'Child Two',
+        description: 'Lorem ipsum',
         children: []
       }
-    ]
+    }
   },
 
   methods: {
-    openEmptyModal() {
-      return this.openAddModal()()
-    },
-
     openAddModal(parent = false) {
-      return () => {
-        this.modal = {
-          ...emptyModal,
-          parent,
-          open: true,
-          new: true
-        }
+      this.modal.editor = {
+        ...emptyEditorModal,
+        open: true,
+        new: true,
+        parent
       }
     },
 
-    openEditModal({name, description, id}, index, child = false) {
-      return () => {
-        this.modal = {
-          ...emptyModal,
-          id,
-          name,
-          index,
-          child,
-          description,
-          open: true
-        }
+    openEditModal(id) {
+      const {name, description} = this.db[id]
+
+      this.modal.editor = {
+        ...emptyEditorModal,
+        open: true,
+        description,
+        name,
+        id
       }
     },
 
-    openMoveModal(index, child = false){
-      return() => {
-        this.moveModal ={
-          ...emptymoveModal,
-          move: true,
-          index,
-          child
-        }
+    openMoveModal(index, parent = false){
+      this.modal.move = {
+        ...emptyMoveModal,
+        open: true,
+        newPosition: index + 1,
+        index,
+        parent
       }
     },
 
-    closeModal() {
-      this.modal = emptyModal
+    closeModal(name) {
+      this.modal[name].open = false
     },
 
-    closeMoveModal() {
-      this.moveModal = emptymoveModal
-    },
-
-    submitModal() {
-      if (this.modal.new) {
-        this.addStory()
-      } else {
-        this.editStory()
-      }
+    submitEditorForm() {
+      (this.modal.editor.new ? this.addStory : this.editStory)()
     },
 
     addStory() {
-      const parent = this.modal.parent
+      const parent  = this.modal.editor.parent
+
+      const id = idGenerator++
 
       const story = {
-        name: this.modal.name,
-        description: this.modal.description,
-        children: []
+        ...R.pick(['name', 'description'], this.modal.editor),
+        children: [],
+        id
       }
 
-      if (parent !== false) {
-        this.stories[parent].children.push(story)
+      this.db[id] = story
+
+      if (parent) {
+        this.db[parent].children.push(id)
       } else {
-        this.stories.push(story)
+        this.backlog.push(id)
       }
 
-      this.closeModal()
+      this.closeModal('editor')
     },
 
     editStory() {
-      const {name, description, index, child = false} = this.modal
+      const {id, name, description} = this.modal.editor
 
-      if (child !== false) {
-        this.stories[index].children[child] =
-          this.updateStory(this.stories[index].children[child], name, description)
-      } else {
-        this.stories[index] =
-          this.updateStory(this.stories[index], name, description)
+      if (this.db[id]) {
+        this.db[id] = {
+          ...this.db[id],
+          name,
+          description
+        }
       }
 
-      this.closeModal()
+      this.closeModal('editor')
     },
 
-    updateStory(current, name, description) {
-      return {
-        ...current,
-        name,
-        description
-      }
-    },
+    deleteStory(id, parent = false) {
+      if (confirm('Are you sure you want to delete this story?')) {
+        const matchId = R.compose(R.equals(id))
 
-    deleteStory(index, child = false) {
-      return () => {
-        if (confirm('Are you sure you want to delete this story?')) {
-          if (child !== false) {
-            this.stories[index].children =
-              R.remove(child, 1, this.stories[index].children)
-          } else {
-            this.stories =
-              R.remove(index, 1, this.stories)
+        if (!parent) {
+          const index = this.backlog.findIndex(matchId)
+          if (index !== -1) {
+            this.backlog.splice(index, 1)
+            delete this.db[id]
+          }
+        } else {
+          const index = this.db[parent].children.findIndex(matchId)
+          if (index !== -1) {
+            const [deletedId] = this.db[parent].children.splice(index, 1)
+            delete this.db[deletedId]
           }
         }
       }
     },
 
-    move(direction, index, child = false) {
-      return () => {
-        const doMove = (xs, index) => {
-          const story = R.nth(index, xs)
+    move(direction, index, parent = false) {
+      const doMove = (xs, index) => {
+        const story = R.nth(index, xs)
 
-          const nextIndex = R.compose(
-            R.clamp(0, xs.length),
-            R.ifElse(R.always(R.equals('up', direction)), R.dec, R.inc),
-          )(index)
+        const nextIndex = R.pipe(
+          R.ifElse(R.always(R.equals('up', direction)), R.dec, R.inc),
+          R.clamp(0, xs.length)
+        )(index)
 
-          return R.compose(
-            R.insert(nextIndex, story),
-            R.remove(index, 1)
-          )(xs)
-        }
+        console.log('next', nextIndex, story, xs[index])
 
-        if (child !== false) {
-          this.stories[index].children =
-            doMove(this.stories[index].children, child)
-        } else {
-          this.stories = doMove(this.stories, index)
-        }
+        return R.pipe(
+          R.remove(index, 1),
+          R.insert(nextIndex, story)
+        )(xs)
+      }
+
+      if (!parent) {
+        console.log(direction, index, parent)
+        this.backlog = doMove(this.backlog, index)
+      } else {
+        this.db[parent].children = doMove(this.db[parent].children, index)
       }
     },
 
     moveTo() {
-      const {index, child = false} = this.moveModal
-      R.clamp(0, this.stories.length, this.moveModal.newPosition)
+      const {index, parent = false, newPosition} = this.modal.move
 
-      if (child !== false) {
-        var obejctToMove = this.stories[index].child[this.moveModal.child]
+      if (!parent) {
+        const story = R.nth(index, this.backlog)
+        const nextIndex = R.clamp(0, this.backlog.length, newPosition - 1)
 
-        this.stories[this.moveModal.index].child.splice(this.moveModal.index, 1),
-        this.stories[this.moveModal.index].child.splice(this.moveModal.newPosition,0,obejctToMove)
+        this.backlog = R.pipe(
+          R.remove(index, 1),
+          R.insert(nextIndex, story)
+        )(this.backlog)
       } else {
-        var obejctToMove = this.stories[this.moveModal.index]
+        const story = R.nth(index, this.db[parent].children)
+        const nextIndex = R.clamp(0, this.db[parent].children.length, newPosition - 1)
 
-        this.stories.splice(this.moveModal.index, 1),
-        this.stories.splice(this.moveModal.newPosition,0,obejctToMove)
+        this.db[parent].children = R.pipe(
+          R.remove(index, 1),
+          R.insert(nextIndex, story)
+        )(this.db[parent].children)
       }
 
-      this.closeMoveModal()
+      this.closeModal('move')
     }
   }
 }
