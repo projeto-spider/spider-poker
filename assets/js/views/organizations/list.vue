@@ -11,20 +11,17 @@
               <th><span class="tag is-spider is-medium">Name</span></th>
               <th><span class="tag is-spider is-medium">Description</span></th>
               <th><span class="tag is-spider is-medium">Type</span></th>
-              <th><span class="tag is-spider is-medium">Actions</span></th>
             </tr>
             <tr v-for="org in organizations ">
-              <td>{{org.displayName || org.name}}</td>
+              <td>
+              <router-link
+                :to="{name: 'organizationShow', params: {organization: org.name}}"
+                class="label label-success"
+              >
+                {{org.displayName || org.name}}
+              </td>
               <td>{{org.description || '-'}}</td>
               <td>{{org.private ? 'Private' : 'Public'}}</td>
-              <td>
-                <router-link
-                  :to="{name: 'organizationShow', params: {organization: org.name}}"
-                  class="label label-success"
-                >
-                  View
-                </router-link>
-              </td>
             </tr>
           </tbody>
         </table>

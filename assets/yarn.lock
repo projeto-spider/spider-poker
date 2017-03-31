@@ -2931,11 +2931,11 @@ pbkdf2@^3.0.3:
   dependencies:
     create-hmac "^1.1.2"
 
-"phoenix@file:deps/phoenix":
-  version "1.2.1"
+"phoenix@file:../deps/phoenix":
+  version "1.3.0-rc.1"
 
-"phoenix_html@file:deps/phoenix_html":
-  version "2.7.0"
+"phoenix_html@file:../deps/phoenix_html":
+  version "2.9.3"
 
 pify@^2.0.0:
   version "2.3.0"
@@ -3612,6 +3612,10 @@ sort-keys@^1.0.0:
   dependencies:
     is-plain-obj "^1.0.0"
 
+sortablejs@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.5.1.tgz#efae13b84c677f3b3d3f4f8e46c7e05fc6acb525"
+
 source-list-map@^0.1.4, source-list-map@~0.1.7:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/source-list-map/-/source-list-map-0.1.8.tgz#c550b2ab5427f6b3f21f5afead88c4f5587b2106"
@@ -3980,6 +3984,12 @@ vue-nprogress@^0.1.4:
   dependencies:
     nprogress "0.2.0"
 
+vue-paginate@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/vue-paginate/-/vue-paginate-3.4.0.tgz#2bdf2adff37f68ee4e3c6a58eab19ee73db83ab6"
+  dependencies:
+    vue "^2.0.5"
+
 vue-resource@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/vue-resource/-/vue-resource-1.0.3.tgz#8d52d0d8a9ed5f2ae704c68d530c84ceaf97be14"
@@ -4009,9 +4019,15 @@ vue-validator@^3.0.0-alpha.1:
   version "3.0.0-alpha.2"
   resolved "https://registry.yarnpkg.com/vue-validator/-/vue-validator-3.0.0-alpha.2.tgz#ffdb797bbe5efdfc8c3050f981983ea0db70dc1c"
 
-vue@^2.1.6:
+vue@^2.0.5, vue@^2.1.6:
   version "2.1.8"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.1.8.tgz#ae30aa86024fccf5535292ce414e7b4c221a1756"
+
+vuedraggable@^2.9.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/vuedraggable/-/vuedraggable-2.9.0.tgz#d3aa8684049d8b3efd27e2b24b6804c235ba74a9"
+  dependencies:
+    sortablejs "^1.5.1"
 
 vuex@^2.1.1:
   version "2.1.1"

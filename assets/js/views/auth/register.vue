@@ -20,6 +20,7 @@
         :errors="errors.username"
         icon="user"
         placeholder="Username"
+        type="text"
       />
 
       <errorable-input
@@ -27,6 +28,7 @@
         :errors="errors.email"
         icon="envelope"
         placeholder="Email"
+        type="email"
       />
 
       <errorable-input

@@ -23,6 +23,9 @@ import ProjectShow from './projects/show'
 import ProjectEdit from './projects/edit'
 import ProjectsList from './projects/list'
 
+// Backlog
+import Backlog from './backlog/show'
+
 // Errors
 import Error404 from './errors/404'
 
@@ -55,6 +58,10 @@ export default {
     Edit: ProjectEdit,
     Show: ProjectShow,
     List: ProjectsList
+  },
+
+  Backlogs: {
+    Show: Backlog
   },
 
   ErrorViews: {
