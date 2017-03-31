@@ -50,11 +50,16 @@
                 <div class="icon is-small">
                   <i class="fa fa-group" />&nbsp;
                 </div>
-                <strong>{{org.displayName}}</strong>
-                <p>{{org.info}}</p>
+                <strong>
+                  <router-link
+                  :to="{name: 'organizationShow', params: {organization: org.name}}"
+                  >
+                  {{org.displayName || org.name}}
+                </strong>
+                <p>{{org.description}}</p>
               </div>
 
-              <article v-for="proj in org.projects" class="media">
+              <article v-for="proj in projects" class="media">
                 <!-- This empty picture pulls the nested content right -->
                 <figure class="media-left"><p class="image is-48x48"></p></figure>
 
@@ -63,7 +68,7 @@
                     <i class="fa fa-list-alt" />&nbsp;
                   </div>
                   <strong>{{proj.displayName}}</strong>
-                  <p>{{proj.info}}</p>
+                  <p>{{proj.description}}</p>
                 </div>
               </article>
             </div>
@@ -77,25 +82,9 @@
 <script>
   import {mapState} from 'vuex'
   import R from 'ramda'
-  import Faker from 'faker/locale/en'
   import gravatar from 'gravatar'
-  import {Users} from 'app/api'
+  import {Users, Organizations} from 'app/api'
   import {HeroTitle} from 'app/components'
-
-  const random = (low, high) => Math.floor(Math.random() * high) + low
-  const range = length => Array.from({length})
-
-  const generateOrganizations = () =>
-    range(random(2, 10))
-      .map(() => ({
-        displayName: Faker.company.companyName(),
-        info: Faker.lorem.paragraph(),
-        projects: range(random(1, 5))
-                    .map(() => ({
-                      displayName: Faker.commerce.productName(),
-                      info: Faker.lorem.sentence()
-                    }))
-      }))
 
   export default {
     name: 'UserShowView',
@@ -104,11 +93,15 @@
 
     data() {
       return {
-        status: 'not-asked',
+        status: {
+          users: 'not-asked',
+          organization: 'not-asked',
+          project: 'not-asked'
+        },
 
         user: null,
-
-        organizations: generateOrganizations(),
+        organizations: [],
+        projects: [],
 
         userInfoIconClasses: {
           location: {'fa-map-marker': true},
@@ -150,7 +143,31 @@
     },
 
     async created() {
-      this.status = 'loading'
+      this.status.organization = 'loading'
+
+      const {data} = await Organizations.all()
+
+      if (data.length === 0) {
+        this.status = 'errored'
+        return
+      }
+
+      this.status.organization = 'success'
+
+      this.organizations = data
+
+      const org = data[0]
+
+      this.status.project = 'loading'
+
+      const proj = await Organizations.projects.all(org.id)
+
+      if (proj.data.length === 0) {
+        this.status.project = 'errored'
+        return
+      }
+
+      this.projects = proj.data
 
       const res = await Users.show(this.$route.params.username)
 
@@ -163,5 +180,5 @@
 
       this.user = res.data[0]
     }
-  }
+}
 </script>
