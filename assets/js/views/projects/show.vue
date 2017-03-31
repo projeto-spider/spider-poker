@@ -26,17 +26,29 @@
               {{project.private ? 'Private' : 'Public'}}
             </p>
           </div>
+          <div class="control is-grouped">
+            <router-link
+              :to="{name: 'projectEdit', params: {project: project.name}}"
+              class="button is-info is-outlined is-fullwidth"
+            >
+              <span class="icon is-small">
+                <i class="fa fa-cog"></i>
+              </span>
 
-          <router-link
-            :to="{name: 'projectEdit', params: {project: project.name}}"
-            class="button is-info is-outlined is-fullwidth"
-          >
-            <span class="icon is-small">
-              <i class="fa fa-cog"></i>
-            </span>
+              <span>Edit project</span>
+            </router-link>
 
-            <span>Edit project</span>
-          </router-link>
+            <router-link
+              :to="{name: 'backlogShow'}"
+              class="button is-info is-outlined is-fullwidth"
+            >
+              <span class="icon is-small">
+                <i class="fa fa-bolt"></i>
+              </span>
+
+              <span>Backlog</span>
+            </router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -169,22 +181,22 @@ export default {
 
     const projectName = this.$route.params.project
 
-    const res = await Projects.show(projectName)
+    const {data: projs} = await Projects.show(projectName)
 
-    if (res.data.length === 0) {
+    if (projs.length === 0) {
       this.status.project = 'errored'
       return
     }
 
     this.status.project = 'success'
 
-    this.project = res.data[0]
+    this.project = projs[0]
 
     this.status.members = 'loading'
 
-    const resMember = await Projects.members.all(this.project.id)
+    const {data: memberships} = await Projects.members.all(this.project.id)
 
-    this.memberships = resMember.data
+    this.memberships = memberships
 
     this.status.members = 'success'
   },
@@ -248,5 +260,4 @@ export default {
     }
   }
 }
-
 </script>
