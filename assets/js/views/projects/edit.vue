@@ -96,6 +96,7 @@
     data() {
       return {
         status: 'not-asked',
+
         project: null,
         private: '',
 
@@ -106,15 +107,15 @@
     async created() {
       this.status = 'loading'
 
-      const res = await Projects.show(this.$route.params.project)
+      const {data: proj} = await Projects.show(this.$route.params.project)
 
-      if (res.data.length === 0) {
+      if (proj.length === 0) {
         this.status = 'errored'
         return
       }
       this.status = 'success'
 
-      this.project = res.data[0]
+      this.project = proj[0]
     },
 
     methods: {
