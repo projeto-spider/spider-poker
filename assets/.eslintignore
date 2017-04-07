@@ -1,1 +1,2 @@
-priv/*
+build/*.js
+config/*.js

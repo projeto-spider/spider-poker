@@ -14,11 +14,12 @@
             </tr>
             <tr v-for="org in organizations ">
               <td>
-              <router-link
-                :to="{name: 'organizationShow', params: {organization: org.name}}"
-                class="label label-success"
-              >
-                {{org.displayName || org.name}}
+                <router-link
+                  :to="{name: 'organizationShow', params: {organization: org.name}}"
+                  class="label label-success"
+                >
+                  {{org.displayName || org.name}}
+                </router-link>
               </td>
               <td>{{org.description || '-'}}</td>
               <td>{{org.private ? 'Private' : 'Public'}}</td>

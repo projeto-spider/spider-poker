@@ -76,6 +76,7 @@
                         autofocus
                       >
                     </p>
+                  </form>
                 </div>
               </section>
               <footer class="modal-card-foot">

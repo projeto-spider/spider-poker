@@ -1,17 +1,23 @@
 {
   "presets": [
-    "es2015"
+    ["env", { "modules": false }],
+    "stage-2"
   ],
   "plugins": [
+    "transform-runtime",
     ["module-alias", [
-      { "src": "./js/components", "expose": "app/components" },
-      { "src": "./js/layouts", "expose": "app/layouts" },
-      { "src": "./js/api", "expose": "app/api" },
-      { "src": "./js/state/store.js", "expose": "app/store" },
-      { "src": "./js/utils.js", "expose": "app/utils" }
+      { "src": "./src/components", "expose": "app/components" },
+      { "src": "./src/layouts", "expose": "app/layouts" },
+      { "src": "./src/api", "expose": "app/api" },
+      { "src": "./src/state/store.js", "expose": "app/store" },
+      { "src": "./src/utils.js", "expose": "app/utils" }
     ]],
-    "transform-object-rest-spread",
-    "transform-async-to-generator",
-    "transform-async-generator-functions"
-  ]
+  ],
+  "comments": false,
+  "env": {
+    "test": {
+      "presets": ["env", "stage-2"],
+      "plugins": [ "istanbul" ]
+    }
+  }
 }

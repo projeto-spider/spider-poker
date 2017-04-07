@@ -54,7 +54,8 @@
                   <router-link
                   :to="{name: 'organizationShow', params: {organization: org.name}}"
                   >
-                  {{org.displayName || org.name}}
+                    {{org.displayName || org.name}}
+                  </router-link>
                 </strong>
                 <p>{{org.description}}</p>
               </div>
