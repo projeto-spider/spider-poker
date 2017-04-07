@@ -18,7 +18,7 @@ export const snakefy =
   casefy(snakeCase)
 
 export const resolveAsJson = async res => {
-  const {meta = {}, data = {}, ...rest} = res.body//await res.json()
+  const {meta = {}, data = {}, ...rest} = res.body
 
   return {
     meta: camelize(meta),
