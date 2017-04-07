@@ -1,5 +1,5 @@
 import {resource} from './http'
-import {apiRequest, snakefy} from 'app/utils'
+import {request, snakefy} from 'app/utils'
 
 const organizations = resource('organizations{/id}')
 const members = resource('organizations{/orgId}/members{/userId}')
@@ -7,33 +7,23 @@ const projects = resource('organizations{/orgId}/projects{/projId}')
 
 export default {
   all() {
-    return apiRequest(
-      organizations.query()
-    )
+    return request(organizations.query())
   },
 
   create(data) {
-    return apiRequest(
-      organizations.save({}, {data: snakefy(data)})
-    )
+    return request(organizations.save({}, {data: snakefy(data)}))
   },
 
   byId(id) {
-    return apiRequest(
-      organizations.get({id})
-    )
+    return request(organizations.get({id}))
   },
 
   show(name) {
-    return apiRequest(
-      organizations.query({'filter[name]': name})
-    )
+    return request(organizations.query({'filter[name]': name}))
   },
 
   update(id, attributes) {
-    return apiRequest(
-      organizations.update({id}, {data: snakefy(attributes)})
-    )
+    return request(organizations.update({id}, {data: snakefy(attributes)}))
   },
 
   delete(id) {
@@ -42,25 +32,19 @@ export default {
 
   members: {
     all(orgId) {
-      return apiRequest(
-        members.query({orgId})
-      )
+      return request(members.query({orgId}))
     },
 
     create(orgId, userId, role = 'member') {
       const body = {data: snakefy({userId, role})}
 
-      return apiRequest(
-        members.save({orgId}, body)
-      )
+      return request(members.save({orgId}, body))
     },
 
     update(orgId, userId, member) {
       const body = {data: snakefy(member)}
 
-      return apiRequest(
-        members.update({orgId, userId}, body)
-      )
+      return request(members.update({orgId, userId}, body))
     },
 
     delete(orgId, userId) {
@@ -70,25 +54,19 @@ export default {
 
   projects: {
     all(orgId) {
-      return apiRequest(
-        projects.query({orgId})
-      )
+      return request(projects.query({orgId}))
     },
 
     create(orgId, data) {
       const body = {data: snakefy(data)}
 
-      return apiRequest(
-        projects.save({orgId}, body)
-      )
+      return request(projects.save({orgId}, body))
     },
 
     update(orgId, projId, data) {
       const body = {data: snakefy(data)}
 
-      return apiRequest(
-        projects.update({orgId, projId}, body)
-      )
+      return request(projects.update({orgId, projId}, body))
     },
 
     delete(orgId, projId) {

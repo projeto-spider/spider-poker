@@ -34,7 +34,8 @@ export const resolveErrorAsJson = async res => {
 export const insertChangesetErrors = errors =>
   R.mergeWith(R.concat, errors)
 
-export const apiRequest = request =>
-  request
+// Enhance an already made VueResource HTTP request
+export const request = httpRequest =>
+  httpRequest
     .then(resolveAsJson)
     .catch(resolveErrorAsJson)

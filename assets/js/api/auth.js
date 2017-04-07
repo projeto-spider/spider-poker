@@ -1,16 +1,12 @@
 import {http} from './http'
-import {apiRequest} from 'app/utils'
+import {request} from 'app/utils'
 
 export default {
   me() {
-    return apiRequest(
-      http.get('/api/sessions')
-    )
+    return request(http.get('/api/sessions'))
   },
 
   signin(username, password) {
-    return apiRequest(
-      http.post('/api/sessions', {data: {username, password}})
-    )
+    return request(http.post('/api/sessions', {data: {username, password}}))
   }
 }
