@@ -30,13 +30,13 @@ defmodule Poker.Web.OrganizationMemberController do
     Repo.get_by!(scoped, user_id: user_id)
   end
 
-  def index(conn, %{"organization_id" => org_id}) do
+  def index(conn, %{"organization_id" => org_id} = params) do
     with {:ok, org} <- organization(conn) do
-      members =
+      page =
         scope(conn)
-        |> Repo.all
+        |> paginate(params)
 
-      render(conn, "index.json", data: members)
+      render(conn, "index.json", page: page)
     end
   end
 

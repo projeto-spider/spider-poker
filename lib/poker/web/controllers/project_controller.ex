@@ -5,12 +5,12 @@ defmodule Poker.Web.ProjectController do
 
   plug :flatten_param, "data" when action == :create
 
-  def index(conn, _params) do
-    projects =
+  def index(conn, params) do
+    page =
       scope(conn)
-      |> Repo.all
+      |> paginate(params)
 
-    render(conn, "index.json", data: projects)
+    render(conn, "index.json", page: page)
   end
 
   def create(conn, params) do

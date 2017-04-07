@@ -3,12 +3,12 @@ defmodule Poker.Web.UserController do
 
   alias Poker.User
 
-  def index(conn, _params) do
-    users =
+  def index(conn, params) do
+    page =
       scope(conn)
-      |> Repo.all
+      |> paginate(params)
 
-    render(conn, "index.json", data: users)
+    render(conn, "index.json", page: page)
   end
 
   def create(conn, %{"data" => params}) do

@@ -40,6 +40,7 @@ defmodule Poker.Web do
       import Poker.Web.Router.Helpers
       import Poker.Web.ErrorHelpers
       import Poker.Web.Gettext
+      use Poker.Web.Helpers.View
     end
   end
 

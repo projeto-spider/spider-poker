@@ -36,13 +36,13 @@ defmodule Poker.Web.ProjectMemberController do
     |> Repo.get_by(user_id: user_id)
   end
 
-  def index(conn, _params) do
+  def index(conn, params) do
     with {:ok, proj} <- project(conn) do
-      members =
+      page =
         scope(conn)
-        |> Repo.all
+        |> paginate(params)
 
-      render(conn, "index.json", data: members)
+      render(conn, "index.json", page: page)
     end
   end
 

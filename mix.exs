@@ -19,7 +19,7 @@ defmodule Poker.Mixfile do
   def application do
     [mod: {Poker, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :comeonin]]
+                    :phoenix_ecto, :postgrex, :comeonin, :scrivener_ecto]]
   end
 
   # Specifies which paths to compile per environment.
@@ -41,6 +41,7 @@ defmodule Poker.Mixfile do
      {:cowboy, "~> 1.0"},
      {:guardian, "~> 0.13.0"},
      {:comeonin, "~> 2.5"},
+     {:scrivener_ecto, "~> 1.0"},
      {:shorter_maps, "~> 2.0"}]
   end
 

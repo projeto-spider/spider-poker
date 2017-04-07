@@ -3,12 +3,12 @@ defmodule Poker.Web.OrganizationController do
 
   alias Poker.{Organization, OrganizationMember}
 
-  def index(conn, _params) do
-    organizations =
+  def index(conn, params) do
+    page =
       scope(conn)
-      |> Repo.all
+      |> paginate(params)
 
-    render(conn, "index.json", data: organizations)
+    render(conn, "index.json", page: page)
   end
 
   def create(conn, %{"data" => params}) do

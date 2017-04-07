@@ -3,10 +3,6 @@ defmodule Poker.Web.OrganizationMemberView do
 
   alias Poker.Web.OrganizationMemberView
 
-  def render("index.json", %{data: data}) do
-    %{data: render_many(data, OrganizationMemberView, "single.json")}
-  end
-
   def render("show.json", %{data: data}) do
     %{data: render_one(data, OrganizationMemberView, "single.json")}
   end

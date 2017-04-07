@@ -3,10 +3,6 @@ defmodule Poker.Web.UserView do
 
   alias Poker.Web.UserView
 
-  def render("index.json", %{data: data}) do
-    %{data: render_many(data, UserView, "single.json")}
-  end
-
   def render("show.json", %{data: data}) do
     %{data: render_one(data, UserView, "single.json")}
   end

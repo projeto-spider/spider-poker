@@ -3,10 +3,6 @@ defmodule Poker.Web.ProjectView do
 
   alias Poker.Web.ProjectView
 
-  def render("index.json", %{data: data}) do
-    %{data: render_many(data, ProjectView, "single.json")}
-  end
-
   def render("show.json", %{data: data}) do
     %{data: render_one(data, ProjectView, "single.json")}
   end

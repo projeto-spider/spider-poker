@@ -25,6 +25,11 @@ defmodule Poker.Web.Helpers.Controller do
     end
   end
 
+  def paginate(query, params) do
+    query
+    |> Poker.Repo.paginate(params)
+  end
+
   defmacro filterable_by(fields) do
     fields
     |> Enum.map(&generic_filter/1)
