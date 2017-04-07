@@ -186,7 +186,6 @@
 
     async created() {
       const res = await Users.all()
-      console.log(res)
       this.users = res.data
     }
   }
