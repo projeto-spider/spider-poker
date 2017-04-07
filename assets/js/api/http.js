@@ -5,8 +5,8 @@ import store from 'app/store'
 Vue.use(VueResource)
 
 Vue.http.options.root = '/api'
-Vue.http.headers.common['accept'] = 'application/vnd.api+json'
-Vue.http.headers.common['content-type'] = 'application/vnd.api+json'
+Vue.http.headers.common['accept'] = 'application/json'
+Vue.http.headers.common['content-type'] = 'application/json'
 
 Vue.http.interceptors.push((request, next) => {
   request.headers.set('Authorization', store.state.auth.token)

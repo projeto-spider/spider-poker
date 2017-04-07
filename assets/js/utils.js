@@ -1,11 +1,7 @@
 import R from 'ramda'
-import yayson from 'yayson'
 import objectKeysToCase from 'object-keys-to-case'
 import camelCase from 'camel-case'
 import snakeCase from 'snake-case'
-
-const {Store} = yayson()
-const store = new Store()
 
 export const casefy = fn => data => {
   if (Array.isArray(data)) {
@@ -21,11 +17,8 @@ export const camelize =
 export const snakefy =
   casefy(snakeCase)
 
-export const parseJsonApi = data =>
-  store.sync(data)
-
 export const resolveAsJson = async res => {
-  const json = await res.json()
+  const {meta = {}, data = {}, ...rest} = res.body//await res.json()
 
   return R.pipe(
     parseJsonApi,
