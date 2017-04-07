@@ -20,10 +20,11 @@ export const snakefy =
 export const resolveAsJson = async res => {
   const {meta = {}, data = {}, ...rest} = res.body//await res.json()
 
-  return R.pipe(
-    parseJsonApi,
-    camelize
-  )(json)
+  return {
+    meta: camelize(meta),
+    data: Array.isArray(data) ? data.map(camelize) : camelize(data),
+    ...camelize(rest)
+  }
 }
 
 export const resolveErrorAsJson = async res => {
@@ -33,17 +34,7 @@ export const resolveErrorAsJson = async res => {
 export const insertChangesetErrors = errors =>
   R.mergeWith(R.concat, errors)
 
-export const jsonApiRequest = request =>
+export const apiRequest = request =>
   request
     .then(resolveAsJson)
     .catch(resolveErrorAsJson)
-
-export const apiRequest = request =>
-  request
-    .then(async res => {
-      const json = await res.json()
-      return {...json, data: camelize(json.data)}
-    })
-    .catch(async res => {
-      throw (await res.json().then(camelize))
-    })
