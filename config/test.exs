@@ -10,7 +10,7 @@ config :poker, Poker.Web.Endpoint,
 config :logger, level: :warn
 
 # Configure your database
-config :poker, Poker.Web.Repo,
+config :poker, Poker.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "postgres",
   password: "postgres",
