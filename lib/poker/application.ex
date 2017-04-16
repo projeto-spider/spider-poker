@@ -1,4 +1,4 @@
-defmodule Poker do
+defmodule Poker.Application do
   use Application
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
