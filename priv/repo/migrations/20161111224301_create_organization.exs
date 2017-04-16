@@ -12,7 +12,7 @@ defmodule Poker.Repo.Migrations.CreateOrganization do
 
       timestamps()
     end
-    create unique_index(:organizations, [:name])
 
+    create unique_index(:organizations, [:name])
   end
 end
