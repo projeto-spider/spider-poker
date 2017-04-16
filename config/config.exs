@@ -14,7 +14,7 @@ config :poker, Poker.Web.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "PtZux+4wH0tbKSqKRcMNHUhNd4K1IADslG5lnUTTlNeDLr0LWuebNJWjfA9uPWfF",
   render_errors: [view: Poker.Web.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Poker.Web.PubSub,
+  pubsub: [name: Poker.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
