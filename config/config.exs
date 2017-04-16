@@ -13,7 +13,7 @@ config :poker,
 config :poker, Poker.Web.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "PtZux+4wH0tbKSqKRcMNHUhNd4K1IADslG5lnUTTlNeDLr0LWuebNJWjfA9uPWfF",
-  render_errors: [view: Poker.Web.ErrorView, accepts: ~w(html json json-api)],
+  render_errors: [view: Poker.Web.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Poker.Web.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
@@ -28,13 +28,6 @@ config :guardian, Guardian,
   ttl: {30, :days},
   verify_issuer: true,
   serializer: Poker.Web.Helpers.GuardianSerializer
-
-config :phoenix, :format_encoders,
-  "json-api": Poison
-
-config :mime, :types, %{
-  "application/vnd.api+json" => ["json-api"]
-}
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
