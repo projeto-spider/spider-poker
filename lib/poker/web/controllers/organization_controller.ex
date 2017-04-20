@@ -1,27 +1,23 @@
 defmodule Poker.Web.OrganizationController do
   use Poker.Web, :controller
 
-  alias Poker.{Organization, OrganizationMember}
+  alias Poker.Accounts
+  alias Poker.Organizations
 
   def index(conn, params) do
     page =
-      scope(conn)
-      |> paginate(params)
+      conn
+      |> scope
+      |> Repo.paginate(params)
 
     render(conn, "index.json", page: page)
   end
 
-  def create(conn, %{"data" => params}) do
-    changeset = Organization.create_changeset(params)
-
-    with :ok            <- authorize(conn, :create),
-         {:ok, org}     <- Repo.insert(changeset),
-         owner          <- conn.assings[:current_user],
-         role           <- %{"organization_id" => org.id,
-                             "user_id" => owner.id,
-                             "role" => "admin"},
-         role_changeset <- OrganizationMember.create_changeset(role),
-         {:ok, _role}   <- Repo.insert(role)
+  def create(conn, ~m{data}) do
+    with :ok          <- authorize(conn, :create),
+         {:ok, org}   <- Organizations.create(data),
+         {:ok, admin} <- Session.user(conn),
+         {:ok, _role} <- Organizations.add_member(org.id, admin.id, "admin")
     do
       conn
       |> put_status(:created)
@@ -30,28 +26,25 @@ defmodule Poker.Web.OrganizationController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    with org <- Repo.get!(scope(conn), id),
-         :ok <- authorize(conn, :show, %{organization: org})
-    do
+  def show(conn, ~m{id}) do
+    with {:ok, org} <- Organizations.get(scope(conn), id) do
       render(conn, "show.json", data: org)
     end
   end
 
-  def update(conn, %{"id" => id, "data" => params}) do
-    with org        <- Repo.get!(scope(conn), id),
+  def update(conn, ~m{id, data}) do
+    with {:ok, org} <- Organizations.get(scope(conn), id),
          :ok        <- authorize(conn, :update, %{organization: org}),
-         changeset  <- Organization.update_changeset(org, params),
-         {:ok, org} <- Repo.update(changeset)
+         {:ok, org} <- Organizations.update(org, data)
     do
       render(conn, "show.json", data: org)
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    with org      <- Repo.get!(scope(conn), id),
-         :ok      <- authorize(conn, :delete, %{organization: org}),
-         {:ok, _} <- Repo.delete(org)
+  def delete(conn, ~m{id}) do
+    with {:ok, org} <- Organizations.get(scope(conn), id),
+         :ok        <- authorize(conn, :delete, %{organization: org}),
+         {:ok, _}   <- Organizations.delete(org)
     do
       send_resp(conn, :no_content, "")
     end

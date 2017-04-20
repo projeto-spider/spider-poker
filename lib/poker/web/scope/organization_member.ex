@@ -1,15 +1,10 @@
 defmodule Poker.Web.Scope.OrganizationMember do
+  @moduledoc false
   use Poker.Web, :scope
 
-  alias Poker.{User, OrganizationMember}
+  alias Poker.Organizations
 
-  def default(%{params: %{"organization_id" => org_id}} = conn) do
-    OrganizationMember
-    |> preload([user: :profile])
-    |> where(organization_id: ^org_id)
-  end
-
-  def scope(conn, _user, _action, _data) do
-    default(conn)
+  def scope(%{params: ~m{organization_id}}, _user, _action, _data) do
+    Organizations.query_members(organization_id)
   end
 end

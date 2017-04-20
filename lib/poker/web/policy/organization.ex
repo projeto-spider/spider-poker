@@ -1,15 +1,20 @@
 defmodule Poker.Web.Policy.Organization do
+  @moduledoc false
   use Poker.Web, :policy
 
-  alias Poker.{User, OrganizationMember}
+  alias Poker.Organizations
+  alias Poker.Organizations.Organization
+  alias Poker.Accounts.User
 
-  def can?(nil, action, _data)
-  when action == :create, do: false
+  def can?(%User{}, :create, _data), do: true
+  def can?(nil, :create, _data), do: false
 
-  def can?(%User{id: user_id}, action, %{organization: %{id: org_id}})
+  def can?(%User{id: user_id}, action, %{organization: %Organization{id: org_id}})
   when action in [:update, :delete] do
-    OrganizationMember.admin?(org_id, user_id)
+    Organizations.admin?(org_id, user_id)
   end
+  def can?(_user, action, _data)
+  when action in [:update, :delete], do: false
 
   def can?(_user, _action, _data), do: true
 end

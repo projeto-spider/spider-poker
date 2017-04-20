@@ -1,31 +1,21 @@
 defmodule Poker.Web.Scope.Organization do
+  @moduledoc false
   use Poker.Web, :scope
 
-  alias Poker.{User, Organization}
+  alias Poker.Organizations
 
-  @filters   ["name", "private"]
-  @searchers ["name"]
+  @filters   ["name", "display_name", "private"]
+  @searchers ["name", "display_name"]
 
-  def default(conn) do
-    Organization
+  def filters(query, conn) do
+    query
     |> filter_params(conn, @filters)
     |> search_params(conn, @searchers)
   end
 
-  def scope(conn, %User{id: user_id}, action, _data)
-  when action in [:update, :delete] do
-    default(conn)
-    |> Organization.where_user_is_admin(user_id)
-  end
-
-  def scope(conn, %User{id: user_id}, action, _data)
-  when action in [:index, :show] do
-    default(conn)
-    |> Organization.where_user_can_see(user_id)
-  end
-
-  def scope(conn, nil, _action, _data) do
-    default(conn)
-    |> where(private: false)
+  def scope(conn, user, _action, _data) do
+    user
+    |> Organizations.query_visible_to
+    |> filters(conn)
   end
 end

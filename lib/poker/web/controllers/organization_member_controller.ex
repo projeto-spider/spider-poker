@@ -1,57 +1,30 @@
 defmodule Poker.Web.OrganizationMemberController do
   use Poker.Web, :controller
 
-  alias Poker.{User, OrganizationMember, UserView}
-  alias Poker.Web.Scope.Organization, as: OrganizationScope
-  alias Poker.Web.Scope.User, as: UserScope
+  alias Poker.Organizations
+  alias Poker.Accounts
 
-  def organization(%{params: %{"organization_id" => org_id}} = conn) do
-    try do
-      scoped = scope(conn, %{action: :show, scope: OrganizationScope})
-      {:ok, Repo.get!(scoped, org_id)}
-    rescue
-      err in Ecto.NoResultsError ->
-        {:error, {:bad_request, "organization does not exists"}}
-    end
-  end
+  def index(conn, ~m{organization_id} = params) do
+    user_id = Session.user_id!(conn)
 
-  def user(conn, user_id) do
-    try do
-      scoped = scope(conn, %{action: :show, scope: UserScope, unnest?: true})
-      {:ok, Repo.get!(scoped, user_id)}
-    rescue
-      err in Ecto.NoResultsError ->
-        {:error, {:bad_request, "user does not exists"}}
-    end
-  end
-
-  def membership(%{params: %{"id" => user_id}} = conn) do
-    scoped = scope(conn)
-    Repo.get_by!(scoped, user_id: user_id)
-  end
-
-  def index(conn, %{"organization_id" => org_id} = params) do
-    with {:ok, org} <- organization(conn) do
+    with :ok <- Organizations.can_see?(organization_id, user_id) do
       page =
-        scope(conn)
-        |> paginate(params)
+        conn
+        |> scope
+        |> Repo.paginate(params)
 
       render(conn, "index.json", page: page)
     end
   end
 
-  def create(conn, %{"data" => %{"user_id" => user_id} = params}) do
-    role = Map.get(params, "role", "member")
-    params =
-      %{user_id: user_id, role: role}
-
-    with {:ok, org}        <- organization(conn),
-         {:ok, user}       <- user(conn, user_id),
-         params            <- Map.put(params, :organization_id, org.id),
-         params            <- Map.put(params, :user, user),
-         :ok               <- authorize(conn, :create, params),
-         changeset         <- OrganizationMember.create_changeset(params),
-         {:ok, membership} <- Repo.insert(changeset)
+  def create(conn, ~m{data} = params) do
+    with {:ok, org_id}       <- Param.fetch(params, "organization_id"),
+         {:ok, user_id}      <- Param.fetch(data, "user_id"),
+         role                <- Map.get(data, "role", "member"),
+         {:ok, session_user} <- Session.user(conn),
+         true                <- Organizations.admin?(org_id, session_user.id),
+         {:ok, user}         <- Accounts.get(user_id),
+         {:ok, membership}   <- Organizations.add_member(org_id, user_id, role)
     do
       conn
       |> put_status(:created)
@@ -59,27 +32,30 @@ defmodule Poker.Web.OrganizationMemberController do
     end
   end
 
-  def show(conn, %{"id" => user_id}) do
-    with membership <- membership(conn)
+  def show(conn, ~m{organization_id, id}) do
+    user_id = Session.user_id!(conn)
+    with :ok               <- Organizations.can_see?(organization_id, user_id),
+         {:ok, membership} <- Organizations.get_member(organization_id, id)
     do
       render(conn, "show.json", data: membership)
     end
   end
 
-  def update(conn, %{"organization_id" => org_id, "data" => params}) do
-    with membership        <- membership(conn),
-         :ok               <- authorize(conn, :update, %{organization_id: org_id}),
-         changeset         <- OrganizationMember.update_changeset(membership, params),
-         {:ok, membership} <- Repo.update(changeset)
+  def update(conn, ~m{organization_id, id, data}) do
+    with {:ok, session_user} <- Session.user(conn),
+         true                <- Organizations.admin?(organization_id, session_user.id),
+         {:ok, _user}        <- Accounts.get(id),
+         {:ok, membership}   <- Organizations.get_member(organization_id, id),
+         {:ok, membership}   <- Organizations.update_member(membership, data)
     do
       render(conn, "show.json", data: membership)
     end
   end
 
-  def delete(conn, %{"id" => user_id}) do
-    with membership <- membership(conn),
-         :ok        <- authorize(conn, :delete, %{organization_id: membership.organization_id}),
-         {:ok, _} <- Repo.delete(membership)
+  def delete(conn, ~m{organization_id, id}) do
+    with {:ok, session_user} <- Session.user(conn),
+         true                <- Organizations.admin?(organization_id, session_user.id),
+         {:ok, _membership}  <- Organizations.delete_member(organization_id, id)
     do
       send_resp(conn, :no_content, "")
     end

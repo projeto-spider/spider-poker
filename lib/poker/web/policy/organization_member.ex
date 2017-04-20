@@ -1,6 +1,7 @@
 defmodule Poker.Web.Policy.OrganizationMember do
   import Ecto.Query, only: [from: 2, where: 2, preload: 2]
-  alias Poker.{Repo, User, OrganizationMember}
+  alias Poker.{Repo, OrganizationMember}
+  alias Poker.Accounts.User
 
   def can?(nil, action, _resource)
   when action in [:create, :update, :delete], do: false
