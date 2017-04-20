@@ -1,7 +1,29 @@
 defmodule Poker.Web.FallbackController do
   use Poker.Web, :controller
 
-  alias Poker.Web.{ErrorView, ChangesetView}
+  alias Poker.Web.ErrorView
+  alias Poker.Web.ChangesetView
+
+
+  def call(conn, {:error, {:not_found, message}}) do
+    conn
+    |> put_status(404)
+    |> render(ErrorView, :"404", message: message)
+  end
+
+  def call(conn, {:error, :not_found}) do
+    conn
+    |> put_status(404)
+    |> render(ErrorView, :"404")
+  end
+
+  # This is a case where you do something like:
+  # with true <- Organizations.admin?(user_id), do: something() end
+  def call(conn, false) do
+    conn
+    |> put_status(403)
+    |> render(ErrorView, :"403")
+  end
 
   def call(conn, {:error, {:unauthorized, message}}) do
     conn
