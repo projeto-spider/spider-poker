@@ -17,9 +17,8 @@ defmodule Poker.Mixfile do
   #
   # Type `mix help compile.app` for more information.
   def application do
-    [mod: {Poker, []},
-     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :comeonin, :scrivener_ecto]]
+    [mod: {Poker.Application, []},
+     extra_applications: [:logger, :runtime_tools]]
   end
 
   # Specifies which paths to compile per environment.
