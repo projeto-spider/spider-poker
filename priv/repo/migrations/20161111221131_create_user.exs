@@ -6,6 +6,11 @@ defmodule Poker.Repo.Migrations.CreateUser do
       add :username, :string
       add :email, :string
       add :password_hash, :string
+      add :display_name, :string
+      add :bio, :string
+      add :location, :string
+      add :contact, :string
+      add :url, :text
 
       timestamps()
     end

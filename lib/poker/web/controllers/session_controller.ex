@@ -3,34 +3,31 @@ defmodule Poker.Web.SessionController do
 
   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
   import Guardian, only: [encode_and_sign: 2]
-  alias Poker.{User, Profile}
+  alias Poker.Accounts
   alias Poker.Web.UserView
 
   plug :flatten_param, "data"
     when action == :create
 
   def show(conn, _params) do
-    with :ok <- authorize(conn, :show) do
-      user    = conn.assigns[:current_user]
-      profile = Repo.get_by(Profile, user_id: user.id)
-      user    = Map.put(user, :profile, profile)
+    with {:ok, user} <- Session.user(conn) do
       render(conn, UserView, "show.json", data: user)
     end
   end
 
   def create(conn, ~m{username, password}) do
-    user = Repo.get_by(User, username: username)
-    do_create(conn, user, password)
+    with {:ok, user} <- Accounts.get(username) do
+      do_create(conn, user, password)
+    end
   end
   def create(conn, ~m{email, password}) do
-    user = Repo.get_by(User, email: email)
-    do_create(conn, user, password)
+    with {:ok, user} <- Accounts.get_by(email: email) do
+      do_create(conn, user, password)
+    end
   end
 
   defp do_create(conn, user, password) do
-    with :ok                  <- authorize(conn, :create),
-         {:ok, {jwt, expiry}} <- check_user(user, password)
-    do
+    with {:ok, {jwt, expiry}} <- check_user(user, password) do
       render(conn, "token.json", token: jwt, expiry: expiry)
     end
   end

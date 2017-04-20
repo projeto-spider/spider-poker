@@ -1,6 +1,7 @@
 defmodule Poker.Web.Notification.Policy do
   import Ecto.Query, only: [where: 2]
-  alias Poker.{User, Notification}
+  alias Poker.Notification
+  alias Poker.Accounts.User
 
   def can?(%User{id: id}, action, resource)
   when action in [:update, :delete] do
