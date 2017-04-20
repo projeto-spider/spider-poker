@@ -16,8 +16,11 @@ defmodule Poker.Web do
       use Poker.Web.Scope
 
       alias Poker.Repo
+      alias Poker.Web.Helpers.Param
+      alias Poker.Web.Helpers.Session
       import Ecto
       import Ecto.Query
+      import Poker.Query
 
       import Poker.Web.Router.Helpers
       import Poker.Web.Gettext
@@ -78,6 +81,8 @@ defmodule Poker.Web do
       import Ecto
       import Ecto.Query
       import Poker.Web.Helpers.Scope
+      import Poker.Query
+      import ShorterMaps
     end
   end
 
