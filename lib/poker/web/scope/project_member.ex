@@ -1,9 +1,10 @@
 defmodule Poker.Web.Scope.ProjectMember do
+  @moduledoc false
   use Poker.Web, :scope
 
-  alias Poker.{User, ProjectMember}
+  alias Poker.ProjectMember
 
-  def default(%{params: %{"project_id" => proj_id}} = conn) do
+  def default(%{params: %{"project_id" => proj_id}}) do
     ProjectMember
     |> where(project_id: ^proj_id)
     |> preload([user: :profile])

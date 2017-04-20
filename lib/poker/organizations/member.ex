@@ -1,7 +1,7 @@
 defmodule Poker.Organizations.Member do
+  @moduledoc false
   use Poker.Web, :model
 
-  alias Poker.Repo
   alias Poker.Organizations
   alias Poker.Organizations.Member
 

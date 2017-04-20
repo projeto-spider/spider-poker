@@ -1,4 +1,5 @@
 defmodule Poker.Backlog do
+  @moduledoc false
   use Poker.Web, :model
 
   alias Poker.Backlog
@@ -10,7 +11,7 @@ defmodule Poker.Backlog do
     belongs_to :project, Poker.Project
     belongs_to :parent, Poker.Backlog, foreign_key: :parent_id
 
-    timestamps
+    timestamps()
   end
 
   # Changesets

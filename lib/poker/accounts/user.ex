@@ -1,10 +1,9 @@
 defmodule Poker.Accounts.User do
+  @moduledoc false
   use Poker.Web, :model
 
   alias Poker.Accounts.User
   alias Poker.Pattern
-  alias Poker.Web.Helpers
-  import Comeonin.Bcrypt, only: [hashpwsalt: 1]
 
   schema "users" do
     field :username, :string

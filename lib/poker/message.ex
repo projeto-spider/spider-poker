@@ -1,6 +1,9 @@
 defmodule Poker.Message do
+  @moduledoc false
   use Poker.Web, :model
-  alias Poker.{Message, User, Repo}
+  alias Poker.Message
+  alias Poker.Accounts.User
+  alias Poker.Repo
 
   @derive {Poison.Encoder, except: [:__meta__, :__struct__, :from, :to,
                                     :to_user, :inserted_at, :updated_at]}
@@ -11,7 +14,7 @@ defmodule Poker.Message do
     belongs_to :from_user, Poker.User, foreign_key: :from
     belongs_to :to_user, Poker.User, foreign_key: :to
 
-    timestamps
+    timestamps()
   end
 
   # Query composers

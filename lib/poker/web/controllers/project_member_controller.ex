@@ -1,7 +1,8 @@
 defmodule Poker.Web.ProjectMemberController do
+  @moduledoc false
   use Poker.Web, :controller
 
-  alias Poker.{ProjectMember, User}
+  alias Poker.ProjectMember
 
   alias Poker.Web.Scope.Project, as: ProjectScope
   alias Poker.Web.Scope.User, as: UserScope
@@ -11,7 +12,7 @@ defmodule Poker.Web.ProjectMemberController do
       scoped = scope(conn, %{action: :show, scope: ProjectScope})
       {:ok, Repo.get!(scoped, proj_id)}
     rescue
-      err in Ecto.NoResultsError ->
+      _ in Ecto.NoResultsError ->
         {:error, {:bad_request, "project does not exists"}}
     end
   end
@@ -21,7 +22,7 @@ defmodule Poker.Web.ProjectMemberController do
       scoped = scope(conn, %{action: :show, scope: UserScope, unnest?: true})
       {:ok, Repo.get!(scoped, user_id)}
     rescue
-      err in Ecto.NoResultsError ->
+      _ in Ecto.NoResultsError ->
         {:error, {:bad_request, "user does not exists"}}
     end
   end
@@ -32,14 +33,16 @@ defmodule Poker.Web.ProjectMemberController do
   end
 
   def record(conn, user_id) do
-    scope(conn)
+    conn
+    |> scope
     |> Repo.get_by(user_id: user_id)
   end
 
   def index(conn, params) do
-    with {:ok, proj} <- project(conn) do
+    with {:ok, _proj} <- project(conn) do
       page =
-        scope(conn)
+        conn
+        |> scope
         |> paginate(params)
 
       render(conn, "index.json", page: page)
@@ -65,14 +68,14 @@ defmodule Poker.Web.ProjectMemberController do
     end
   end
 
-  def show(conn, %{"id" => user_id}) do
+  def show(conn, %{"id" => _user_id}) do
     with membership <- membership(conn)
     do
       render(conn, "show.json", data: membership)
     end
   end
 
-  def update(conn, %{"id" => user_id, "data" => params}) do
+  def update(conn, %{"id" => _user_id, "data" => params}) do
     with membership        <- membership(conn),
          :ok               <- authorize(conn, :update, %{project_id: membership.project_id}),
          changeset         <- ProjectMember.update_changeset(membership, params),
@@ -82,7 +85,7 @@ defmodule Poker.Web.ProjectMemberController do
     end
   end
 
-  def delete(conn, %{"id" => user_id}) do
+  def delete(conn, %{"id" => _user_id}) do
     with membership <- membership(conn),
          :ok        <- authorize(conn, :delete, %{project_id: membership.project_id}),
          {:ok, _} <- Repo.delete(membership)
