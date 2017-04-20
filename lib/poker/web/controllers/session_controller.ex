@@ -18,11 +18,11 @@ defmodule Poker.Web.SessionController do
     end
   end
 
-  def create(conn, %{"username" => username, "password" => password}) do
+  def create(conn, ~m{username, password}) do
     user = Repo.get_by(User, username: username)
     do_create(conn, user, password)
   end
-  def create(conn, %{"email" => email, "password" => password}) do
+  def create(conn, ~m{email, password}) do
     user = Repo.get_by(User, email: email)
     do_create(conn, user, password)
   end
