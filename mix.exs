@@ -41,7 +41,8 @@ defmodule Poker.Mixfile do
      {:guardian, "~> 0.14", override: true},
      {:comeonin, "~> 3.0"},
      {:scrivener_ecto, "~> 1.0"},
-     {:shorter_maps, "~> 2.0"}]
+     {:shorter_maps, "~> 2.0"},
+     {:credo, "~> 0.7", only: [:dev, :test]}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
