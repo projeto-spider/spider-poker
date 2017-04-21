@@ -16,7 +16,7 @@ defmodule Poker.Accounts.User do
     field :location, :string
     field :contact, :string
     field :url, :string
-    has_many :organizations_users, Poker.OrganizationMember
+    has_many :organizations_users, Poker.Organizations.Member
     has_many :organizations, through: [:organizations_users, :organization]
     has_many :notifications, Poker.Notification, on_delete: :delete_all
 
