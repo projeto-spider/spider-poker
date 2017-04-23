@@ -13,14 +13,9 @@ defmodule Poker.Organizations.Member do
     timestamps()
   end
 
-  def changeset(attrs) do
-    %Member{}
-    |> cast(attrs, [:role, :user_id, :organization_id])
-  end
-
-  def changeset(%Member{} = member, attrs) do
+  def changeset(%Member{} = member, attrs \\ %{}) do
     member
-    |> cast(attrs, [:role])
+    |> cast(attrs, [:role, :user_id, :organization_id])
   end
 
   def validate(member) do
