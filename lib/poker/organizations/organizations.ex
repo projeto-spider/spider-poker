@@ -53,11 +53,12 @@ defmodule Poker.Organizations do
   end
 
   def can_see?(org_id, user_id) do
-    scope = if is_nil(user_id) do
-      query_public()
-    else
-      query_visible_to(%User{id: user_id})
-    end
+    scope =
+      if is_nil(user_id) do
+        query_public()
+      else
+        query_visible_to(%User{id: user_id})
+      end
 
     query =
       from(m in scope, select: m.id)

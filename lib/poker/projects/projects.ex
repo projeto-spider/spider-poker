@@ -64,14 +64,9 @@ defmodule Poker.Projects do
       end
 
     query =
-      from(m in scope, select: count(m.id, :distinct))
+      from(m in scope, select: m.id)
 
-    case Repo.soft_get(query, proj_id) do
-      {:ok, 1} ->
-        :ok
-      {:ok, _} ->
-        {:error, :not_found}
-    end
+    with {:ok, _id} <- get(query, proj_id), do: :ok
   end
 
   # Membership
@@ -84,8 +79,8 @@ defmodule Poker.Projects do
     else
       from m in Member,
       preload: [:user],
-      join: o in assoc(m, :project),
-      where: o.name == ^proj_id
+      join: p in assoc(m, :project),
+      where: p.name == ^proj_id
     end
   end
 
