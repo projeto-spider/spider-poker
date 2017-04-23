@@ -33,6 +33,7 @@ defmodule Poker.Projects do
   def create(attrs \\ %{}) do
     %Project{}
     |> Project.changeset(attrs)
+    |> cast(attrs, [:organization_id])
     |> Project.default_display_name
     |> Project.validate
     |> Repo.insert
