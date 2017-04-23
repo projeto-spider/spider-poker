@@ -97,8 +97,10 @@ defmodule Poker.Organizations do
   end
 
   def add_member(org_id, user_id, role \\ "member") do
-    %{organization_id: org_id, user_id: user_id, role: role}
-    |> Member.changeset
+    attrs = %{organization_id: org_id, user_id: user_id, role: role}
+
+    %Member{}
+    |> Member.changeset(attrs)
     |> Member.validate
     |> Member.validate_duplicated
     |> Repo.insert
