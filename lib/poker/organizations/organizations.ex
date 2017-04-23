@@ -4,7 +4,7 @@ defmodule Poker.Organizations do
   alias Poker.Repo
   alias Poker.Pattern
   alias Poker.Accounts.User
-  alias Poker.Organizations.Organization, as: Organization
+  alias Poker.Organizations.Organization
   alias Poker.Organizations.Member
 
   # Organization
