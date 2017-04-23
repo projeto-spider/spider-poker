@@ -1,43 +1,49 @@
 defmodule Poker.Web.ProjectController do
   use Poker.Web, :controller
 
-  alias Poker.{Repo, Project, ProjectMember, Organization}
-
-  plug :flatten_param, "data" when action == :create
+  alias Poker.Repo
+  alias Poker.Projects
+  alias Poker.Projects.Project
+  alias Poker.Projects.Member
+  alias Poker.Organizations
+  alias Poker.Organizations.Organization
 
   def index(conn, params) do
-    page =
-      scope(conn)
-      |> paginate(params)
+    get_page = fn ->
+      conn
+      |> scope
+      |> Repo.paginate(params)
+    end
 
-    render(conn, "index.json", page: page)
+    case nested_resource(conn) do
+      {"organizations", organization_id} ->
+        user_id = Session.user_id!(conn)
+
+        with :ok <- Organizations.can_see?(organization_id, user_id) do
+          render(conn, "index.json", page: get_page.())
+        end
+
+      _ ->
+          render(conn, "index.json", page: get_page.())
+    end
   end
 
   def create(conn, params) do
+    # You can either POST at /organizations/1/projects which would make `params`
+    # have a "organization_id" key or POST at /projects with a
+    # "organization_id" key.
     fetch_org_id =
-      case nested_resource(conn) do
-        {"organizations", org_id} ->
-          {:ok, org_id}
-        _ ->
-          with :error <- Map.fetch(params, "organization_id") do
-            {:error, :bad_request}
-          end
+      with {:error, _} <- Param.fetch(params, "organization_id") do
+        Param.fetch(params["data"], "organization_id")
       end
 
     with {:ok, org_id} <- fetch_org_id,
-         organization  <- Repo.get!(Organization, org_id),
-         params        <- params
-                          |> Map.put("organization_id", org_id)
-                          |> Map.put("organization", organization),
-         changeset     <- Project.create_changeset(params),
+         {:ok, user}   <- Session.user(conn),
          :ok           <- authorize(conn, :create, %{organization_id: org_id}),
-         {:ok, proj}   <- Repo.insert(changeset),
-         user          <- conn.assigns[:current_user],
-         role          <- %{"project_id" => proj.id,
-                            "user_id" => user.id,
-                            "role" => "manager"},
-         role          <- ProjectMember.create_changeset(role),
-         {:ok, _role}  <- Repo.insert(role)
+         {:ok, data}   <- Param.fetch(params, "data"),
+         attrs         <- Map.put_new(data, "organization_id", org_id),
+         {:ok, proj}   <- Projects.create(attrs),
+         {:ok, _role}  <- Projects.add_member(proj.id, user.id, "manager")
     do
       conn
       |> put_status(:created)
@@ -46,28 +52,25 @@ defmodule Poker.Web.ProjectController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    with proj <- Repo.get!(scope(conn), id),
-         :ok  <- authorize(conn, :show, %{project: proj})
-    do
+  def show(conn, ~m{id}) do
+    with {:ok, proj} <- Projects.get(scope(conn), id) do
       render(conn, "show.json", data: proj)
     end
   end
 
-  def update(conn, %{"id" => id, "data" => params}) do
-    with proj        <- Repo.get!(scope(conn), id),
+  def update(conn, ~m{id, data}) do
+    with {:ok, proj} <- Projects.get(scope(conn), id),
          :ok         <- authorize(conn, :update, %{project_id: proj.id}),
-         changeset   <- Project.update_changeset(proj, params),
-         {:ok, proj} <- Repo.update(changeset)
+         {:ok, proj} <- Projects.update(proj, data)
     do
       render(conn, "show.json", data: proj)
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    with proj     <- Repo.get!(scope(conn), id),
-         :ok      <- authorize(conn, :delete, %{project_id: proj.id}),
-         {:ok, _} <- Repo.delete(proj)
+  def delete(conn, ~m{id}) do
+    with {:ok, proj} <- Projects.get(scope(conn), id),
+         :ok         <- authorize(conn, :delete, %{project_id: proj.id}),
+         {:ok, _}    <- Projects.delete(proj)
     do
       send_resp(conn, :no_content, "")
     end
