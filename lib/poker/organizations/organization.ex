@@ -12,7 +12,7 @@ defmodule Poker.Organizations.Organization do
     field :location, :string
     field :url, :string
     field :private, :boolean, default: false
-    has_many :projects, Poker.Project, on_delete: :delete_all
+    has_many :projects, Poker.Projects.Project, on_delete: :delete_all
     has_many :organizations_members, Poker.Organizations.Member, on_delete: :delete_all
     has_many :users, through: [:organizations_members, :user]
 
