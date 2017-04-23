@@ -59,7 +59,7 @@ module.exports = {
         loader: 'file-loader',
         query: {
           outputPath: '../fonts/',
-          publicPath: 'fonts/'
+          publicPath: '/fonts/'
         }
       }
     ]
