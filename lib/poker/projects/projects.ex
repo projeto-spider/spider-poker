@@ -10,15 +10,20 @@ defmodule Poker.Projects do
   def query, do: Project
 
   def query_public do
-    Project
-    |> where(private: false)
+    from p in Project,
+    distinct: p.id,
+    join: o in assoc(p, :organization),
+    where: o.private == false and p.private == false
   end
 
   def query_visible_to(%User{id: user_id}) do
     from p in Project,
-    left_join: m in assoc(p, :projects_members),
-    where: p.private == false or
-           m.user_id == ^user_id
+    distinct: p.id,
+    join: o in assoc(p, :organization),
+    left_join: om in assoc(o, :organizations_members),
+    left_join: pm in assoc(p, :projects_members),
+    where: (o.private == false or om.user_id == ^user_id) and
+           (p.private == false or pm.user_id == ^user_id)
   end
   def query_visible_to(_), do: query_public()
 
