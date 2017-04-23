@@ -119,19 +119,15 @@
       }
     },
 
-    async created() {
+    created() {
       this.status.organization = 'loading'
 
-      const res = await Organizations.show(this.$route.params.organization)
-
-      if (res.data.length === 0) {
-        this.status.organization = 'errored'
-        return
-      }
-
-      this.status.organization = 'success'
-
-      this.organization = res.data[0]
+      Organizations.show(this.$route.params.organization)
+        .then(({data: organization}) => {
+          this.status.organization = 'success'
+          this.organization = organization
+        })
+        .catch(() => this.status.organization = 'errored')
     },
 
     methods: {

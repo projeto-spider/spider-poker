@@ -207,27 +207,24 @@ export default {
     }
   },
 
-  async created() {
+  created() {
     this.status.organization = 'loading'
 
-    const res = await Organizations.show(this.$route.params.organization)
+    Organizations.show(this.$route.params.organization)
+      .then(({data: organization}) => {
+        this.status.organization = 'success'
+        this.organization = organization
 
-    if (res.data.length === 0) {
-      this.status.organization = 'errored'
-      return
-    }
-
-    this.status.organization = 'success'
-
-    this.organization = res.data[0]
-
-    this.status.members = 'loading'
-
-    const resMemberships = await Organizations.members.all(this.organization.id)
-
-    this.memberships = resMemberships.data
-
-    this.status.members = 'success'
+        this.status.members = 'loading'
+        return Organizations.members.all(this.organization.id)
+      })
+      .then(({data: members}) => {
+        this.status.members = 'success'
+        this.memberships = members
+      })
+      .catch(() => {
+        this.status.organization = 'errored'
+      })
   },
 
   methods: {

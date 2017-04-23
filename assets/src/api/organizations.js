@@ -19,7 +19,7 @@ export default {
   },
 
   show(name) {
-    return request(organizations.query({'filter[name]': name}))
+    return request(organizations.get({id: name}))
   },
 
   update(id, attributes) {
