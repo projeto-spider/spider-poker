@@ -1,7 +1,8 @@
 defmodule Poker.Web.Policy.User do
+  @moduledoc false
   use Poker.Web, :policy
 
-  alias Poker.User
+  alias Poker.Accounts.User
 
   def can?(%User{id: user_id}, action, %{user: user})
   when action in [:update, :delete] do

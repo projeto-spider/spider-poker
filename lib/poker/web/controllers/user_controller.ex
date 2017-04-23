@@ -1,21 +1,23 @@
 defmodule Poker.Web.UserController do
   use Poker.Web, :controller
+  alias Poker.Accounts
 
-  alias Poker.User
+  @filters   ["username", "display_name", "email"]
+  @searchers ["username", "display_name", "email"]
 
   def index(conn, params) do
     page =
-      scope(conn)
-      |> paginate(params)
+      Accounts.query
+      |> filter_params(params, @filters)
+      |> search_params(params, @searchers)
+      |> Repo.paginate(params)
 
     render(conn, "index.json", page: page)
   end
 
-  def create(conn, %{"data" => params}) do
-    changeset = User.create_changeset(params)
-
+  def create(conn, ~m{data}) do
     with :ok         <- authorize(conn, :create),
-         {:ok, user} <- Repo.insert(changeset)
+         {:ok, user} <- Accounts.create(data)
     do
       conn
       |> put_status(:created)
@@ -24,28 +26,27 @@ defmodule Poker.Web.UserController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    with user <- Repo.get!(scope(conn), id),
-         :ok  <- authorize(conn, :show, %{user: user})
+  def show(conn, ~m{id}) do
+    with {:ok, user} <- Accounts.get(id),
+         :ok         <- authorize(conn, :show, %{user: user})
     do
       render(conn, "show.json", data: user)
     end
   end
 
   def update(conn, %{"id" => id, "data" => params}) do
-    with user        <- Repo.get!(scope(conn), id),
+    with {:ok, user} <- Accounts.get(id),
          :ok         <- authorize(conn, :update, %{user: user}),
-         changeset   <- User.update_changeset(user, params),
-         {:ok, user} <- Repo.update(changeset)
+         {:ok, user} <- Accounts.update(user, params)
     do
       render(conn, "show.json", data: user)
     end
   end
 
   def delete(conn, %{"id" => id}) do
-    with user     <- Repo.get!(scope(conn), id),
-         :ok      <- authorize(conn, :delete, %{user: user}),
-         {:ok, _} <- Repo.delete(user)
+    with {:ok, user} <- Accounts.get(id),
+         :ok         <- authorize(conn, :delete, %{user: user}),
+         {:ok, _}    <- Accounts.delete(user)
     do
       send_resp(conn, :no_content, "")
     end
