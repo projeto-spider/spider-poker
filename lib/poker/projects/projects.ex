@@ -76,17 +76,17 @@ defmodule Poker.Projects do
 
   # Membership
 
-  def query_members(proj_name)
-  when is_binary(proj_name) do
-    from m in Member,
-    preload: [:user],
-    join: o in assoc(m, :project),
-    where: o.name == ^proj_name
-  end
   def query_members(proj_id) do
-    Member
-    |> preload([:user])
-    |> where(project_id: ^proj_id)
+    if Pattern.numeric?(proj_id) do
+      Member
+      |> preload([:user])
+      |> where(project_id: ^proj_id)
+    else
+      from m in Member,
+      preload: [:user],
+      join: o in assoc(m, :project),
+      where: o.name == ^proj_id
+    end
   end
 
   def get_member(proj_id, id) do

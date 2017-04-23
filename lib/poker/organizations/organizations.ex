@@ -67,17 +67,17 @@ defmodule Poker.Organizations do
 
   # Membership
 
-  def query_members(org_name)
-  when is_binary(org_name) do
-    from m in Member,
-    preload: [:user],
-    join: o in assoc(m, :organization),
-    where: o.name == ^org_name
-  end
   def query_members(org_id) do
-    Member
-    |> preload([:user])
-    |> where(organization_id: ^org_id)
+    if Pattern.numeric?(org_id) do
+      Member
+      |> preload([:user])
+      |> where(organization_id: ^org_id)
+    else
+      from m in Member,
+      preload: [:user],
+      join: o in assoc(m, :organization),
+      where: o.name == ^org_id
+    end
   end
 
   def get_member(org_id, id) do
