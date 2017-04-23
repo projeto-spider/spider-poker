@@ -3,10 +3,7 @@ defmodule Poker.Web.ProjectController do
 
   alias Poker.Repo
   alias Poker.Projects
-  alias Poker.Projects.Project
-  alias Poker.Projects.Member
   alias Poker.Organizations
-  alias Poker.Organizations.Organization
 
   def index(conn, params) do
     get_page = fn ->
