@@ -224,12 +224,12 @@ export default {
 
       const res = await Users.show(this.memberToAdd)
 
-      if (res.data.length === 0) {
+      if (res.error) {
         this.status.addMember = 'errored'
         return
       }
 
-      const userId = R.prop('id', res.data[0])
+      const userId = R.prop('id', res.data)
 
       const projId = R.prop('id', this.project)
 

@@ -13,7 +13,7 @@ export default {
   },
 
   show(username) {
-    return request(users.query({'filter[username]': username}))
+    return request(users.get({id: username}))
   },
 
   create(user) {

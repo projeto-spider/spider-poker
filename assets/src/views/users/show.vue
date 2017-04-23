@@ -167,16 +167,12 @@
 
       this.projects = proj.data
 
-      const res = await Users.show(this.$route.params.username)
-
-      if (res.data.length === 0) {
-        this.status = 'errored'
-        return
-      }
-
-      this.status = 'success'
-
-      this.user = res.data[0]
+      Users.show(this.$route.params.username)
+        .then(({data: user}) => {
+          this.status = 'success'
+          this.user = user
+        })
+        .catch(() => this.status = 'errored')
     }
 }
 </script>
