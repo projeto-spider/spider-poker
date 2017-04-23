@@ -29,7 +29,7 @@ defmodule Poker.Organizations do
     if Pattern.numeric?(id) do
       Repo.soft_get(scope, id)
     else
-      Repo.soft_get_by(Organization, name: id)
+      Repo.soft_get_by(scope, name: id)
     end
   end
 
