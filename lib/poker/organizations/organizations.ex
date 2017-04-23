@@ -60,14 +60,9 @@ defmodule Poker.Organizations do
     end
 
     query =
-      from(m in scope, select: count(m.id, :distinct))
+      from(m in scope, select: m.id)
 
-    case Repo.soft_get(query, org_id) do
-      {:ok, 1} ->
-        :ok
-      {:ok, _} ->
-        {:error, :not_found}
-    end
+    with {:ok, _id} <- get(query, org_id), do: :ok
   end
 
   # Membership
