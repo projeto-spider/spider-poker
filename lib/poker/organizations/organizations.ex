@@ -82,14 +82,16 @@ defmodule Poker.Organizations do
   end
 
   def get_member(org_id, id) do
-    query =
-      Member
-      |> preload([:user])
+    query = query_members(org_id)
 
     if Pattern.numeric?(id) do
-      Repo.soft_get_by(query, organization_id: org_id, user_id: id)
+      Repo.soft_get_by(query, user_id: id)
     else
-      Repo.soft_get_by(query, organization_id: org_id, username: id)
+      query =
+        from m in query,
+        join: u in assoc(m, :user),
+        where: u.username == ^id
+      Repo.soft_one(query)
     end
   end
 
