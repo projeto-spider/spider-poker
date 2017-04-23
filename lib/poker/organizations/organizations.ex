@@ -18,6 +18,7 @@ defmodule Poker.Organizations do
 
   def query_visible_to(%User{id: user_id}) do
     from o in Organization,
+    distinct: o.id,
     left_join: m in assoc(o, :organizations_members),
     where: o.private == false or
            m.user_id == ^user_id
