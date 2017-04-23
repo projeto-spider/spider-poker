@@ -19,4 +19,13 @@ defmodule Poker.Repo do
         {:ok, schema}
     end
   end
+
+  def soft_one(queryable, opts \\ []) do
+    case one(queryable, opts) do
+      nil ->
+        {:error, :not_found}
+      schema ->
+        {:ok, schema}
+    end
+  end
 end
