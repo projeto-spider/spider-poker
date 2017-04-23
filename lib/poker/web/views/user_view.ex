@@ -8,10 +8,8 @@ defmodule Poker.Web.UserView do
   end
 
   def render("single.json", %{user: user}) do
-    profile = render_one(user.profile, Poker.Web.ProfileView, "single.json")
-
     user
-    |> Map.take([:id, :username, :email])
-    |> Map.put(:profile, profile)
+    |> Map.take([:id, :username, :email, :display_name, :bio, :location,
+                 :company, :contact, :url])
   end
 end
