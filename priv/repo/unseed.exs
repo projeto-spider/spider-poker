@@ -1,0 +1,9 @@
+  alias Poker.Repo
+  alias Poker.Accounts
+  alias Poker.Organizations
+  alias Poker.Projects
+  Repo.delete_all Organizations.Member
+  Repo.delete_all Organizations.Organization
+  Repo.delete_all Accounts.User
+  Repo.delete_all Projects.Project
+  Repo.delete_all Projects.Member

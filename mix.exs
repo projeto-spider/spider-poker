@@ -51,8 +51,11 @@ defmodule Poker.Mixfile do
   #
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
-    ["ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+    ["ecto.setup": ["ecto.create", "ecto.migrate", "seed"],
      "ecto.reset": ["ecto.drop", "ecto.setup"],
+     "seed": ["run priv/repo/seed.exs"],
+     "unseed": ["run priv/repo/unseed.exs"],
+     "reseed": ["unseed", "seed"],
      "test": ["ecto.create --quiet", "ecto.migrate", "test"]]
   end
 end
