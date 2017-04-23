@@ -133,4 +133,15 @@ defmodule Poker.Projects do
 
     Repo.one!(query) > 0
   end
+
+  def manager?(proj_id, user_id) do
+    query =
+      from m in Member,
+      where: m.project_id      == ^proj_id and
+             m.user_id         == ^user_id and
+             m.role            == "manager",
+      select: count(m.id)
+
+    Repo.one!(query) > 0
+  end
 end
