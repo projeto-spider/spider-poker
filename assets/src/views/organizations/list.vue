@@ -42,7 +42,6 @@
     components: {HeroTitle},
 
     created() {
-      store.commit('page/set', {title: 'Organizations'})
       Organizations.all()
         .then(res => {
           this.organizations = res.data
