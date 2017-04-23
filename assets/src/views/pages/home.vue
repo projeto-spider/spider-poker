@@ -28,7 +28,7 @@
                   <router-link
                     :to="{name: 'userShow', params: {username: user.username}}"
                   >
-                    {{user.profile.name}}
+                    {{user.displayName}}
                   </router-link>
                   <p>
                     <router-link
@@ -40,7 +40,7 @@
                   </p>
                 </p>
 
-                <p v-if='user.profile.bio'>{{user.profile.bio}}</p>
+                <p v-if='user.bio'>{{user.bio}}</p>
               </div>
             </article>
           </paginate>

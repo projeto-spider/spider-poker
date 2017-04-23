@@ -120,7 +120,7 @@
                   <router-link
                     :to="{name: 'userShow', params: {username: member.user.username}}"
                   >
-                    {{member.user.profile.name}}
+                    {{member.user.name}}
                   </router-link>
                   <p>
                     <router-link

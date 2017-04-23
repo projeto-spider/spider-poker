@@ -2,7 +2,7 @@
   <main>
     <hero-title
       v-if='user'
-      :text="user.profile.name"
+      :text="user.name"
       :subtitle="`@${user.username}`"
     />
 
@@ -19,7 +19,7 @@
             <img :src="gravatar(user.email)" alt="Avatar"/>
           </div>
 
-          <p v-if="user.profile.bio">{{user.profile.bio}}</p>
+          <p v-if="user.bio">{{user.bio}}</p>
 
           <div v-if="userInfos" class="panel">
             <p v-for="info in userInfos" class="panel-block">
@@ -132,10 +132,7 @@
 
         return R.pipe(
           R.prop('user'),
-          R.pick(['email']),
-          R.merge(
-            R.pick(['location', 'url'], profile)
-          ),
+          R.pick(['email', 'location', 'url']),
           R.filter(Boolean),
           R.toPairs,
           R.map(([key, text]) => ({text, key})),
