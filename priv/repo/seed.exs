@@ -82,6 +82,7 @@ end)
   {"leochrisis", "projeto-spider", "admin"},
   {"lubien", "federal-university-of-para", "member"},
   {"leochrisis", "federal-university-of-para", "member"},
+  {"lubien", "nihon-hikikomori-kyokai", "member"},
   {"foobar", "nihon-hikikomori-kyokai", "admin"},
   {"quxbar", "nihon-hikikomori-kyokai", "member"}
 ]
