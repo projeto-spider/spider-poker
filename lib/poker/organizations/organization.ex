@@ -1,4 +1,5 @@
 defmodule Poker.Organizations.Organization do
+  @moduledoc false
   use Poker.Web, :model
   use Ecto.Schema
 
