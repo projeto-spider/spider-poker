@@ -1,24 +1,22 @@
 defmodule Poker.Web.Policy.Project do
   @moduledoc false
-  alias Poker.ProjectMember
+  use Poker.Web, :policy
+
+  alias Poker.Projects
   alias Poker.Organizations
   alias Poker.Accounts.User
 
-  def can?(nil, action, _data)
-  when action in [:create, :update, :delete], do: false
-
-  def can?(%User{id: user_id}, action, %{organization_id: org_id})
-  when action == :create do
+  def can?(%User{id: user_id}, :create, %{organization_id: org_id}) do
     Organizations.member?(org_id, user_id)
   end
 
   def can?(%User{id: user_id}, action, %{project_id: proj_id})
   when action in [:update, :delete] do
-    ProjectMember.member?(proj_id, user_id)
+    Projects.manager?(proj_id, user_id)
   end
 
   def can?(_user, action, _data)
-  when action in [:index, :show], do: true
+  when action in [:create, :update, :delete], do: false
 
-  def can?(_user, _action, _data), do: false
+  def can?(_user, _action, _data), do: true
 end
