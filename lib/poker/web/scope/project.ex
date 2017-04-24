@@ -27,6 +27,18 @@ defmodule Poker.Web.Scope.Project do
           where: o.name == ^org_id
         end
 
+      {"users", user_id} ->
+        if Pattern.numeric?(user_id) do
+          from o in query,
+          join: m in assoc(o, :projects_members),
+          where: m.user_id == ^user_id
+        else
+          from o in query,
+          join: m in assoc(o, :projects_members),
+          join: u in assoc(m, :user),
+          where: u.username == ^user_id
+        end
+
       _ ->
         query
     end

@@ -26,6 +26,8 @@ defmodule Poker.Web.Router do
         singleton: true,
         only: [:show, :update]
       resources "/messages", MessageController, only: [:index, :update]
+      resources "/organizations", OrganizationController, except: @non_rest
+      resources "/projects", ProjectController, except: @non_rest
     end
     resources "/organizations", OrganizationController, except: @non_rest do
       resources "/members", OrganizationMemberController, excepct: @non_rest,
