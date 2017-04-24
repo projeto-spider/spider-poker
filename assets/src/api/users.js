@@ -2,6 +2,8 @@ import {http, resource} from './http'
 import {request} from 'app/utils'
 
 const users = resource('users{/id}')
+const organizations = resource('users{/userId}/organizations{/orgId}')
+const projects = resource('users{/userId}/projects{/projId}')
 
 export default {
   all() {
@@ -37,6 +39,18 @@ export default {
       return request(
         http.put(`/api/users/${username}/notifications/${id}`, {notification})
       )
+    }
+  },
+
+  organizations: {
+    all(userId) {
+      return request(organizations.query({userId}))
+    }
+  },
+
+  projects: {
+    all(userId) {
+      return request(projects.query({userId}))
     }
   }
 }

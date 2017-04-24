@@ -60,7 +60,7 @@
                 <p>{{org.description}}</p>
               </div>
 
-              <article v-for="proj in projects" class="media">
+              <article v-for="proj in projects.filter(p => p.organizationId === org.id)" class="media">
                 <!-- This empty picture pulls the nested content right -->
                 <figure class="media-left"><p class="image is-48x48"></p></figure>
 
@@ -140,39 +140,27 @@
       }
     },
 
-    async created() {
-      this.status.organization = 'loading'
-
-      const {data} = await Organizations.all()
-
-      if (data.length === 0) {
-        this.status = 'errored'
-        return
-      }
-
-      this.status.organization = 'success'
-
-      this.organizations = data
-
-      const org = data[0]
-
-      this.status.project = 'loading'
-
-      const proj = await Organizations.projects.all(org.id)
-
-      if (proj.data.length === 0) {
-        this.status.project = 'errored'
-        return
-      }
-
-      this.projects = proj.data
-
+    created() {
       Users.show(this.$route.params.username)
         .then(({data: user}) => {
-          this.status = 'success'
+          this.status.organization = 'success'
           this.user = user
+
+          this.status.organization = 'loading'
+          return Users.organizations.all(user.id)
         })
-        .catch(() => this.status = 'errored')
+        .then(({data: organizations}) => {
+          this.status.organization = 'success'
+          this.organizations = organizations
+
+          this.status.project = 'loading'
+          return Users.projects.all(this.user.id)
+        })
+        .then(({data: projects}) => {
+          this.status.project = 'success'
+          this.projects = projects
+        })
+        .catch((err) => this.status.organization = 'errored')
     }
 }
 </script>
