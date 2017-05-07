@@ -1,4 +1,5 @@
 defmodule Poker.Web.Scope do
+  @moduledoc false
   import Poker.Web.Helpers, only: [module_for_controller: 2]
 
   defmacro __using__(_opts) do
