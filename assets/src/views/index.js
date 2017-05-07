@@ -31,6 +31,7 @@ import Board from './game/board'
 
 // Errors
 import Error404 from './errors/404'
+import Error403 from './errors/403'
 
 export default {
   Auth: {
@@ -72,6 +73,7 @@ export default {
   },
 
   ErrorViews: {
-    Error404
+    Error404,
+    Error403
   }
 }
