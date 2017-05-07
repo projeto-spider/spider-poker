@@ -13,11 +13,11 @@
         </div>
         <div class="column is-half">
           <div class="text-box has-text-centered">
-            <div class="notification is-danger">
-              <h1>404</h1>
+            <div class="notification is-warning">
+              <h1>403</h1>
             </div>
-            <h1>This page does not exist</h1>
-            <p>It would appear that <em>{{ path }}</em> could not be found.</p>
+            <h1>Not authorized</h1>
+            <p>It would appear that you can not acess <em>{{ path }}</em>.</p>
           </div>
         </div>
       </div>
@@ -26,21 +26,21 @@
 </template>
 
 <script>
-  export default {
-    name: 'Error',
-    props: {
-      path: {
-        type: String,
-        required: false
-      }
-    },
-    created() {
-      // Get the current route.
-      let route = this.$route;
-      // Set the route path in the data.
-      this.path = route.path;
+export default {
+  name: 'Error',
+  props: {
+    path: {
+      type: String,
+      required: false
     }
+  },
+  created() {
+    // Get the current route.
+    let route = this.$route;
+    // Set the route path in the data.
+    this.path = route.path;
   }
+}
 </script>
 
 <style lang="sass">
@@ -56,7 +56,7 @@
   font-size: 30px
   border-radius: 280px;
   margin-left: 240px
-  width: 80px;
+  width: 100px;
   padding-left: 20px
 
 .text-box

@@ -159,13 +159,27 @@ export default new Router({
           name: 'backlogShow',
           path: 'project/:project/backlog',
           component: Backlogs.Show
+        },
+
+        // Errors
+
+        {
+          name: 'error404',
+          path: 'errors/404',
+          component: ErrorViews.Error404
+        },
+
+        {
+          name: 'error403',
+          path: 'errors/403',
+          component: ErrorViews.Error403
         }
       ]
     },
 
     {
       path: '*',
-      name: 'error404',
+      name: 'fallback',
       component: ErrorViews.Error404
     }
   ]
