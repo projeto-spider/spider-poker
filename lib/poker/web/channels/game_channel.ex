@@ -28,7 +28,7 @@ defmodule Poker.Web.GameChannel do
 
   def handle_in("message", %{"body" => body}, socket) do
     message = %{
-      user: socket.assigns.user,
+      user_id: socket.assigns.user.id,
       body: body
     }
 

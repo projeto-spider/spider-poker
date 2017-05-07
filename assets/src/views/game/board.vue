@@ -126,27 +126,14 @@
         </div>
 
         <div class="chat">
-          <article
-            v-for="message in messages"
-            class="media media-message"
-            :class="{'is-from-self': message.user.id === loggedinId}"
-          >
-            <figure class="media-left">
-              <p class="image is-48x48">
-                <img :src="gravatar(message.user.email)">
-              </p>
-            </figure>
-            <div class="media-content">
-              <div class="content">
-                <p>
-                  <strong>{{message.user.display_name}}</strong>
-                  <small>@{{message.user.username}}</small>
-                  <br>
-                  {{message.body}}
-                </p>
-              </div>
-            </div>
-          </article>
+          <div v-for="message in messages">
+            <message
+              :body="message.body"
+              :user="player_db[message.user_id]"
+              :fromSelf="message.user_id === loggedinId"
+            >
+            </message>
+          </div>
         </div>
 
          <div v-if="modal.stories.open">
@@ -239,8 +226,7 @@ import R from 'ramda'
 import {Socket} from 'phoenix'
 import {mapState} from 'vuex'
 import gravatar from 'gravatar'
-
-let player_db = {}
+import Message from './message'
 
 const emptyStoriesModal = {
   open: false,
@@ -256,6 +242,8 @@ const emptyVotationModal = {
 
 export default {
   name: 'BoardView',
+
+  components: {Message},
 
   data: () => {
     const time = Math.trunc((new Date()).getTime() / 1000)
@@ -282,6 +270,7 @@ export default {
         {name: 'Fourth', description: 'Lorem Ipsum'}
       ],
       players_ids: [],
+      player_db: {},
       message: '',
       messages: [],
       picked: [],
@@ -331,7 +320,7 @@ export default {
     },
 
     users() {
-      return R.map(R.flip(R.prop)(player_db), this.players_ids)
+      return R.map(R.flip(R.prop)(this.player_db), this.players_ids)
     }
   },
 
@@ -431,7 +420,7 @@ export default {
     apply_joins(joins) {
       R.mapObjIndexed(({user}, id) => {
         this.players_ids.push(id)
-        player_db[id] = user
+        this.player_db[id] = user
       }, joins)
     }
   },
@@ -557,34 +546,4 @@ $border-color: 1px solid rgba(0, 0, 0, .10)
 
     &.selected
       bottom: 10px
-
-.media-message
-  margin-top: 0
-
-  &.media + .media
-    border-top: 0
-
-  .media-left img
-    border-radius: 50%
-
-  .media-content
-    background-color: #00B1FF
-    padding: 3px 10px
-    border-radius: 5px
-
-    .content, strong
-      color: #fff
-
-  &.is-from-self
-    flex-direction: row-reverse
-
-    .media-left
-      margin-right: 0
-
-    .media-content
-      margin-right: 10px
-      background-color: #EAEFF3
-
-      .content, strong
-        color: #000
 </style>
