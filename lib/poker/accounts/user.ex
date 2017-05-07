@@ -1,5 +1,8 @@
 defmodule Poker.Accounts.User do
   @moduledoc false
+  @derive {Poison.Encoder, only: [:id, :username, :display_name, :email, :bio,
+                                  :location, :contact, :url]}
+
   use Poker.Web, :model
 
   alias Poker.Accounts.User
