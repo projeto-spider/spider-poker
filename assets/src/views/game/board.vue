@@ -219,7 +219,7 @@ export default {
     this.socket = new Socket('/socket', {params: {token: this.token}})
     this.socket.connect()
 
-    this.channel = this.socket.channel("room:lobby", {})
+    this.channel = this.socket.channel("game:lobby", {})
 
     this.channel.on("message", payload => {
       this.messages.unshift(payload.message)
