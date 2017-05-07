@@ -240,6 +240,8 @@ import {Socket} from 'phoenix'
 import {mapState} from 'vuex'
 import gravatar from 'gravatar'
 
+let player_db = {}
+
 const emptyStoriesModal = {
   open: false,
   currentPosition: null,
@@ -279,7 +281,7 @@ export default {
         {name: 'Third', description: 'Lorem Ipsum'},
         {name: 'Fourth', description: 'Lorem Ipsum'}
       ],
-      users: [],
+      players_ids: [],
       message: '',
       messages: [],
       picked: [],
@@ -326,6 +328,10 @@ export default {
           }
         } while (this.votationTimePassed.seconds > 0)
       }
+    },
+
+    users() {
+      return R.map(R.flip(R.prop)(player_db), this.players_ids)
     }
   },
 
@@ -414,6 +420,19 @@ export default {
 
     startDicussionTimer() {
       this.discussionTimer = Math.trunc((new Date()).getTime() / 1000)
+    },
+
+    apply_leaves(leaves) {
+      R.mapObjIndexed((_, id) => {
+        this.players_ids = this.players_ids.filter(R.compose(R.not, R.equals(id)))
+      }, leaves)
+    },
+
+    apply_joins(joins) {
+      R.mapObjIndexed(({user}, id) => {
+        this.players_ids.push(id)
+        player_db[id] = user
+      }, joins)
     }
   },
 
@@ -433,6 +452,15 @@ export default {
 
     this.channel.on('user_joined', payload => {
       this.users.push(payload.user)
+    })
+
+    this.channel.on('presence_state', users => {
+      this.apply_joins(users)
+    })
+
+    this.channel.on('presence_diff', ({leaves, joins}) => {
+      this.apply_leaves(leaves)
+      this.apply_joins(joins)
     })
 
     this.channel.join()

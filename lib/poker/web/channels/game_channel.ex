@@ -2,6 +2,7 @@ defmodule Poker.Web.GameChannel do
   @moduledoc false
   use Phoenix.Channel
   alias Poker.Accounts.User
+  alias Poker.Web.Presence
 
   def join("game:lobby", _message, socket) do
     case socket.assigns.user do
@@ -17,7 +18,11 @@ defmodule Poker.Web.GameChannel do
   end
 
   def handle_info(:after_join, socket) do
-    broadcast! socket, "user_joined", %{user: socket.assigns.user}
+    push(socket, "presence_state", Presence.list(socket))
+    {:ok, _} = Presence.track(socket, socket.assigns.user.id, %{
+      online_at: inspect(System.system_time(:seconds))
+    })
+
     {:noreply, socket}
   end
 

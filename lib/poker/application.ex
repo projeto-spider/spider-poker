@@ -12,8 +12,8 @@ defmodule Poker.Application do
       supervisor(Poker.Repo, []),
       # Start the endpoint when the application starts
       supervisor(Poker.Web.Endpoint, []),
-      # Start your own worker by calling: Poker.Worker.start_link(arg1, arg2, arg3)
-      # worker(Poker.Worker, [arg1, arg2, arg3]),
+      # Start Presence
+      supervisor(Poker.Web.Presence, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
