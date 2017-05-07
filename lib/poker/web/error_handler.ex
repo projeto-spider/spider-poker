@@ -1,4 +1,5 @@
 defmodule Poker.Web.ErrorHandler do
+  @moduledoc false
   use Poker.Web, :controller
   require Logger
   alias Poker.Web.ErrorView
