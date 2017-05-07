@@ -26,6 +26,9 @@ import ProjectsList from './projects/list'
 // Backlog
 import Backlog from './backlog/show'
 
+// Game
+import Board from './game/board'
+
 // Errors
 import Error404 from './errors/404'
 
@@ -62,6 +65,10 @@ export default {
 
   Backlogs: {
     Show: Backlog
+  },
+
+  Game: {
+    Board
   },
 
   ErrorViews: {

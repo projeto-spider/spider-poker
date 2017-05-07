@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 import store from 'app/store'
 import {
-  AuthPanel, BaseLayout
+  AuthPanel, BaseLayout, GameLayout
 } from 'app/layouts'
 import views from '../views'
 
@@ -14,6 +14,7 @@ const {
   Organizations,
   Projects,
   Backlogs,
+  Game,
   ErrorViews
 } = views
 
@@ -46,6 +47,18 @@ export default new Router({
           name: 'logout',
           path: 'logout',
           component: Auth.Logout
+        }
+      ]
+    },
+
+    {
+      path: '/game',
+      component: GameLayout,
+      children: [
+        {
+          name: 'board',
+          path: '/',
+          component: Game.Board
         }
       ]
     },
