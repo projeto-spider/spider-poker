@@ -1,15 +1,15 @@
-defmodule Poker.Backlog do
+defmodule Poker.Projects.Backlog do
   @moduledoc false
   use Poker.Web, :model
 
-  alias Poker.Backlog
+  alias Poker.Projects.Backlog
 
   schema "backlogs" do
     field :content, :string
     field :position, :integer
     field :priority, :integer
-    belongs_to :project, Poker.Project
-    belongs_to :parent, Poker.Backlog, foreign_key: :parent_id
+    belongs_to :project, Poker.Projects.Project
+    belongs_to :parent, Poker.Projects.Backlog, foreign_key: :parent_id
 
     timestamps()
   end
