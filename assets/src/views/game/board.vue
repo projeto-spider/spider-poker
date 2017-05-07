@@ -2,8 +2,16 @@
   <div class="is-fullheight">
     <div class="columns is-fullheight">
       <div class="column board-sidebar">
-        <div class="timer title is-2">
+        <div v-if="!votation" class="timer title is-2">
           {{padZero(timePassed.minutes)}}:{{padZero(timePassed.seconds)}}
+        </div>
+        <div v-if="votation">
+          <div class="timer title is-2">
+            {{padZero(timePassed.minutes)}}:{{padZero(timePassed.seconds)}}
+          </div>
+          <div class="timer votetitle is-2">
+            {{padZero(votationTimePassed.minutes)}}:{{padZero(votationTimePassed.seconds)}}
+          </div>
         </div>
         <div class="tabs is-centered">
           <ul>
@@ -32,17 +40,46 @@
         </div>
 
         <div v-if="sidebarTab === 2" class="backlog">
-          <article v-for="story in backlog" class="media">
+          <article v-for="story in picked" class="media">
             <div class="media-content">
               <div class="content">
                 <p>
                   <strong>{{story.name}}</strong>
                   <br>
-                  <small>{{story.description}}</small>
+                  {{story.description}}
                 </p>
+                <small>
+                  <a @click="undo"> remove </a>
+                </small>
               </div>
             </div>
           </article>
+          <hr/>
+          <div v-if="isManager">
+            <button
+              v-if="!onGoing"
+              @click="openStoriesModal"
+              class="button is-primary is-fullwidth"
+            >
+              Choose a story
+            </button>
+            <button
+              v-else
+              class="button is-primary is-fullwidth is-disabled"
+            >
+              Choose a story
+            </button>
+          </div>
+
+          <small>
+            <a @click="openVotationModal"> init votation </a>
+          </small>
+
+          <br/>
+
+          <small>
+            <a @click="startDicussionTimer"> init discussion </a>
+          </small>
         </div>
 
         <div v-if="sidebarTab === 4" class="votes">
@@ -112,6 +149,75 @@
           </article>
         </div>
 
+         <div v-if="modal.stories.open">
+          <div class="modal is-active">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+              <header class="modal-card-head">
+                <p class="modal-card-title">Choosing story</p>
+              </header>
+              <section class="modal-card-body">
+                <div class="field">
+                  <article v-for="(story, i) in options" class="media">
+                  <label class="radio">
+                  <input type="radio" @click="currentStory(story, i)">
+                      <div class="media-content">
+                        <div class="content">
+                          <p>
+                            <strong>{{story.name}}</strong>
+                            <br>
+                            <small>{{story.description}}</small>
+                          </p>
+                        </div>
+                      </div>
+                    </label>
+                  </article>
+                </div>
+              </section>
+              <footer class="modal-card-foot">
+                <a @click="chooseStory" class="button is-success">Choose</a>
+                <a @click="modal.stories.open = false" class="button">Cancel</a>
+              </footer>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="modal.votation.open">
+          <div class="modal is-active">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+              <header class="modal-card-head">
+                <p class="modal-card-title">Inform votation time</p>
+              </header>
+              <section class="modal-card-body">
+                <div class="field">
+                  <form
+                    method="post"
+                    @submit.prevent="VotationTimer"
+                    @keyup.13="VotationTimer"
+                  >
+                    <p class="control">
+                      <input
+                        class="input"
+                        placeholder="Votation time (min)"
+                        v-model="modal.votation.time"
+                      >
+                    </p>
+                  </form>
+                </div>
+                <div v-if="modal.votation.erro" class="notification is-danger">
+                  <button @click="modal.votation.erro = false" class="delete"></button>
+                  Something went wrong
+                </div>
+              </section>
+              <footer class="modal-card-foot">
+                <a @click="VotationTimer" class="button is-success">Start</a>
+                <a @click="closeVotationModal">Cancel</a>
+              </footer>
+            </div>
+          </div>
+        </div>
+
         <div v-if="false" class="deck">
           <div v-for="card in deck" @click="() => select(card)" class="card" :class="cardClass(card)">
             <span v-if="card === 'Pass'">
@@ -134,6 +240,18 @@ import {Socket} from 'phoenix'
 import {mapState} from 'vuex'
 import gravatar from 'gravatar'
 
+const emptyStoriesModal = {
+  open: false,
+  currentPosition: null,
+  story: null
+}
+
+const emptyVotationModal = {
+  open: false,
+  time: null,
+  erro: false
+}
+
 export default {
   name: 'BoardView',
 
@@ -143,6 +261,8 @@ export default {
     return {
       start: time,
       now: time,
+      voteTimer: 0,
+      discussionTimer: 0,
       sidebarTab: 1,
       socket: null,
       channel: null,
@@ -157,12 +277,21 @@ export default {
         {name: 'First', description: 'Lorem Ipsum'},
         {name: 'Second', description: 'Lorem Ipsum'},
         {name: 'Third', description: 'Lorem Ipsum'},
-        {name: 'Fourth', description: 'Lorem Ipsum'},
+        {name: 'Fourth', description: 'Lorem Ipsum'}
       ],
       users: [],
       message: '',
-      messages: []
-
+      messages: [],
+      picked: [],
+      options: [],
+      onGoing: false,
+      isManager: true,
+      modal: {
+        stories: emptyStoriesModal,
+        votation: emptyVotationModal
+      },
+      open: false,
+      votation: false
     }
   },
 
@@ -176,6 +305,26 @@ export default {
       return {
         seconds: (this.now - this.start) % 60,
         minutes: Math.trunc((this.now - this.start) / 60) % 60
+      }
+    },
+
+    discussionTimePassed() {
+      if (this.discussionTimer !== 0) {
+        return {
+          seconds: (this.now - this.discussionTimer) % 60,
+          minutes: Math.trunc((this.now - this.discussionTimer) / 60) % 60
+        }
+      }
+    },
+
+    votationTimePassed() {
+      if (this.voteTimer !== 0) {
+        do {
+          return {
+            seconds: (this.voteTimer - this.now) % 60,
+            minutes: Math.trunc((this.voteTimer - this.now) / 60) % 60
+          }
+        } while (this.votationTimePassed.seconds > 0)
       }
     }
   },
@@ -208,6 +357,63 @@ export default {
     sendMessage() {
       this.channel.push('message', {body: this.message})
       this.message = ''
+    },
+
+    openStoriesModal() {
+      this.modal.stories.open = true
+      this.options = this.backlog
+    },
+
+    openVotationModal() {
+      this.modal.votation.open = true
+    },
+
+    currentStory(story, index) {
+      this.modal.stories = {
+        ...emptyStoriesModal,
+        currentPosition: index,
+        story
+      }
+    },
+
+    chooseStory() {
+      this.picked.push(this.modal.stories.story)
+      this.modal.stories.open = false
+      this.onGoing = true
+    },
+
+    undo() {
+      this.picked.shift()
+      this.modal.stories.open = true
+      this.onGoing = false
+    },
+
+    VotationTimer() {
+      var valid = /^\d*$/.test(this.modal.votation.time)
+
+      if (valid) {
+        this.voteTimer = (parseFloat(this.modal.votation.time) * 60) + Math.trunc((new Date()).getTime() / 1000)
+        this.modal.votation.open = false
+        this.modal.votation.time = null
+        this.votation = true
+      } else {
+        this.modal.votation.erro = true
+        this.modal.votation.time = null
+      }
+      console.log(this.votationTimePassed.seconds)
+    },
+
+    closeVotationModal() {
+      this.modal.votation = {
+        ...emptyVotationModal,
+        open: false,
+        erro: false,
+        time: null
+      }
+    },
+
+    startDicussionTimer() {
+      this.discussionTimer = Math.trunc((new Date()).getTime() / 1000)
     }
   },
 
@@ -242,6 +448,17 @@ $border-color: 1px solid rgba(0, 0, 0, .10)
 .title
   text-align: center
   margin: 10px 0 0
+
+.title1
+  text-align: center
+  margin: 0px 0 2px
+
+.votetitle
+  text-align: center
+  margin: 0px 0 2px
+
+.isvote
+  text-align: right
 
 .votes
   padding: 12px
