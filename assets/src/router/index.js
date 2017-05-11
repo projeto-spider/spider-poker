@@ -1,22 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
 import store from 'app/store'
-import {
-  AuthPanel, BaseLayout, GameLayout
-} from 'app/layouts'
-import views from '../views'
-
-const {
-  Auth,
-  Pages,
-  Users,
-  Organizations,
-  Projects,
-  Backlogs,
-  Game,
-  ErrorViews
-} = views
 
 Vue.use(Router)
 
@@ -27,70 +11,70 @@ export default new Router({
   routes: [
     {
       path: '/auth',
-      component: AuthPanel,
+      component: require('../layouts/auth-panel'),
       children: [
         {
           name: 'login',
           path: 'login',
-          component: Auth.Login,
+          component: require('../views/auth/login'),
           beforeEnter: requireLoggedOff()
         },
 
         {
           name: 'register',
           path: 'register',
-          component: Auth.Register,
+          component: require('../views/auth/register'),
           beforeEnter: requireLoggedOff()
         },
 
         {
           name: 'logout',
           path: 'logout',
-          component: Auth.Logout
+          component: require('../views/auth/logout')
         }
       ]
     },
 
     {
       path: '/game',
-      component: GameLayout,
+      component: require('../layouts/game'),
       children: [
         {
           name: 'board',
           path: '/',
-          component: Game.Board
+          component: require('../views/game/board')
         }
       ]
     },
 
     {
       path: '/',
-      component: BaseLayout,
+      component: require('../layouts/base'),
       children: [
         // Pages
         {
           path: '/',
           name: 'home',
-          component: Pages.Home
+          component: require('../views/pages/home')
         },
 
         // Users
         {
           name: 'userShow',
           path: '@:username',
-          component: Users.Show
+          component: require('../views/users/show')
         },
 
         {
           name: 'usersList',
           path: 'users',
-          component: Users.List
+          component: require('../views/users/list')
         },
 
         {
           name: 'userEdit',
           path: 'profile/edit',
-          component: Users.Edit,
+          component: require('../views/users/edit'),
           beforeEnter: requireAuth()
         },
 
@@ -98,59 +82,59 @@ export default new Router({
         {
           name: 'organizationCreate',
           path: 'organization/create',
-          component: Organizations.Create
+          component: require('../views/organizations/create')
         },
 
         {
           name: 'organizationShow',
           path: 'organization/:organization',
-          component: Organizations.Show
+          component: require('../views/organizations/show')
         },
 
         {
           name: 'organizationEdit',
           path: 'organization/:organization/edit',
-          component: Organizations.Edit
+          component: require('../views/organizations/edit')
         },
 
         {
           name: 'organizationsList',
           path: 'organizations',
-          component: Organizations.List
+          component: require('../views/organizations/list')
         },
 
         // Projects
         {
           name: 'projectCreate',
           path: 'organization/:organization/project/create',
-          component: Projects.Create,
+          component: require('../views/projects/create'),
           beforeEnter: requireAuth()
         },
 
         {
           name: 'projectShow',
           path: 'project/:project',
-          component: Projects.Show,
+          component: require('../views/projects/show'),
           beforeEnter: requireAuth()
         },
 
         {
           name: 'projectEdit',
           path: 'project/:project/edit',
-          component: Projects.Edit,
+          component: require('../views/projects/edit'),
           beforeEnter: requireAuth()
         },
 
         {
           name: 'projectsList',
           path: 'projects',
-          component: Projects.List
+          component: require('../views/projects/list')
         },
 
         {
           name: 'organizationProjectsList',
           path: 'organization/:organization/projects',
-          component: Projects.List
+          component: require('../views/projects/list')
         },
 
         // Backlogs
@@ -158,7 +142,7 @@ export default new Router({
         {
           name: 'backlogShow',
           path: 'project/:project/backlog',
-          component: Backlogs.Show
+          component: require('../views/backlog/show')
         },
 
         // Errors
@@ -166,13 +150,13 @@ export default new Router({
         {
           name: 'error404',
           path: 'errors/404',
-          component: ErrorViews.Error404
+          component: require('../views/errors/404')
         },
 
         {
           name: 'error403',
           path: 'errors/403',
-          component: ErrorViews.Error403
+          component: require('../views/errors/403')
         }
       ]
     },
@@ -180,7 +164,7 @@ export default new Router({
     {
       path: '*',
       name: 'fallback',
-      component: ErrorViews.Error404
+      component: require('../views/errors/404')
     }
   ]
 })
