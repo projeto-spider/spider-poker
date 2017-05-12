@@ -23,7 +23,7 @@ export default {
   },
 
   update(id, data) {
-    return request(http.put(`users/${id}/profile`, {data}))
+    return request(http.put(`users/${id}`, {data}))
   },
 
   delete(id) {
