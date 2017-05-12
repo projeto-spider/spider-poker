@@ -12,7 +12,7 @@ Vue.use(NProgress)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
-new Vue({
+const app = new Vue({
   el: '#content',
   router,
   store,
@@ -20,3 +20,7 @@ new Vue({
   template: '<App/>',
   components: { App }
 })
+
+if (process.env.NODE_ENV === 'development') {
+  window.App = app
+}
