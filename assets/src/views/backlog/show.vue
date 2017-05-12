@@ -159,7 +159,7 @@
 
 <script>
 import R from 'ramda'
-import {mapState} from 'vuex'
+import {mapGetters} from 'vuex'
 import Draggable from 'vuedraggable'
 import {HeroTitle, ErrorableInput} from 'app/components'
 import Story from './story'
@@ -223,9 +223,7 @@ export default {
       ))(this.backlog)
     },
 
-    ...mapState({
-      loggedinId: R.view(R.lensPath(['auth', 'user', 'id']))
-    })
+    ...mapGetters(['loggedUser'])
   },
 
   async created() {

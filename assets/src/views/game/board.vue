@@ -130,7 +130,7 @@
             <message
               :body="message.body"
               :user="player_db[message.user_id]"
-              :fromSelf="message.user_id === loggedinId"
+              :fromSelf="message.user_id === loggedUser.id"
             >
             </message>
           </div>
@@ -224,7 +224,7 @@
 <script>
 import R from 'ramda'
 import {Socket} from 'phoenix'
-import {mapState} from 'vuex'
+import {mapState, mapGetters} from 'vuex'
 import gravatar from 'gravatar'
 import Message from './message'
 
@@ -287,8 +287,9 @@ export default {
   },
 
   computed: {
+    ...mapGetters(['loggedUser']),
+
     ...mapState({
-      loggedinId: R.view(R.lensPath(['auth', 'user', 'id'])),
       token: R.view(R.lensPath(['auth', 'token']))
     }),
 

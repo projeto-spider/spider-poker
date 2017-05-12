@@ -88,20 +88,20 @@
 
             <article v-for="member in memberships" class="media">
               <router-link
-                :to="{name: 'userShow', params: {username: member.user.username}}"
+                :to="{name: 'UserShowView', params: {username: member.user.username}}"
               >
               </router-link>
 
               <div class="media-content">
                 <p>
                   <router-link
-                    :to="{name: 'userShow', params: {username: member.user.username}}"
+                    :to="{name: 'UserShowView', params: {username: member.user.username}}"
                   >
                     {{member.user.profile.name}}
                   </router-link>
                   <p>
                     <router-link
-                      :to="{name: 'userShow', params: {username: member.user.username}}"
+                      :to="{name: 'UserShowView', params: {username: member.user.username}}"
                       class="is-primary"
                     >
                       @{{member.user.username}}
@@ -110,7 +110,7 @@
                   </p>
                 </p>
               </div>
-              <p  v-if="member.user.id !== loggedinId" class="control has-addons has-addons-centered">
+              <p  v-if="member.user.id !== loggedUser.id" class="control has-addons has-addons-centered">
                 <button v-if="isManager" @click="removeMember(member.user.id)" class="button is-danger">
                   Delete
                 </button>
@@ -125,7 +125,7 @@
 
 <script>
 import R from 'ramda'
-import {mapState} from 'vuex'
+import {mapGetters} from 'vuex'
 import {HeroTitle} from 'app/components'
 import {Projects, Users} from 'app/api'
 
@@ -151,12 +151,10 @@ export default {
   },
 
   computed: {
-    ...mapState({
-      loggedinId: R.view(R.lensPath(['auth', 'user', 'id']))
-    }),
+    ...mapGetters(['loggedUser']),
 
     isManager() {
-      if (!this.loggedinId) {
+      if (!this.loggedUser.id) {
         return false
       }
 
@@ -165,7 +163,7 @@ export default {
       }
 
       return !!this.memberships
-        .filter(member => member.role === 'manager' && member.user.id === this.loggedinId)
+        .filter(member => member.role === 'manager' && member.user.id === this.loggedUser.id)
         .length
     },
 

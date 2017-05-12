@@ -32,7 +32,6 @@
 </template>
 
 <script>
-  import store from 'app/store'
   import {Organizations} from 'app/api'
   import {HeroTitle} from 'app/components'
 

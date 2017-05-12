@@ -27,7 +27,7 @@
             Projects
           </router-link>
 
-          <span v-if="!loggedin" class="nav-item">
+          <span v-if="!isAuthenticated" class="nav-item">
             <router-link
               :to="{name: 'login'}"
               class="button is-info is-inverted is-outlined"
@@ -39,7 +39,7 @@
             </router-link>
           </span>
 
-          <span v-if="!loggedin" class="nav-item">
+          <span v-if="!isAuthenticated" class="nav-item">
             <router-link
               :to="{name: 'register'}"
               class="button is-info is-inverted is-outlined"
@@ -51,9 +51,9 @@
             </router-link>
           </span>
 
-          <span v-if="loggedin" class="nav-item">
+          <span v-if="isAuthenticated" class="nav-item">
             <router-link
-              :to="{name: 'userShow', params: {username}}"
+              :to="{name: 'userShow', params: {loggedUser}}"
               class="button is-success"
             >
               <span class="icon is-small">
@@ -63,7 +63,7 @@
             </router-link>
           </span>
 
-          <span v-if="loggedin" class="nav-item">
+          <span v-if="isAuthenticated" class="nav-item">
             <router-link
               :to="{name: 'logout'}"
               class="button is-danger"
@@ -81,8 +81,7 @@
 </template>
 
 <script>
-  import R from 'ramda'
-  import {mapState} from 'vuex'
+  import {mapGetters} from 'vuex'
 
   export default {
     name: 'Navbar',
@@ -93,16 +92,10 @@
       }
     },
 
-    computed: {
-      ...mapState({
-        loggedin: R.pipe(
-          R.view(R.lensPath(['auth', 'user'])),
-          R.isNil,
-          R.not
-        ),
-        username: R.view(R.lensPath(['auth', 'user', 'username']))
-      })
-    },
+    computed: mapGetters([
+      'isAuthenticated',
+      'loggedUser'
+    ]),
 
     methods: {
       toggleNav() {

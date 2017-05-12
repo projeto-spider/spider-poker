@@ -81,7 +81,7 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
+  import {mapGetters} from 'vuex'
   import R from 'ramda'
   import gravatar from 'gravatar'
   import {Users, Organizations} from 'app/api'
@@ -119,12 +119,10 @@
     },
 
     computed: {
-      ...mapState({
-        loggedinId: R.view(R.lensPath(['auth', 'user', 'id']))
-      }),
+      ...mapGetters(['loggedUser']),
 
       currentUserIsSelf() {
-        return this.loggedinId === this.user.id
+        return this.loggedUser.id === this.user.id
       },
 
       userInfos() {

@@ -14,10 +14,20 @@ const mutations = {
   }
 }
 
+const getters = {
+  isAuthenticated (state) {
+    return !!state.user
+  },
+
+  loggedUser (state) {
+    return state.user
+  }
+}
+
 export default {
-  namespaced: 'true',
   state,
-  mutations
+  mutations,
+  getters
 }
 
 // Helpers

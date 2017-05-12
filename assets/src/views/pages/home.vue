@@ -56,7 +56,7 @@
           </paginate-links>
         </div>
 
-        <div v-if='loggedin' class="column is-one-third">
+        <div v-if='isAuthenticated' class="column is-one-third">
           <router-link
             :to="{name: 'organizationCreate'}"
             class="button is-primary is-outlined is-fullwidth"
@@ -108,7 +108,7 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
+  import {mapGetters} from 'vuex'
   import gravatar from 'gravatar'
   import Vue from 'vue'
   import {HeroTitle} from 'app/components'
@@ -160,9 +160,7 @@
     },
 
     computed: {
-      ...mapState({
-        loggedin: state => state.auth.user !== null
-      }),
+      ...mapGetters(['isAuthenticated']),
 
       items() {
         const currentTab = this.currentTab

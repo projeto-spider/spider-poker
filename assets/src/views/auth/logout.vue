@@ -14,8 +14,8 @@
     name: 'LogoutView',
 
     created() {
-      store.commit('auth/set_token', '')
-      store.commit('auth/set_user', null)
+      store.commit('set_token', '')
+      store.commit('set_user', null)
       this.$router.push({name: 'home'})
     }
   }

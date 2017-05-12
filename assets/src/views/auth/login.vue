@@ -81,9 +81,9 @@
         try {
           const res = await Auth.signin(this.username, this.password)
 
-          store.commit('auth/set_token', res.data.token)
+          store.commit('set_token', res.data.token)
           const userRes = await Auth.me()
-          this.$store.commit('auth/set_user', userRes.data)
+          this.$store.commit('set_user', userRes.data)
 
           this.status = 'success'
           this.$router.push({name: 'home'})

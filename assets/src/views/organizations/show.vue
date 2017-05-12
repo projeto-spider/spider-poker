@@ -111,20 +111,20 @@
 
             <article v-for="member in memberships" class="media">
               <router-link
-                :to="{name: 'userShow', params: {username: member.user.username}}"
+                :to="{name: 'UserShowView', params: {username: member.user.username}}"
               >
               </router-link>
 
               <div class="media-content">
                 <p>
                   <router-link
-                    :to="{name: 'userShow', params: {username: member.user.username}}"
+                    :to="{name: 'UserShowView', params: {username: member.user.username}}"
                   >
                     {{member.user.name}}
                   </router-link>
                   <p>
                     <router-link
-                      :to="{name: 'userShow', params: {username: member.user.username}}"
+                      :to="{name: 'UserShowView', params: {username: member.user.username}}"
                       class="is-primary"
                     >
                       @{{member.user.username}}
@@ -133,7 +133,7 @@
                   </p>
                 </p>
               </div>
-              <p  v-if="member.user.id !== loggedinId" class="control has-addons has-addons-centered">
+              <p  v-if="member.user.id !== loggedUser.id" class="control has-addons has-addons-centered">
                 <button v-if="isAdmin" @click="removeMember(member.user.id)" class="button is-danger">
                   Delete
                 </button>
@@ -147,7 +147,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import {mapGetters} from 'vuex'
 import R from 'ramda'
 import {HeroTitle} from 'app/components'
 import {Organizations, Users} from 'app/api'
@@ -174,12 +174,10 @@ export default {
   },
 
   computed: {
-    ...mapState({
-      loggedinId: R.view(R.lensPath(['auth', 'user', 'id']))
-    }),
+    ...mapGetters(['loggedUser']),
 
     isAdmin() {
-      if (!this.loggedinId) {
+      if (!this.loggedUser.id) {
         return false
       }
 
@@ -188,12 +186,12 @@ export default {
       }
 
       return !!this.memberships
-        .filter(member => member.role === 'admin' && member.user.id === this.loggedinId)
+        .filter(member => member.role === 'admin' && member.user.id === this.loggedUser.id)
         .length
     },
 
     isMember() {
-      if (!this.loggedinId) {
+      if (!this.loggedUser.id) {
         return false
       }
 
@@ -202,7 +200,7 @@ export default {
       }
 
       return !!this.memberships
-        .filter(member => member.user.id === this.loggedinId)
+        .filter(member => member.user.id === this.loggedUser.id)
         .length
     }
   },
