@@ -10,10 +10,10 @@
 
 <style lang="sass">
 @import '~font-awesome/css/font-awesome.css'
-//$primary: #00346F // blue
-$primary: #88C139 // green
+@import '../layouts/variables.sass'
 @import '~bulma/bulma'
 @import '~nprogress/nprogress.css'
+@import '../layouts/generic.sass'
 
 main > .container
   padding: 10px 0
