@@ -53,7 +53,7 @@
 
           <span v-if="isAuthenticated" class="nav-item">
             <router-link
-              :to="{name: 'userShow', params: {loggedUser}}"
+              :to="{name: 'userShow', params: {username: loggedUser.username}}"
               class="button is-success"
             >
               <span class="icon is-small">
