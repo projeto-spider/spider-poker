@@ -151,7 +151,7 @@
 
           this.status = 'success'
 
-          store.commit('auth/set_user', {
+          store.commit('set_user', {
             ...this.user,
             user
           })
@@ -170,8 +170,8 @@
 
           await Users.delete(id)
 
-          store.commit('auth/set_token', '')
-          store.commit('auth/set_user', null)
+          store.commit('set_token', '')
+          store.commit('set_user', null)
           this.$router.push({name: 'home'})
         }
       }
