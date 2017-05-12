@@ -15,7 +15,7 @@
       <div class="columns">
         <div class="column is-one-quarter">
           <div class="image">
-            <gravatar :email="user.email" :size="512" circle="false"></gravatar>
+            <gravatar :email="user.email" :size="512"></gravatar>
           </div>
         </div>
 
