@@ -9,7 +9,7 @@ charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
 
-[*.{js,json,vue,babelrc,ex,exs,eex}]
+[*.{js,json,vue,babelrc,ex,exs,eex,sass}]
 indent_size = 2
 indent_style = space
 
