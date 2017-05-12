@@ -25,7 +25,7 @@
           <article v-for="user in users" class="media">
             <figure class="media-left">
               <p class="image is-48x48">
-                <img :src="gravatar(user.email)">
+                <gravatar :email="user.email"></gravatar>
               </p>
             </figure>
             <div class="media-content">
@@ -225,7 +225,7 @@
 import R from 'ramda'
 import {Socket} from 'phoenix'
 import {mapState, mapGetters} from 'vuex'
-import gravatar from 'gravatar'
+import {Gravatar} from 'app/components'
 import Message from './message'
 
 const emptyStoriesModal = {
@@ -243,7 +243,7 @@ const emptyVotationModal = {
 export default {
   name: 'BoardView',
 
-  components: {Message},
+  components: {Message, Gravatar},
 
   data: () => {
     const time = Math.trunc((new Date()).getTime() / 1000)
@@ -333,10 +333,6 @@ export default {
 
     setSidebarTab(id) {
       this.sidebarTab = id
-    },
-
-    gravatar(email) {
-      return gravatar.url(email, {size: 512})
     },
 
     select(card) {

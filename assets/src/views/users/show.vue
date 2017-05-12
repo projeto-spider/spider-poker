@@ -16,7 +16,7 @@
       <div class="columns">
         <div class="column is-one-quarter">
           <div class="image">
-            <img :src="gravatar(user.email)" alt="Avatar"/>
+            <gravatar :email="user.email" :size="512" cicle="false"></gravatar>
           </div>
 
           <p v-if="user.bio">{{user.bio}}</p>
@@ -83,14 +83,13 @@
 <script>
   import {mapGetters} from 'vuex'
   import R from 'ramda'
-  import gravatar from 'gravatar'
   import {Users, Organizations} from 'app/api'
-  import {HeroTitle} from 'app/components'
+  import {HeroTitle, Gravatar} from 'app/components'
 
   export default {
     name: 'UserShowView',
 
-    components: {HeroTitle},
+    components: {HeroTitle, Gravatar},
 
     data() {
       return {
@@ -109,12 +108,6 @@
           email: {'fa-envelope': true},
           url: {'fa-globe': true}
         }
-      }
-    },
-
-    methods: {
-      gravatar(email) {
-        return gravatar.url(email, {size: 512})
       }
     },
 

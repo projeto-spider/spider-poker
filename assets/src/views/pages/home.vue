@@ -18,7 +18,7 @@
               >
                 <figure class="media-left">
                   <p class="image is-64x64">
-                    <img :src="gravatar(user.email)">
+                    <gravatar :email="user.email"></gravatar>
                   </p>
                 </figure>
               </router-link>
@@ -109,9 +109,8 @@
 
 <script>
   import {mapGetters} from 'vuex'
-  import gravatar from 'gravatar'
   import Vue from 'vue'
-  import {HeroTitle} from 'app/components'
+  import {HeroTitle, Gravatar} from 'app/components'
   import {Users} from 'app/api'
 
   var VuePaginate = require('vue-paginate')
@@ -137,7 +136,7 @@
   export default {
     name: 'HomeView',
 
-    components: {HeroTitle},
+    components: {HeroTitle, Gravatar},
 
     data() {
       return {
@@ -175,8 +174,6 @@
     },
 
     methods: {
-      gravatar: gravatar.url,
-
       changeTab(index) {
         this.currentTab = index
       }

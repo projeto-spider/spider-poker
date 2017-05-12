@@ -15,7 +15,7 @@
       <div class="columns">
         <div class="column is-one-quarter">
           <div class="image">
-            <img :src="gravatar(user.email)" alt="Avatar"/>
+            <gravatar :email="user.email" :size="512" circle="false"></gravatar>
           </div>
         </div>
 
@@ -93,11 +93,10 @@
 <script>
   import {mapState} from 'vuex'
   import R from 'ramda'
-  import gravatar from 'gravatar'
   import store from 'app/store'
   import {Users} from 'app/api'
   import {insertChangesetErrors} from 'app/utils'
-  import {HeroTitle, ErrorableInput} from 'app/components'
+  import {HeroTitle, ErrorableInput, Gravatar} from 'app/components'
 
   const emptyErrors = {
     bio: [],
@@ -112,7 +111,7 @@
   export default {
     name: 'UserEditView',
 
-    components: {HeroTitle, ErrorableInput},
+    components: {HeroTitle, ErrorableInput, Gravatar},
 
     data() {
       return {
@@ -132,10 +131,6 @@
     },
 
     methods: {
-      gravatar(email) {
-        return gravatar.url(email, {size: 512})
-      },
-
       async submit() {
         if (this.status === 'loading') {
           return
