@@ -60,6 +60,10 @@ alphanum-sort@^1.0.1, alphanum-sort@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
 
+animate.css@^3.5.2:
+  version "3.5.2"
+  resolved "https://registry.yarnpkg.com/animate.css/-/animate.css-3.5.2.tgz#91e668dc069a808e5e499514867b97aae0166c36"
+
 ansi-escapes@^1.1.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/ansi-escapes/-/ansi-escapes-1.4.0.tgz#d3a8a83b319aa67793662b13e761c7911422306e"
@@ -937,9 +941,9 @@ builtin-status-codes@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
 
-bulma@^0.3.1:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/bulma/-/bulma-0.3.2.tgz#2c1fa6adaf2a31f47a142c11856f2db27bc638c9"
+bulma@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/bulma/-/bulma-0.4.1.tgz#620b7986bc552311358aa9393c10905c55648864"
 
 caller-path@^0.1.0:
   version "0.1.0"
@@ -3160,7 +3164,7 @@ node-pre-gyp@^0.6.29:
     tar "^2.2.1"
     tar-pack "^3.4.0"
 
-node-sass@^4.4.0:
+node-sass@^4.5.2:
   version "4.5.2"
   resolved "https://registry.yarnpkg.com/node-sass/-/node-sass-4.5.2.tgz#4012fa2bd129b1d6365117e88d9da0500d99da64"
   dependencies:
@@ -4661,6 +4665,10 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
+vue-animate@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/vue-animate/-/vue-animate-0.0.4.tgz#bf7afcdfec4694e4d19147a75f6761ecf3735f8f"
+
 vue-hot-reload-api@^2.0.11:
   version "2.0.11"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.0.11.tgz#bf26374fb73366ce03f799e65ef5dfd0e28a1568"
@@ -4681,6 +4689,12 @@ vue-loader@^11.1.4:
     vue-hot-reload-api "^2.0.11"
     vue-style-loader "^2.0.0"
     vue-template-es2015-compiler "^1.2.2"
+
+vue-my-dropdown@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/vue-my-dropdown/-/vue-my-dropdown-2.0.4.tgz#0a2b6e8b957261459e1ba3e321c480362f1eb9f8"
+  dependencies:
+    vue "^2.1.10"
 
 vue-nprogress@^0.1.5:
   version "0.1.5"
@@ -4726,7 +4740,7 @@ vue-validator@^3.0.0-alpha.1:
   version "3.0.0-alpha.2"
   resolved "https://registry.yarnpkg.com/vue-validator/-/vue-validator-3.0.0-alpha.2.tgz#ffdb797bbe5efdfc8c3050f981983ea0db70dc1c"
 
-vue@^2.0.5, vue@^2.1.6:
+vue@^2.0.5, vue@^2.1.10, vue@^2.1.6:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.2.6.tgz#451714b394dd6d4eae7b773c40c2034a59621aed"
 
