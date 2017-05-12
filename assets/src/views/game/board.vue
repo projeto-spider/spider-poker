@@ -25,7 +25,7 @@
           <article v-for="user in users" class="media">
             <figure class="media-left">
               <p class="image is-48x48">
-                <gravatar :email="user.email"></gravatar>
+                <gravatar :email="user.email" :size="48"></gravatar>
               </p>
             </figure>
             <div class="media-content">

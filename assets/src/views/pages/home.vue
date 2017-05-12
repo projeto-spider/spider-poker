@@ -18,7 +18,7 @@
               >
                 <figure class="media-left">
                   <p class="image is-64x64">
-                    <gravatar :email="user.email"></gravatar>
+                    <gravatar :email="user.email" :size="64"></gravatar>
                   </p>
                 </figure>
               </router-link>
