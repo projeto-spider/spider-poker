@@ -24,3 +24,5 @@ const app = new Vue({
 if (process.env.NODE_ENV === 'development') {
   window.App = app
 }
+
+window.addEventListener('resize', () => app.$store.commit('updateScreenSize'))
