@@ -15,7 +15,7 @@ import {
 } from 'app/components'
 
 export default {
-  name: 'Base Layout',
+  name: 'BaseLayout',
 
   components: {AppAside, Navbar, 'footer-component': Footer}
 }
