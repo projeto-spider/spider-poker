@@ -1,20 +1,24 @@
 <template>
-  <div>
-    <navbar/>
-    <router-view/>
-    <footer-component/>
+  <div class="app-container">
+    <app-aside></app-aside>
+    <div class="app-content">
+      <navbar></navbar>
+      <router-view/>
+      <footer-component/>
+    </div>
   </div>
 </template>
 
 <script>
-  import {
-    Navbar,
-    Footer
-  } from 'app/components'
+import {
+  AppAside, Navbar, Footer
+} from 'app/components'
 
-  export default {
-    name: 'BaseLayout',
+export default {
+  name: 'Base Layout',
 
-    components: {Navbar, 'footer-component': Footer}
-  }
+  components: {AppAside, Navbar, 'footer-component': Footer}
+}
 </script>
+
+<style lang="sass" src="./base.sass"></style>

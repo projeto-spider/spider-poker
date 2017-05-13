@@ -1,0 +1,91 @@
+@import '../layouts/variables.sass'
+@import '~bulma/sass/utilities/mixins.sass'
+
+$bg: #101823
+
+.app-aside
+  position: fixed
+  top: 0
+  left: 0
+  z-index: 20
+  height: 100%
+
+  @include until($desktop)
+    &.is-open
+      background-color: rgba($black, .5)
+      width: 100%
+
+  @include from($desktop)
+    width: 200px
+
+  > div
+    height: 100%
+    display: flex
+    flex-direction: column
+    overflow: hidden
+    width: 200px
+    background-color: $bg
+    color: rgba(225,235,245,.87)
+    animation-duration: .3s
+
+.app-aside-header
+  background-color: $blue
+  color: #fff
+  font-size: 18px
+  min-height: 56px
+  padding: $size-6
+
+  &:hover
+    color: #fff
+
+.app-aside-body
+  overflow-y: auto
+  flex: 1 0 0
+
+.app-aside-separator
+  padding: $size-7
+  font-size: $size-7
+  color: $grey
+
+.app-aside-menu
+  font-size: $size-7
+
+  li
+    a
+      height: 38px
+      display: flex
+      align-items: center
+      padding: 0 $size-5
+      height: 38px
+      color: $grey-light
+      transition: background-color .2s $easing
+
+    &.is-active a, &:hover a
+      background-color: $grey-darker
+
+    i
+      display: inline-block
+      padding: 3px 5px
+      margin-right: 1rem
+      padding: 3px
+      font-size: 14px
+
+.app-aside-footer
+  cursor: pointer
+  height: 60px
+  display: flex
+  align-items: center
+  padding: 0 $size-7
+  background-color: $grey-darker
+  font-size: $size-7
+
+  img
+    height: 40px
+    width: 40px
+
+  i
+    font-size: $size-7
+    padding: 3px
+
+  > div
+    flex: 1 0 0
