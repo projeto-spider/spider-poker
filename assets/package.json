@@ -5,7 +5,7 @@
   "author": "lubien <lubien1996@gmail.com>",
   "private": true,
   "scripts": {
-    "watch": "webpack --config build/webpack.dev.conf --watch-stdin",
+    "watch": "webpack --config build/webpack.dev.conf --watch-stdin --color",
     "build": "node build/build.js",
     "lint": "eslint --ext .js,.vue src"
   },
