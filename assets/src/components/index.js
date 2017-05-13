@@ -1,5 +1,5 @@
 export {default as App} from './app'
-export {default as Navbar} from './navbar'
+export {default as Navbar} from './navbar.vue'
 export {default as Footer} from './footer'
 export {default as HeroTitle} from './hero-title'
 export {default as ErrorableInput} from './errorable-input.vue'
