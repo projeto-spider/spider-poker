@@ -4,8 +4,7 @@ const commit = (...args) => context => context.commit(...args)
 
 export const state = {
   screenWidth: window.innerWidth,
-  // TODO: make it false
-  sidebarOpen: !true
+  sidebarOpen: false
 }
 
 export const mutations = {
