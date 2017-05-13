@@ -3,7 +3,7 @@
     <transition :name="transition">
       <div v-if="open" v-on-clickaway="toggle">
         <router-link :to="{name: 'home'}" class="app-aside-header">
-          <span><b>Planning</b>Poker</span>
+          <span @click="toggle"><b>Planning</b>Poker</span>
         </router-link>
 
         <div class="app-aside-body">
