@@ -39,6 +39,3 @@ export const request = httpRequest =>
   httpRequest
     .then(resolveAsJson)
     .catch(resolveErrorAsJson)
-
-export const gravatarUrl = email =>
-  gravatar.url(email, {size: 512})
