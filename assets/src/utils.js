@@ -3,6 +3,11 @@ import objectKeysToCase from 'object-keys-to-case'
 import camelCase from 'camel-case'
 import snakeCase from 'snake-case'
 
+export const TABLET_WIDTH = 769
+export const DESKTOP_WIDTH = 1000
+export const WIDESCREEN_WIDTH = 1192
+export const FULLHD_WIDTH = 1384
+
 export const casefy = fn => data => {
   if (Array.isArray(data)) {
     return data.map(obj => objectKeysToCase(obj, fn))
