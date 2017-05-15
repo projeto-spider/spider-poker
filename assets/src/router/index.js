@@ -2,8 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from 'app/store'
 
-const layout = name => require(`../layouts/${name}`)
-const view = name => require(`../views/${name}`)
+const layout = name => require(`../layouts/${name}.vue`)
+const view = name => require(`../views/${name}.vue`)
 
 Vue.use(Router)
 

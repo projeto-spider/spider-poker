@@ -43,24 +43,4 @@
   }
 </script>
 
-<style lang="sass">
-.title-box
-  color: black
-  margin-top: 20px
-  padding: 230px 0 230px 240px
-
-.title
-  font-size: 50px
-
-.notification
-  font-size: 30px
-  border-radius: 280px;
-  margin-left: 240px
-  width: 80px;
-  padding-left: 20px
-
-.text-box
-  color: black
-  margin-top: 20px
-  padding: 230px 0 230px 0
-</style>
+<style lang="sass" src="./404.sass"></style>

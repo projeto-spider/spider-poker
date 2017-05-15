@@ -34,35 +34,4 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.media-message
-  margin-top: 0
-  margin-bottom: 5px
-
-  &.media + .media
-    border-top: 0
-
-  .media-left img
-    border-radius: 50%
-
-  .media-content
-    background-color: #00B1FF
-    padding: 3px 10px
-    border-radius: 5px
-
-    .content, strong
-      color: #fff
-
-  &.is-from-self
-    flex-direction: row-reverse
-
-    .media-left
-      margin-right: 0
-
-    .media-content
-      margin-right: 10px
-      background-color: #EAEFF3
-
-      .content, strong
-        color: #000
-</style>
+<style lang="sass" src="./message.sass" scoped></style>

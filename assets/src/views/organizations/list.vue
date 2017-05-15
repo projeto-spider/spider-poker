@@ -31,32 +31,7 @@
   </main>
 </template>
 
-<script>
-  import {Organizations} from 'app/api'
-  import {HeroTitle} from 'app/components'
-
-  export default {
-    name: 'OrganizationsList',
-
-    components: {HeroTitle},
-
-    created() {
-      Organizations.all()
-        .then(res => {
-          this.organizations = res.data
-        })
-    },
-
-    data() {
-      return {
-        organizations: []
-      }
-    },
-
-    methods: {
-    }
-  }
-</script>
+<script src="./list.js"></script>
 
 <style lang="sass" scoped>
   .is-spider
