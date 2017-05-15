@@ -1,7 +1,7 @@
 import R from 'ramda'
 import {mapGetters} from 'vuex'
 import Draggable from 'vuedraggable'
-import {HeroTitle, ErrorableInput} from 'app/components'
+import {HeroTitle, FormControl} from 'app/components'
 import Story from './story'
 import {Stories, Projects} from 'app/api'
 
@@ -33,7 +33,7 @@ const emptyMoveModal = {
 export default {
   name: 'BacklogShowView',
 
-  components: {Draggable, HeroTitle, ErrorableInput, Story},
+  components: {Draggable, HeroTitle, FormControl, Story},
 
   data() {
     return {

@@ -3,7 +3,7 @@ import R from 'ramda'
 import store from 'app/store'
 import {Users} from 'app/api'
 import {insertChangesetErrors} from 'app/utils'
-import {HeroTitle, ErrorableInput, Gravatar} from 'app/components'
+import {HeroTitle, FormControl, Gravatar} from 'app/components'
 
 const emptyErrors = {
   bio: [],
@@ -18,7 +18,7 @@ const userIdView = R.view(R.lensPath(['user', 'id']))
 export default {
   name: 'UserEditView',
 
-  components: {HeroTitle, ErrorableInput, Gravatar},
+  components: {HeroTitle, FormControl, Gravatar},
 
   data() {
     return {

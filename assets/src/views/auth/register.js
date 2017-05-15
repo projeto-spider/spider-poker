@@ -1,6 +1,6 @@
 import R from 'ramda'
 import {Users} from 'app/api'
-import {ErrorableInput} from 'app/components'
+import {FormControl} from 'app/components'
 import {insertChangesetErrors} from 'app/utils'
 
 const emptyErrors = {
@@ -13,7 +13,7 @@ const emptyErrors = {
 export default {
   name: 'RegisterView',
 
-  components: {ErrorableInput},
+  components: {FormControl},
 
   data() {
     return {

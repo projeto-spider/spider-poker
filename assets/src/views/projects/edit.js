@@ -1,7 +1,7 @@
 import R from 'ramda'
 import {Projects} from 'app/api'
 import {insertChangesetErrors} from 'app/utils'
-import {HeroTitle, ErrorableInput} from 'app/components'
+import {HeroTitle, FormControl} from 'app/components'
 
 const emptyErrors = {
   displayName: [],
@@ -15,7 +15,7 @@ export default {
   name: 'ProjectEditView',
 
   components: {
-    HeroTitle, ErrorableInput
+    HeroTitle, FormControl
   },
 
   data() {

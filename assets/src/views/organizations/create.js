@@ -1,6 +1,6 @@
 import R from 'ramda'
 import {Organizations} from 'app/api'
-import {HeroTitle, ErrorableInput} from 'app/components'
+import {HeroTitle, FormControl} from 'app/components'
 import {insertChangesetErrors} from 'app/utils'
 
 const emptyErrors = {
@@ -16,7 +16,7 @@ export default {
   name: 'OrganizationsCreateView',
 
   components: {
-    HeroTitle, ErrorableInput
+    HeroTitle, FormControl
   },
 
   data() {

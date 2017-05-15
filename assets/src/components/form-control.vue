@@ -50,4 +50,4 @@
   </div>
 </template>
 
-<script src="./errorable-input.js"></script>
+<script src="./form-control.js"></script>

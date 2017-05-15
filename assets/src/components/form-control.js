@@ -1,5 +1,5 @@
 export default {
-  name: 'ErrorableInput',
+  name: 'FormControl',
 
   props: {
     type: {

@@ -1,12 +1,12 @@
 import R from 'ramda'
 import {Auth} from 'app/api'
 import store from 'app/store'
-import {ErrorableInput} from 'app/components'
+import {FormControl} from 'app/components'
 
 export default {
   name: 'LoginView',
 
-  components: {ErrorableInput},
+  components: {FormControl},
 
   data() {
     return {
