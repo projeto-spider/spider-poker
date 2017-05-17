@@ -15,14 +15,14 @@
       @submit.prevent="submit"
       @keyup.13="submit"
     >
-      <errorable-input
+      <form-control
         v-model="username"
         :errors="[]"
         icon="user"
         placeholder="Username"
       />
 
-      <errorable-input
+      <form-control
         v-model="password"
         :errors="[]"
         icon="lock"

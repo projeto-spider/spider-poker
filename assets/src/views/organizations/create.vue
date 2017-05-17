@@ -27,21 +27,21 @@
             @keyup.13="submit"
           >
 
-            <errorable-input
+            <form-control
               v-model="name"
               :errors="errors.name"
               icon="building-o"
               placeholder="Organization name"
             />
 
-            <errorable-input
+            <form-control
               v-model="displayName"
               :errors="errors.displayName"
               icon="briefcase"
               placeholder="Display name"
             />
 
-            <errorable-input
+            <form-control
               v-model="description"
               type="textarea"
               :errors="errors.description"
@@ -49,14 +49,14 @@
               placeholder="Description"
             />
 
-            <errorable-input
+            <form-control
               v-model="location"
               :errors="errors.location"
               icon="map-marker"
               placeholder="Location"
             />
 
-           <errorable-input
+           <form-control
               v-model="url"
               :errors="errors.url"
               icon="link"

@@ -104,14 +104,14 @@
               >
                 <section class="modal-card-body">
                   <div class="container">
-                    <errorable-input
+                    <form-control
                       v-model="modal.editor.name"
                       :errors="modal.editor.errors.name"
                       icon="bars"
                       placeholder="Story name"
                     />
 
-                    <errorable-input
+                    <form-control
                       v-model="modal.editor.description"
                       type="textarea"
                       :errors="modal.editor.errors.description"

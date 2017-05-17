@@ -15,7 +15,7 @@
       @submit.prevent="submit"
       @keyup.13="submit"
     >
-      <errorable-input
+      <form-control
         v-model="username"
         :errors="errors.username"
         icon="user"
@@ -23,7 +23,7 @@
         type="text"
       />
 
-      <errorable-input
+      <form-control
         v-model="email"
         :errors="errors.email"
         icon="envelope"
@@ -31,7 +31,7 @@
         type="email"
       />
 
-      <errorable-input
+      <form-control
         v-model="password"
         :errors="errors.password"
         icon="lock"
@@ -39,7 +39,7 @@
         type="password"
       />
 
-      <errorable-input
+      <form-control
         v-model="password_confirmation"
         :errors="errors.password_confirmation"
         icon="lock"

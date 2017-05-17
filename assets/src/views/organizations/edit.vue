@@ -16,14 +16,14 @@
         @submit.prevent="submit"
         @keyup.13="submit"
       >
-        <errorable-input
+        <form-control
           v-model="organization.displayName"
           :errors="errors.displayName"
           icon="briefcase"
           placeholder="Display name"
         />
 
-        <errorable-input
+        <form-control
           v-model="organization.description"
           :errors="errors.description"
           type="textarea"
@@ -31,14 +31,14 @@
           placeholder="Description"
         />
 
-        <errorable-input
+        <form-control
           v-model="organization.location"
           :errors="errors.location"
           icon="map-marker"
           placeholder="Location"
         />
 
-        <errorable-input
+        <form-control
           v-model="organization.url"
           :errors="errors.url"
           icon="link"
