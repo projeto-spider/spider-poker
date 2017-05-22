@@ -1,14 +1,16 @@
 import {mapGetters, mapActions} from 'vuex'
 import {mixin as clickaway} from 'vue-clickaway'
 import {Gravatar, Dropdown, LoggedUserDropdown} from 'app/components'
+import Sidebar from './sidebar.vue'
 import {DESKTOP_WIDTH} from 'app/utils'
+console.log(Sidebar)
 
 export default {
-  name: 'Sidebar',
+  name: 'AppSidebar',
 
   mixins: [clickaway],
 
-  components: {Gravatar, Dropdown, LoggedUserDropdown},
+  components: {Sidebar, Gravatar, Dropdown, LoggedUserDropdown},
 
   computed: {
     ...mapGetters(['screenWidth', 'sidebarOpen', 'isAuthenticated', 'loggedUser']),

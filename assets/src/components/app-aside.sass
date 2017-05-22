@@ -4,29 +4,13 @@
 $bg: #101823
 
 .app-aside
-  position: fixed
-  top: 0
-  left: 0
-  z-index: 20
+  display: flex
+  flex-direction: column
   height: 100%
-
-  @include until($desktop)
-    &.is-open
-      background-color: rgba($black, .5)
-      width: 100%
-
-  @include from($desktop)
-    width: 200px
-
-  > div
-    height: 100%
-    display: flex
-    flex-direction: column
-    overflow: hidden
-    width: 200px
-    background-color: $bg
-    color: rgba(225,235,245,.87)
-    animation-duration: .3s
+  width: 200px
+  background-color: $bg
+  color: rgba(225,235,245,.87)
+  animation-duration: .3s
 
 .app-aside-header
   background-color: $blue
