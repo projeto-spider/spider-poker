@@ -3,10 +3,9 @@
     <div class="hero-head">
       <nav class="nav">
         <a
-          v-if="isAtLeastDesktop"
           @click.prevent="toggleSidebar"
           href="#"
-          class="nav-sidebar-toggle"
+          class="nav-sidebar-toggle is-hidden-desktop"
         >
           <i class="fa fa-indent"></i>
         </a>

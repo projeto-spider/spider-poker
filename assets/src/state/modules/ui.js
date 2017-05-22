@@ -3,15 +3,10 @@ import {prop} from 'ramda'
 const commit = (...args) => context => context.commit(...args)
 
 export const state = {
-  screenWidth: window.innerWidth,
   sidebarOpen: false
 }
 
 export const mutations = {
-  updateScreenSize(state) {
-    state.screenWidth = window.innerWidth
-  },
-
   toggleSidebar(state) {
     state.sidebarOpen = !state.sidebarOpen
   },
@@ -28,6 +23,5 @@ export const actions = {
 }
 
 export const getters = {
-  sidebarOpen: prop('sidebarOpen'),
-  screenWidth: prop('screenWidth')
+  sidebarOpen: prop('sidebarOpen')
 }

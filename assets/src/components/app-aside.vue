@@ -2,14 +2,14 @@
   <sidebar :open="sidebarOpen" :clickAway="toggleSidebar" :fullHeight="true">
     <div class="app-aside">
       <router-link :to="{name: 'home'}" class="app-aside-header">
-        <span @click="toggle"><b>Planning</b>Poker</span>
+        <span @click="toggleSidebar"><b>Planning</b>Poker</span>
       </router-link>
 
       <div class="app-aside-body">
         <nav class="app-aside-nav">
           <div class="app-aside-separator">Main</div>
 
-          <ul @click="toggle" class="app-aside-menu">
+          <ul @click="toggleSidebar" class="app-aside-menu">
             <router-link :to="{name: 'home'}" tag="li" exact>
               <a href="#">
                 <i class="fa fa-tachometer"></i>

@@ -4,7 +4,6 @@ import {mapGetters, mapActions} from 'vuex'
 import Gravatar from './gravatar.vue'
 import Dropdown from './dropdown.vue'
 import LoggedUserDropdown from './logged-user-dropdown.vue'
-import {DESKTOP_WIDTH} from 'app/utils'
 
 export default {
   name: 'Navbar',
@@ -12,11 +11,7 @@ export default {
   components: {Gravatar, Dropdown, LoggedUserDropdown},
 
   computed: {
-    ...mapGetters(['screenWidth', 'isAuthenticated', 'loggedUser']),
-
-    isAtLeastDesktop() {
-      return this.screenWidth < DESKTOP_WIDTH
-    }
+    ...mapGetters(['isAuthenticated', 'loggedUser'])
   },
 
   methods: {...mapActions(['toggleSidebar'])}
