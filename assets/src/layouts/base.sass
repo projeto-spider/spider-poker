@@ -1,6 +1,18 @@
 @import '../layouts/variables.sass'
 @import '~bulma/sass/utilities/mixins.sass'
 
+.app-container
+  display: flex
+  height: 100%
+  overflow: hidden
+
 .app-content
-  @include from($desktop)
-    margin-left: 200px
+  flex: 1 0 0
+  overflow-x: hidden
+  overflow-y: auto
+
+  // @include from($desktop)
+  //   margin-left: 200px
+
+  main
+    min-height: 2000px

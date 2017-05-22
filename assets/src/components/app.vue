@@ -16,6 +16,9 @@
 @import '~vue2-animate/dist/vue2-animate.min.css'
 @import '../layouts/generic.sass'
 
+html, body
+  overflow: hidden
+
 main > .container
   padding: 10px 0
 
