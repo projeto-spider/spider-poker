@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import store from 'app/store'
 
 const layout = name => require(`../layouts/${name}.vue`)
-const view = name => require(`../views/${name}.vue`)
+const page = name => require(`../pages/${name}.vue`)
 
 Vue.use(Router)
 
@@ -19,21 +19,21 @@ export default new Router({
         {
           name: 'login',
           path: 'login',
-          component: view('auth/login'),
+          component: page('auth/login'),
           beforeEnter: requireLoggedOff()
         },
 
         {
           name: 'register',
           path: 'register',
-          component: view('auth/register'),
+          component: page('auth/register'),
           beforeEnter: requireLoggedOff()
         },
 
         {
           name: 'logout',
           path: 'logout',
-          component: view('auth/logout')
+          component: page('auth/logout')
         }
       ]
     },
@@ -45,7 +45,7 @@ export default new Router({
         {
           name: 'board',
           path: '/',
-          component: view('game/board')
+          component: page('game/board')
         }
       ]
     },
@@ -58,26 +58,26 @@ export default new Router({
         {
           path: '/',
           name: 'home',
-          component: view('pages/home')
+          component: page('pages/home')
         },
 
         // Users
         {
           name: 'userShow',
           path: '@:username',
-          component: view('users/show')
+          component: page('users/show')
         },
 
         {
           name: 'usersList',
           path: 'users',
-          component: view('users/list')
+          component: page('users/list')
         },
 
         {
           name: 'userEdit',
           path: 'profile/edit',
-          component: view('users/edit'),
+          component: page('users/edit'),
           beforeEnter: requireAuth()
         },
 
@@ -85,59 +85,59 @@ export default new Router({
         {
           name: 'organizationCreate',
           path: 'organization/create',
-          component: view('organizations/create')
+          component: page('organizations/create')
         },
 
         {
           name: 'organizationShow',
           path: 'organization/:organization',
-          component: view('organizations/show')
+          component: page('organizations/show')
         },
 
         {
           name: 'organizationEdit',
           path: 'organization/:organization/edit',
-          component: view('organizations/edit')
+          component: page('organizations/edit')
         },
 
         {
           name: 'organizationsList',
           path: 'organizations',
-          component: view('organizations/list')
+          component: page('organizations/list')
         },
 
         // Projects
         {
           name: 'projectCreate',
           path: 'organization/:organization/project/create',
-          component: view('projects/create'),
+          component: page('projects/create'),
           beforeEnter: requireAuth()
         },
 
         {
           name: 'projectShow',
           path: 'project/:project',
-          component: view('projects/show'),
+          component: page('projects/show'),
           beforeEnter: requireAuth()
         },
 
         {
           name: 'projectEdit',
           path: 'project/:project/edit',
-          component: view('projects/edit'),
+          component: page('projects/edit'),
           beforeEnter: requireAuth()
         },
 
         {
           name: 'projectsList',
           path: 'projects',
-          component: view('projects/list')
+          component: page('projects/list')
         },
 
         {
           name: 'organizationProjectsList',
           path: 'organization/:organization/projects',
-          component: view('projects/list')
+          component: page('projects/list')
         },
 
         // Backlogs
@@ -145,7 +145,7 @@ export default new Router({
         {
           name: 'backlogShow',
           path: 'project/:project/backlog',
-          component: view('backlog/show')
+          component: page('backlog/show')
         },
 
         // Errors
@@ -153,13 +153,13 @@ export default new Router({
         {
           name: 'error404',
           path: 'errors/404',
-          component: view('errors/404')
+          component: page('errors/404')
         },
 
         {
           name: 'error403',
           path: 'errors/403',
-          component: view('errors/403')
+          component: page('errors/403')
         }
       ]
     },
@@ -167,7 +167,7 @@ export default new Router({
     {
       path: '*',
       name: 'fallback',
-      component: view('errors/404')
+      component: page('errors/404')
     }
   ]
 })

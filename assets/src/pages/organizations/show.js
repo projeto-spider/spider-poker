@@ -4,7 +4,7 @@ import {HeroTitle} from 'app/components'
 import {Organizations, Users} from 'app/api'
 
 export default {
-  name: 'OrganizationShowView',
+  name: 'OrganizationShowPage',
 
   components: {HeroTitle},
 

@@ -4,7 +4,7 @@ import {HeroTitle} from 'app/components'
 import {Projects, Users} from 'app/api'
 
 export default {
-  name: 'ProjectShowView',
+  name: 'ProjectShowPage',
 
   components: {HeroTitle},
 

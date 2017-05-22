@@ -16,7 +16,7 @@ const emptyErrors = {
 const userIdView = R.view(R.lensPath(['user', 'id']))
 
 export default {
-  name: 'UserEditView',
+  name: 'UserEditPage',
 
   components: {HeroTitle, FormControl, Gravatar},
 

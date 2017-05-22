@@ -24,7 +24,7 @@ const mockItems = [
 ]
 
 export default {
-  name: 'HomeView',
+  name: 'HomePage',
 
   components: {HeroTitle, Gravatar},
 

@@ -11,7 +11,7 @@
   import store from 'app/store'
 
   export default {
-    name: 'LogoutView',
+    name: 'LogoutPage',
 
     created() {
       store.commit('set_token', '')

@@ -12,7 +12,7 @@ const emptyErrors = {
 const projectIdView = R.view(R.lensPath(['project', 'id']))
 
 export default {
-  name: 'ProjectEditView',
+  name: 'ProjectEditPage',
 
   components: {
     HeroTitle, FormControl

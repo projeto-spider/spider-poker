@@ -4,7 +4,7 @@ import {Users, Organizations} from 'app/api'
 import {HeroTitle, Gravatar} from 'app/components'
 
 export default {
-  name: 'UserShowView',
+  name: 'UserShowPage',
 
   components: {HeroTitle, Gravatar},
 

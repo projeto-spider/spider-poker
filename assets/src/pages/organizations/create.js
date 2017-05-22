@@ -13,7 +13,7 @@ const emptyErrors = {
 }
 
 export default {
-  name: 'OrganizationsCreateView',
+  name: 'OrganizationsCreatePage',
 
   components: {
     HeroTitle, FormControl

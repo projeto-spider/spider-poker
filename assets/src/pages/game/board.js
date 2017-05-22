@@ -17,7 +17,7 @@ const emptyVotationModal = {
 }
 
 export default {
-  name: 'BoardView',
+  name: 'BoardPage',
 
   components: {Message, Gravatar},
 

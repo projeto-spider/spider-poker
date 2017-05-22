@@ -2,7 +2,7 @@ import {Projects, Organizations} from 'app/api'
 import {HeroTitle} from 'app/components'
 
 export default {
-  name: 'projectsList',
+  name: 'ProjectsListPage',
 
   components: {HeroTitle},
 

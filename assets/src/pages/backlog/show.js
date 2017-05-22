@@ -31,7 +31,7 @@ const emptyMoveModal = {
 }
 
 export default {
-  name: 'BacklogShowView',
+  name: 'BacklogShowPage',
 
   components: {Draggable, HeroTitle, FormControl, Story},
 

@@ -4,7 +4,7 @@ import store from 'app/store'
 import {FormControl} from 'app/components'
 
 export default {
-  name: 'LoginView',
+  name: 'LoginPage',
 
   components: {FormControl},
 

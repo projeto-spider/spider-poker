@@ -11,7 +11,7 @@ const emptyErrors = {
 }
 
 export default {
-  name: 'RegisterView',
+  name: 'RegisterPage',
 
   components: {FormControl},
 

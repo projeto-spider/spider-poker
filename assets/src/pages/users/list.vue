@@ -27,7 +27,7 @@
   import {Users} from 'app/api';
 
   export default {
-    name: 'UsersList',
+    name: 'UsersListPage',
 
     created() {
       store.commit('page/set', {title: 'Users'});

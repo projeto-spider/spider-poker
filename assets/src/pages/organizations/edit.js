@@ -15,7 +15,7 @@ const emptyErrors = {
 const organizationIdView = R.view(R.lensPath(['organization', 'id']))
 
 export default {
-  name: 'OrganizationEditView',
+  name: 'OrganizationEditPage',
 
   components: {
     HeroTitle, FormControl
