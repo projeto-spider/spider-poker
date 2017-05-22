@@ -21,7 +21,9 @@ export default {
 
       containerClasses: {
         type: [Array, String],
-        default: []
+        default() {
+          return []
+        }
       },
 
       // This is for the main sidebar which is always fullheight
