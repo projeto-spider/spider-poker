@@ -1,6 +1,5 @@
 import {mapGetters, mapActions} from 'vuex'
-import {Gravatar, Dropdown, LoggedUserDropdown} from 'app/components'
-import Sidebar from './sidebar.vue'
+import {Sidebar, Gravatar, Dropdown, LoggedUserDropdown} from 'app/components'
 
 export default {
   name: 'AppSidebar',
