@@ -15,4 +15,4 @@
 </template>
 
 <script src="./sidebar.js"></script>
-<style lang="sass" src="./sidebar.sass"></style>
+<style lang="sass" src="./sidebar.sass" scoped></style>
