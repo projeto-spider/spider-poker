@@ -20,7 +20,6 @@
     "ramda": "^0.22.1",
     "snake-case": "^2.1.0",
     "vue": "^2.1.6",
-    "vue-clickaway": "^2.1.0",
     "vue-my-dropdown": "^2.0.4",
     "vue-nprogress": "^0.1.5",
     "vue-paginate": "^3.4.0",
