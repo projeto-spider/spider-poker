@@ -1,0 +1,36 @@
+@import '../layouts/variables.sass'
+
+.user-block
+  border: 1px solid $border-color
+  height: 100%
+  background-color: #fff
+  display: flex
+  flex-direction: column
+
+  > div
+    flex: 1 0 0
+
+  .user-body
+    padding: 25px 25px 0
+    overflow-y: auto
+
+    .user-avatar
+      text-align: center
+      padding: 10px
+
+    .user-infos
+      font-size: $size-6
+
+      .fa
+        font-size: $size-6
+
+      li
+        margin: 5px 0
+
+  .user-footer
+    padding: 0 25px
+    border-top: 1px solid $border-color
+    max-height: 60px
+    display: flex
+    align-items: center
+    justify-content: flex-end
