@@ -46,7 +46,7 @@
         </li>
       </ul>
     </div>
-    <div class="user-footer">
+    <div v-if="shouldRenderFooter" class="user-footer">
       <router-link :to="{name: 'userEdit'}" tag="button" class="button is-small is-primary">
         <span class="icon is-small"><i class="fa fa-pencil"></i></span>
         <span>Edit</span>
