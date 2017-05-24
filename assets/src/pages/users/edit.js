@@ -1,9 +1,9 @@
-import {mapState} from 'vuex'
+import {mapGetters, mapActions, mapState} from 'vuex'
 import R from 'ramda'
 import store from 'app/store'
 import {Users} from 'app/api'
 import {insertChangesetErrors} from 'app/utils'
-import {HeroTitle, FormControl, Gravatar} from 'app/components'
+import {FormControl, Gravatar, UserBlock} from 'app/components'
 
 const emptyErrors = {
   bio: [],
@@ -18,7 +18,7 @@ const userIdView = R.view(R.lensPath(['user', 'id']))
 export default {
   name: 'UserEditPage',
 
-  components: {HeroTitle, FormControl, Gravatar},
+  components: {FormControl, Gravatar, UserBlock},
 
   data() {
     return {
@@ -29,6 +29,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters(['loggedUser']),
     ...mapState({
       user: R.pipe(
         R.view(R.lensPath(['auth', 'user'])),
@@ -37,7 +38,19 @@ export default {
     })
   },
 
+  async created() {
+    this.hideFooter()
+    this.enableFullheightPage()
+  },
+
+  destroy() {
+    this.showFooter()
+    this.disableFullheightPage()
+  },
+
   methods: {
+    ...mapActions(['hideFooter', 'showFooter', 'enableFullheightPage', 'disableFullheightPage']),
+
     async submit() {
       if (this.status === 'loading') {
         return
@@ -48,7 +61,7 @@ export default {
       const id = userIdView(this)
 
       const attributes = R.pipe(
-        R.view(R.lensPath(['user', 'profile'])),
+        R.view(R.lensPath(['user'])),
         R.pick(['bio', 'contact', 'location', 'name', 'url'])
       )(this)
 
@@ -58,6 +71,7 @@ export default {
 
         this.status = 'success'
 
+        this.$router.push({name: 'home'})
         store.commit('set_user', {
           ...this.user,
           user
