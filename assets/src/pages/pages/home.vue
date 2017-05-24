@@ -4,7 +4,7 @@
       <user-block :user="loggedUser"></user-block>
     </div>
     <div class="column">
-      Bar
+      <memberships-block :user="loggedUser"></memberships-block>
     </div>
   </main>
 </template>

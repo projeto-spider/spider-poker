@@ -1,11 +1,11 @@
 import {mapGetters, mapActions} from 'vuex'
-import {UserBlock, Gravatar} from 'app/components'
+import {UserBlock, MembershipsBlock, Gravatar} from 'app/components'
 // import {Users} from 'app/api'
 
 export default {
   name: 'HomePage',
 
-  components: {UserBlock, Gravatar},
+  components: {UserBlock, MembershipsBlock, Gravatar},
 
   data() {
     return {
