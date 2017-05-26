@@ -1,20 +1,20 @@
 @import '../layouts/variables.sass'
 @import '~bulma/sass/utilities/mixins.sass'
 
-$bg: #101823
+$bg: $black-ter
 
 .app-aside
   display: flex
   flex-direction: column
   height: 100%
   width: 200px
-  background-color: $bg
+  background-color: $white-ter
   color: rgba(225,235,245,.87)
   animation-duration: .3s
 
 .app-aside-header
-  background-color: $blue
-  color: #fff
+  background-color: $primary
+  color: $white-ter
   font-size: 18px
   min-height: 56px
   padding: $size-6
@@ -41,11 +41,13 @@ $bg: #101823
       align-items: center
       padding: 0 $size-5
       height: 38px
-      color: $grey-light
+      color: $black-ter
       transition: background-color .2s $easing
 
     &.is-active a, &:hover a
       background-color: $grey-darker
+      background-color: $blue
+      color: $white-ter
 
     i
       display: inline-block
@@ -60,7 +62,8 @@ $bg: #101823
   display: flex
   align-items: center
   padding: 0 $size-7
-  background-color: $grey-darker
+  color: $black-ter
+  background-color: $grey-lighter
   font-size: $size-7
 
   img
