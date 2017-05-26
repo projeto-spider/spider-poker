@@ -3,7 +3,7 @@
     <div class="column is-paddingless">
       <user-block :user="user"></user-block>
     </div>
-    <div class="column is-padding-less">
+    <div class="column is-paddingless">
       <form
         method="post"
         @submit.prevent="submit"
