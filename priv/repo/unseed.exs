@@ -7,3 +7,4 @@
   Repo.delete_all Accounts.User
   Repo.delete_all Projects.Project
   Repo.delete_all Projects.Member
+  Repo.delete_all Projects.Story

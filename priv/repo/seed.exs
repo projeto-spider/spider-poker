@@ -135,3 +135,23 @@ end)
   end
 end)
 |> Task.yield_many
+
+[
+  {"planning-poker", [
+    %{title: "First", description: "Lorem"},
+    %{title: "Second", description: "Ipsum"},
+    %{title: "Third", description: "Sit"},
+  ]}
+]
+|> Enum.map(fn {proj_name, stories} ->
+  Task.async fn ->
+    proj_id = ID.get(:project, proj_name)
+
+    stories
+    |> Enum.map(fn attrs ->
+      data = Map.put(attrs, :project_id, proj_id)
+      {:ok, _} = Projects.add_story(proj_id, data)
+    end)
+  end
+end)
+|> Task.yield_many
