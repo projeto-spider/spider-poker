@@ -1,7 +1,13 @@
 import {resource} from './http'
 import {request, snakefy} from 'app/utils'
 
-const projects = resource('projects{/id}')
+const projectCustomActions = {
+  backlog: {
+    method: 'GET',
+    url: 'projects{/id}/backlog'
+  }
+}
+const projects = resource('projects{/id}', {}, projectCustomActions)
 const members = resource('projects{/projId}/members{/userId}')
 
 export default {
@@ -27,6 +33,10 @@ export default {
 
   delete(id) {
     return projects.delete({id})
+  },
+
+  backlog(id) {
+    return request(projects.backlog({id}))
   },
 
   members: {
