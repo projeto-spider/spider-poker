@@ -3,6 +3,7 @@ defmodule Poker.Web.ProjectController do
 
   alias Poker.Repo
   alias Poker.Projects
+  alias Poker.Projects.Project
   alias Poker.Organizations
 
   def index(conn, params) do
@@ -74,10 +75,12 @@ defmodule Poker.Web.ProjectController do
   end
 
   def backlog(conn, ~m{id}) do
-    stories =
-      Projects.query_stories(id)
-      |> Repo.all
+    with {:ok, %Project{backlog: order}} <- Projects.get(id) do
+      stories =
+        Projects.query_stories(id)
+        |> Repo.all
 
-    render(conn, "backlog.json", stories: stories)
+      render(conn, "backlog.json", order: order, stories: stories)
+    end
   end
 end

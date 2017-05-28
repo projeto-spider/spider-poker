@@ -12,7 +12,7 @@ defmodule Poker.Web.ProjectView do
     |> Map.take([:id, :organization_id, :name, :display_name, :description, :private])
   end
 
-  def render("backlog.json", %{stories: stories}) do
+  def render("backlog.json", %{order: order, stories: stories}) do
     rendered =
       render_many(stories, __MODULE__, "story.json")
       |> Enum.map(fn %{id: id} = attrs ->
@@ -21,6 +21,7 @@ defmodule Poker.Web.ProjectView do
       |> Enum.into(%{})
 
     %{
+      meta: %{order: order},
       data: rendered
     }
   end
