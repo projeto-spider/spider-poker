@@ -2,6 +2,7 @@ import R from 'ramda'
 import {Socket} from 'phoenix'
 import {mapState, mapGetters} from 'vuex'
 import {Gravatar} from 'app/components'
+import {Projects} from 'app/api'
 import Message from './message'
 
 const emptyStoriesModal = {
@@ -39,12 +40,10 @@ export default {
         {username: 'bazbar', displayName: 'Bazbar', when: '45s', voted: 13},
         {username: 'quxbar', displayName: 'Quxbar', when: '1m', voted: 40}
       ],
-      backlog: [
-        {name: 'First', description: 'Lorem Ipsum'},
-        {name: 'Second', description: 'Lorem Ipsum'},
-        {name: 'Third', description: 'Lorem Ipsum'},
-        {name: 'Fourth', description: 'Lorem Ipsum'}
-      ],
+      backlog: {
+        order: [],
+        stories: {}
+      },
       players_ids: [],
       player_db: {},
       message: '',
@@ -98,6 +97,11 @@ export default {
 
     users() {
       return R.map(R.flip(R.prop)(this.player_db), this.players_ids)
+    },
+
+    stories() {
+      return this.backlog.order
+        .map(storyId => this.backlog.stories[id])
     }
   },
 
@@ -205,7 +209,15 @@ export default {
 
     // Channel
 
-    channelJoined() {},
+    channelJoined() {
+      const projectName = this.$route.params.project
+
+      Projects.backlog(projectName)
+        .then(({meta: {order}, data}) => {
+          this.backlog.order = order
+          this.backlog.stories = data
+        })
+    },
 
     channelRejected({reason}) {
       if (reason === 'unauthorized')
