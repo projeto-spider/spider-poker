@@ -1,20 +1,29 @@
 defmodule Poker.Web.GameChannel do
   @moduledoc false
   use Phoenix.Channel
+  alias Poker.Projects
+  alias Poker.Projects.Project
   alias Poker.Accounts.User
   alias Poker.Web.Presence
 
-  def join("game:lobby", _message, socket) do
+  def join("game:" <> project_name, _params, socket) do
     case socket.assigns.user do
       %User{} = user ->
-        send(self(), :after_join)
-        {:ok, socket}
+        case Projects.get(project_name) do
+          {:ok, %Project{id: proj_id}} ->
+            if Projects.member?(proj_id, user.id) do
+              send(self(), :after_join)
+              {:ok, socket}
+            else
+              {:error, %{reason: "unauthorized"}}
+            end
+
+          _ ->
+            {:error, %{reason: "not found"}}
+        end
       _ ->
         {:error, %{reason: "unauthorized"}}
     end
-  end
-  def join("game:" <> _private_game_id, _params, _socket) do
-    {:error, %{reason: "unauthorized"}}
   end
 
   def handle_info(:after_join, socket) do
@@ -40,9 +49,4 @@ defmodule Poker.Web.GameChannel do
     push socket, "message", payload
     {:noreply, socket}
   end
-
-  # def handle_out("user_joined", payload, socket) do
-    # push socket, "user_joined", payload
-    # {:noreply, socket}
-  # end
 end

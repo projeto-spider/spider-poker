@@ -184,13 +184,13 @@ export default {
       this.discussionTimer = Math.trunc((new Date()).getTime() / 1000)
     },
 
-    apply_leaves(leaves) {
+    applyLeaves(leaves) {
       R.mapObjIndexed((_, id) => {
         this.players_ids = this.players_ids.filter(R.compose(R.not, R.equals(id)))
       }, leaves)
     },
 
-    apply_joins(joins) {
+    applyJoins(joins) {
       R.mapObjIndexed(({user}, id) => {
         this.players_ids.push(id)
         this.player_db[id] = user
@@ -206,7 +206,9 @@ export default {
     this.socket = new Socket('/socket', {params: {token: this.token}})
     this.socket.connect()
 
-    this.channel = this.socket.channel("game:lobby", {})
+    const projectId = this.$route.params.project
+    const channelParams = {}
+    this.channel = this.socket.channel(`game:${projectId}`, channelParams)
 
     this.channel.on("message", payload => {
       this.messages.unshift(payload.message)
@@ -217,12 +219,12 @@ export default {
     })
 
     this.channel.on('presence_state', users => {
-      this.apply_joins(users)
+      this.applyJoins(users)
     })
 
     this.channel.on('presence_diff', ({leaves, joins}) => {
-      this.apply_leaves(leaves)
-      this.apply_joins(joins)
+      this.applyLeaves(leaves)
+      this.applyJoins(joins)
     })
 
     this.channel.join()

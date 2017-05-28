@@ -39,12 +39,12 @@ export default new Router({
     },
 
     {
-      path: '/game',
+      path: '/',
       component: layout('game'),
       children: [
         {
           name: 'board',
-          path: '/',
+          path: '/game/:project',
           component: page('game/board')
         }
       ]
