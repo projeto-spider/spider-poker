@@ -195,13 +195,47 @@ export default {
         this.players_ids.push(id)
         this.player_db[id] = user
       }, joins)
+    },
+
+    // Time
+
+    tick() {
+      this.now = Math.trunc((new Date()).getTime() / 1000);
+    },
+
+    // Channel
+
+    channelJoined() {},
+
+    channelRejected({reason}) {
+      if (reason === 'unauthorized')
+        return this.$router.replace({name: 'error403'})
+      if (reason === 'not found')
+        return this.$router.replace({name: 'error404'})
+      // TODO: properly tell that things went wrong
+      console.error(reason)
+    },
+
+    channelMessage({message}) {
+      this.messages.unshift(message)
+    },
+
+    channelUserJoined({user}) {
+      this.users.push(user)
+    },
+
+    channelPresenceState(joins) {
+      this.applyJoins(joins)
+    },
+
+    channelPresenceDiff({leaves, joins}) {
+      this.applyLeaves(leaves)
+      this.applyJoins(joins)
     }
   },
 
   created() {
-    window.setInterval(() => {
-      this.now = Math.trunc((new Date()).getTime() / 1000);
-    },1000)
+    window.setInterval(this.tick, 1000)
 
     this.socket = new Socket('/socket', {params: {token: this.token}})
     this.socket.connect()
@@ -209,30 +243,17 @@ export default {
     const projectId = this.$route.params.project
     const channelParams = {}
     this.channel = this.socket.channel(`game:${projectId}`, channelParams)
+    this.channel.on("message", this.channelMessage)
+    this.channel.on('user_joined', this.channelUserJoined)
+    this.channel.on('presence_state', this.channelPresenceState)
+    this.channel.on('presence_diff', this.channelPresenceDiff)
 
-    this.channel.on("message", payload => {
-      this.messages.unshift(payload.message)
-    })
-
-    this.channel.on('user_joined', payload => {
-      this.users.push(payload.user)
-    })
-
-    this.channel.on('presence_state', users => {
-      this.applyJoins(users)
-    })
-
-    this.channel.on('presence_diff', ({leaves, joins}) => {
-      this.applyLeaves(leaves)
-      this.applyJoins(joins)
-    })
-
-    this.channel.join()
-      .receive("ok", resp => { console.log("Joined successfully", resp) })
-      .receive("error", resp => { console.log("Unable to join", resp) })
+    this.channel.join().receive("ok", this.channelJoined)
+                       .receive("error", this.channelRejected)
   },
 
   beforeDestroy() {
+    clearInterval(this.tick)
     this.channel.leave()
   }
 }
