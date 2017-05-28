@@ -140,5 +140,24 @@ defmodule Poker.Projects do
       select: count(m.id)
 
     Repo.one!(query) > 0
+
+  def add_story(proj_id, attrs \\ %{}) do
+    operation =
+      %Story{}
+      |> Story.changeset(attrs)
+      |> Story.validate
+      |> Repo.insert
+
+    with {:ok, %Story{id: story_id}} <- operation,
+         {:ok, project} <- get(proj_id)
+    do
+      backlog =
+        project.backlog
+        |> Backlog.push(story_id)
+
+      project
+      |> Project.backlog_changeset(%{backlog: backlog})
+      |> Repo.update
+    end
   end
 end

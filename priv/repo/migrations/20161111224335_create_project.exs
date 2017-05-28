@@ -6,6 +6,7 @@ defmodule Poker.Repo.Migrations.CreateProject do
       add :name, :string
       add :display_name, :string
       add :description, :string
+      add :backlog, {:array, :integer}, default: []
       add :private, :boolean, default: false, null: false
       add :organization_id, references(:organizations, on_delete: :nothing)
 
