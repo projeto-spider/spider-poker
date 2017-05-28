@@ -6,6 +6,8 @@ defmodule Poker.Projects do
   alias Poker.Accounts.User
   alias Poker.Projects.Project
   alias Poker.Projects.Member
+  alias Poker.Projects.Story
+  alias Poker.Projects.Backlog
 
   def query, do: Project
 
@@ -140,6 +142,20 @@ defmodule Poker.Projects do
       select: count(m.id)
 
     Repo.one!(query) > 0
+  end
+
+  # Backlog
+
+  def query_stories(proj_id) do
+    if Pattern.numeric?(proj_id) do
+      Story
+      |> where(project_id: ^proj_id)
+    else
+      from m in Story,
+      join: p in assoc(m, :project),
+      where: p.name == ^proj_id
+    end
+  end
 
   def add_story(proj_id, attrs \\ %{}) do
     operation =

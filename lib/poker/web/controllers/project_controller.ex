@@ -72,4 +72,12 @@ defmodule Poker.Web.ProjectController do
       send_resp(conn, :no_content, "")
     end
   end
+
+  def backlog(conn, ~m{id}) do
+    stories =
+      Projects.query_stories(id)
+      |> Repo.all
+
+    render(conn, "backlog.json", stories: stories)
+  end
 end

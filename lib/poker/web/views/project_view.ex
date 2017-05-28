@@ -11,4 +11,22 @@ defmodule Poker.Web.ProjectView do
     project
     |> Map.take([:id, :organization_id, :name, :display_name, :description, :private])
   end
+
+  def render("backlog.json", %{stories: stories}) do
+    rendered =
+      render_many(stories, __MODULE__, "story.json")
+      |> Enum.map(fn %{id: id} = attrs ->
+        {id, Map.delete(attrs, :id)}
+      end)
+      |> Enum.into(%{})
+
+    %{
+      data: rendered
+    }
+  end
+
+  def render("story.json", %{project: story}) do
+    story
+    |> Map.take([:id, :title, :description, :estimation])
+  end
 end

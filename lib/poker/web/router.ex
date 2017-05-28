@@ -39,6 +39,7 @@ defmodule Poker.Web.Router do
     resources "/projects", ProjectController, except: @non_rest do
       resources "/members", ProjectMemberController, except: @non_rest, as: "member"
     end
+    get "/projects/:id/backlog", ProjectController, :backlog
 
     get "/sessions", SessionController, :show
     post "/sessions", SessionController, :create
