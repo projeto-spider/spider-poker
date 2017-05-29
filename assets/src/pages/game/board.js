@@ -213,18 +213,6 @@ export default {
       this.discussionTimer = Math.trunc((new Date()).getTime() / 1000)
     },
 
-    applyLeaves(leaves) {
-      R.mapObjIndexed((_, id) => {
-        this.online = R.without([+id], this.online)
-      }, leaves)
-    },
-
-    applyJoins(joins) {
-      R.mapObjIndexed((_user, id) => {
-        this.online.push(+id)
-      }, joins)
-    },
-
     // Time
 
     tick() {
@@ -283,6 +271,18 @@ export default {
     channelPresenceDiff({leaves, joins}) {
       this.applyLeaves(leaves)
       this.applyJoins(joins)
+    },
+
+    applyLeaves(leaves) {
+      R.mapObjIndexed((_user, id) => {
+        this.online = R.without([+id], this.online)
+      }, leaves)
+    },
+
+    applyJoins(joins) {
+      R.mapObjIndexed((_user, id) => {
+        this.online.push(+id)
+      }, joins)
     }
   },
 
