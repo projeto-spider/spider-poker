@@ -41,6 +41,8 @@ export default {
         {username: 'quxbar', displayName: 'Quxbar', when: '1m', voted: 40}
       ],
 
+      game: {},
+
       online: [],
 
       project: {
@@ -260,6 +262,10 @@ export default {
         ...message,
         user: this.project.members.find(R.propEq('id', message.user_id))
       })
+    },
+
+    channelGameState({game}) {
+      this.game = game
     },
 
     channelUserJoined({user}) {
