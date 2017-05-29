@@ -13,7 +13,9 @@ defmodule Poker.Application do
       # Start the endpoint when the application starts
       supervisor(Poker.Web.Endpoint, []),
       # Start Presence
-      supervisor(Poker.Web.Presence, [])
+      supervisor(Poker.Web.Presence, []),
+      # Game
+      worker(Poker.Web.Game, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
