@@ -144,6 +144,15 @@ defmodule Poker.Projects do
     Repo.one!(query) > 0
   end
 
+  def get_manager(proj_id) do
+    query =
+      from m in Member,
+      where: m.project_id == ^proj_id and
+             m.role       == "manager"
+
+    Repo.one(query)
+  end
+
   # Backlog
 
   def query_stories(proj_id) do
