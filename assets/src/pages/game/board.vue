@@ -53,32 +53,6 @@
               </div>
             </div>
           </article>
-          <hr/>
-          <div v-if="isManager">
-            <button
-              v-if="!onGoing"
-              @click="openStoriesModal"
-              class="button is-primary is-fullwidth"
-            >
-              Choose a story
-            </button>
-            <button
-              v-else
-              class="button is-primary is-fullwidth is-disabled"
-            >
-              Choose a story
-            </button>
-          </div>
-
-          <small>
-            <a @click="openVotationModal"> init votation </a>
-          </small>
-
-          <br/>
-
-          <small>
-            <a @click="startDicussionTimer"> init discussion </a>
-          </small>
         </div>
 
         <div v-if="sidebarTab === 4" class="votes">
