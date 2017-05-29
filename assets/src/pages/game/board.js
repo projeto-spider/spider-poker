@@ -59,7 +59,6 @@ export default {
       picked: [],
       options: [],
       onGoing: false,
-      isManager: true,
       modal: {
         stories: emptyStoriesModal,
         votation: emptyVotationModal
