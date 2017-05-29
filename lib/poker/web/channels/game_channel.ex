@@ -7,6 +7,8 @@ defmodule Poker.Web.GameChannel do
   alias Poker.Accounts.User
   alias Poker.Web.Presence
 
+  intercept ["game_state"]
+
   def join("game:" <> project_name, _params, socket) do
     case socket.assigns.user do
       %User{} = user ->
@@ -50,8 +52,23 @@ defmodule Poker.Web.GameChannel do
     {:noreply, socket}
   end
 
-  def handle_out("message", payload, socket) do
-    push socket, "message", payload
+  # Story selection
+
+  def handle_in("select_story", story_id, socket) do
+    user = socket.assigns.user
+    {:ok, game} = Game.for(socket)
+
+    if Game.manager?(game, user) do
+      {:ok, game} = Game.select_story(game, story_id)
+      broadcast!(socket, "game_state", game)
+    end
+
+    {:noreply, socket}
+  end
+
+  def handle_out("game_state", game, socket) do
+    payload = Game.display_public(game)
+    push(socket, "game_state", %{game: payload})
     {:noreply, socket}
   end
 end

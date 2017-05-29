@@ -5,12 +5,6 @@ import {Gravatar} from 'app/components'
 import {Projects} from 'app/api'
 import Message from './message'
 
-const emptyStoriesModal = {
-  open: false,
-  currentPosition: null,
-  story: null
-}
-
 const emptyVotationModal = {
   open: false,
   time: null,
@@ -41,6 +35,8 @@ export default {
         {username: 'quxbar', displayName: 'Quxbar', when: '1m', voted: 40}
       ],
 
+      modalSelectStory: false,
+
       game: {},
 
       online: [],
@@ -62,7 +58,6 @@ export default {
       options: [],
       onGoing: false,
       modal: {
-        stories: emptyStoriesModal,
         votation: emptyVotationModal
       },
       open: false,
@@ -127,6 +122,14 @@ export default {
           ...this.backlog.stories[id],
           id
         }))
+    },
+
+    currentStory() {
+      if (!this.game.current_story)
+        return false
+
+      return this.stories
+        .find(R.propEq('id', this.game.current_story))
     }
   },
 
@@ -156,34 +159,8 @@ export default {
       this.message = ''
     },
 
-    openStoriesModal() {
-      this.modal.stories.open = true
-      this.options = this.backlog
-    },
-
     openVotationModal() {
       this.modal.votation.open = true
-    },
-
-    currentStory(story, index) {
-      this.modal.stories = {
-        ...emptyStoriesModal,
-        currentPosition: index,
-        story
-      }
-    },
-
-    chooseStory() {
-      this.picked.push(this.modal.stories.story)
-      this.modal.stories.open = false
-      this.onGoing = true
-    },
-
-    // Removes current story
-    undo() {
-      this.picked.shift()
-      this.modal.stories.open = true
-      this.onGoing = false
     },
 
     VotationTimer() {
@@ -212,6 +189,21 @@ export default {
 
     startDicussionTimer() {
       this.discussionTimer = Math.trunc((new Date()).getTime() / 1000)
+    },
+
+    // Story selection
+
+    openSelectStoryModal() {
+      this.modalSelectStory = true
+    },
+
+    closeSelectStoryModal() {
+      this.modalSelectStory = false
+    },
+
+    selectStory(story) {
+      this.channel.push('select_story', story.id)
+      this.closeSelectStoryModal()
     },
 
     // Time
@@ -305,6 +297,7 @@ export default {
     this.channel = this.socket.channel(`game:${projectId}`, channelParams)
     this.channel.on("message", this.channelMessage)
     this.channel.on('user_joined', this.channelUserJoined)
+    this.channel.on('game_state', this.channelGameState)
     this.channel.on('presence_state', this.channelPresenceState)
     this.channel.on('presence_diff', this.channelPresenceDiff)
 

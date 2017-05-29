@@ -102,19 +102,29 @@
           </article>
         </div>
       </div>
-      <div class="column main-board">
-        <p v-if="false" class="title is-spaced">
-          #1 As a power user, I can specify files or folders to backup based
-          on file size, date created and date modified
-        </p>
-        <p v-if="false" class="subtitle">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras luctus
-          ac lacus id vulputate. Integer sit amet magna feugiat, facilisis sem
-          in, vehicula orci. Integer fringilla turpis congue ligula convallis,
-          non auctor est scelerisque.
-        </p>
 
-        <hr v-if="false"/>
+      <div class="column main-board">
+        <section v-if="currentStory" class="hero is-primary">
+          <div class="hero-body">
+            <div class="container">
+              <h1 class="title">{{currentStory.title}}</h1>
+              <h2 v-show="currentStory.description" class="subtitle">
+                {{currentStory.description}}
+              </h2>
+            </div>
+          </div>
+        </section>
+
+        <div v-if="isManager" class="manager-controls">
+          <div class="block">
+            <button
+              @click="openSelectStoryModal"
+              class="button is-primary"
+            >
+              Select story
+            </button>
+          </div>
+        </div>
 
         <div class="chat-input">
           <div class="field">
@@ -135,69 +145,72 @@
           </div>
         </div>
 
-         <div v-if="modal.stories.open">
-          <div class="modal is-active">
-            <div class="modal-background"></div>
+        <div v-if="isManager">
+          <div class="modal" :class="{'is-active': modalSelectStory}">
+            <div @click="closeSelectStoryModal" class="modal-background"></div>
+
             <div class="modal-card">
               <header class="modal-card-head">
-                <p class="modal-card-title">Choosing story</p>
+                <p class="modal-card-title">Choose a Story</p>
+                <button @click="closeSelectStoryModal" class="delete"></button>
               </header>
+
               <section class="modal-card-body">
-                <div class="field">
-                  <article v-for="(story, i) in options" class="media">
-                  <label class="radio">
-                  <input type="radio" @click="currentStory(story, i)">
-                      <div class="media-content">
-                        <div class="content">
-                          <p>
-                            <strong>{{story.name}}</strong>
-                            <br>
-                            <small>{{story.description}}</small>
-                          </p>
-                        </div>
-                      </div>
-                    </label>
-                  </article>
-                </div>
+                <article
+                  v-for="story in stories"
+                  @click="() => selectStory(story)"
+                  class="media is-clickable"
+                >
+                  <div class="media-content">
+                    <div class="content">
+                      <p>
+                        <strong>{{story.title}}</strong>
+                        <br>
+                        {{story.description}}
+                      </p>
+                    </div>
+                  </div>
+                </article>
               </section>
+
               <footer class="modal-card-foot">
-                <a @click="chooseStory" class="button is-success">Choose</a>
-                <a @click="modal.stories.open = false" class="button">Cancel</a>
+                <a class="button is-success">Save changes</a>
+                <a class="button">Cancel</a>
               </footer>
             </div>
           </div>
         </div>
 
-        <div v-if="modal.votation.open">
-          <div class="modal is-active">
-            <div class="modal-background"></div>
-            <div class="modal-card">
-              <header class="modal-card-head">
-                <p class="modal-card-title">Inform votation time</p>
-              </header>
-              <section class="modal-card-body">
-                <div class="field">
-                  <form
-                    method="post"
-                    @submit.prevent="VotationTimer"
-                    @keyup.13="VotationTimer"
-                  >
-                    <p class="control">
-                      <input
-                        class="input"
-                        placeholder="Votation time (min)"
-                        v-model="modal.votation.time"
-                      >
-                    </p>
-                  </form>
-                </div>
-                <div v-if="modal.votation.erro" class="notification is-danger">
-                  <button @click="modal.votation.erro = false" class="delete"></button>
-                  Something went wrong
-                </div>
-              </section>
-              <footer class="modal-card-foot">
-                <a @click="VotationTimer" class="button is-success">Start</a>
+      <div v-if="modal.votation.open">
+        <div class="modal is-active">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Inform votation time</p>
+            </header>
+            <section class="modal-card-body">
+              <div class="field">
+                <form
+                  method="post"
+                  @submit.prevent="VotationTimer"
+                  @keyup.13="VotationTimer"
+                >
+                  <p class="control">
+                    <input
+                      class="input"
+                      placeholder="Votation time (min)"
+                      v-model="modal.votation.time"
+                    >
+                  </p>
+                </form>
+              </div>
+              <div v-if="modal.votation.erro" class="notification is-danger">
+                <button @click="modal.votation.erro = false" class="delete"></button>
+                Something went wrong
+              </div>
+            </section>
+            <footer class="modal-card-foot">
+              <a @click="VotationTimer" class="button is-success">Start</a>
                 <a @click="closeVotationModal">Cancel</a>
               </footer>
             </div>
