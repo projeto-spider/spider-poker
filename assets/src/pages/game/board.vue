@@ -128,7 +128,7 @@
           <div v-for="message in messages">
             <message
               :body="message.body"
-              :user="player_db[message.user_id]"
+              :user="message.user"
               :fromSelf="message.user_id === loggedUser.id"
             >
             </message>

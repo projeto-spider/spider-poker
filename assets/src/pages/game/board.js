@@ -257,7 +257,10 @@ export default {
     },
 
     channelMessage({message}) {
-      this.messages.unshift(message)
+      this.messages.unshift({
+        ...message,
+        user: this.project.members.find(R.propEq('id', message.user_id))
+      })
     },
 
     channelUserJoined({user}) {
