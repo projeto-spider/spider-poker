@@ -54,28 +54,7 @@
             </div>
           </article>
         </div>
-
-        <div v-if="sidebarTab === 4" class="votes">
-          <article v-for="vote in votes" class="media">
-            <figure class="media-left">
-              <p class="image is-64x64">
-                <img src="https://placeholdit.imgix.net/~text?txtsize=20&txt=Avatar&w=64&h=64&txttrack=0">
-              </p>
-            </figure>
-            <div class="media-content">
-              <div class="content">
-                <p>
-                  <strong>{{vote.displayName}}</strong>
-                  <small>@{{vote.username}}</small>
-                  <small>{{vote.when}}</small>
-                  <br>
-                  Voted: <strong>{{vote.voted}}</strong>
-                </p>
               </div>
-            </div>
-          </article>
-        </div>
-      </div>
 
       <div class="column main-board">
         <section v-if="currentStory" class="hero is-primary">
