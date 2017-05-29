@@ -66,6 +66,69 @@ defmodule Poker.Web.GameChannel do
     {:noreply, socket}
   end
 
+
+  # Voting
+
+  def handle_in("start_voting", _, socket) do
+    user = socket.assigns.user
+    {:ok, game} = Game.for(socket)
+
+    if Game.manager?(game, user) do
+      duration = 3 * 60 # TODO: not hardcode this time
+      time_to_end = System.system_time(:seconds) + duration
+
+      {:ok, game} = Game.start_voting(game, time_to_end)
+      broadcast!(socket, "game_state", game)
+
+      :timer.send_after(duration * 1000, self(), :stop_voting)
+    end
+
+    {:noreply, socket}
+  end
+
+  def handle_info(:stop_voting, socket) do
+    {:ok, game} = Game.for(socket)
+
+    {:ok, game} = Game.stop_voting(game)
+    broadcast!(socket, "game_state", game)
+
+    {:noreply, socket}
+  end
+
+  def handle_in("stop_voting", _, socket) do
+    user = socket.assigns.user
+    {:ok, game} = Game.for(socket)
+
+    if Game.manager?(game, user) do
+      {:ok, game} = Game.stop_voting(game)
+      broadcast!(socket, "game_state", game)
+    end
+
+    {:noreply, socket}
+  end
+
+  def handle_in("set_vote", vote, socket) do
+    user = socket.assigns.user
+    {:ok, game} = Game.for(socket)
+
+    {:ok, game} = Game.set_vote(game, user.id, vote)
+    broadcast!(socket, "game_state", game)
+
+    {:noreply, socket}
+  end
+
+  def handle_in("set_score", score, socket) do
+    user = socket.assigns.user
+    {:ok, game} = Game.for(socket)
+
+    if Game.manager?(game, user) do
+      {:ok, game} = Game.set_score(game, score)
+      broadcast!(socket, "game_state", game)
+    end
+
+    {:noreply, socket}
+  end
+
   def handle_out("game_state", game, socket) do
     payload = Game.display_public(game)
     push(socket, "game_state", %{game: payload})

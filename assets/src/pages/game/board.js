@@ -5,6 +5,16 @@ import {Gravatar} from 'app/components'
 import {Projects} from 'app/api'
 import Message from './message'
 
+const STATE = {
+  CREATED: 0,
+  IDLE: 1,
+  VOTING: 2,
+  DISCUSSION: 3
+}
+
+const padZero = x =>
+  `${'0'.repeat(R.clamp(0, 2, 2 - x.toString().length))}${x}`
+
 const emptyVotationModal = {
   open: false,
   time: null,
@@ -20,20 +30,16 @@ export default {
     const time = Math.trunc((new Date()).getTime() / 1000)
 
     return {
-      start: time,
-      now: time,
-      voteTimer: 0,
-      discussionTimer: 0,
+      STATE,
+
+      now: 0,
+
       sidebarTab: 1,
+
       socket: null,
       channel: null,
-      selected: null,
+
       deck: [0, '1/2', 1, 2, 3, 5, 8, 13, 20, 40, 100, '?', 'Pass', 'Coffee'],
-      votes: [
-        {username: 'foobar', displayName: 'Foobar', when: '31s', voted: 1},
-        {username: 'bazbar', displayName: 'Bazbar', when: '45s', voted: 13},
-        {username: 'quxbar', displayName: 'Quxbar', when: '1m', voted: 40}
-      ],
 
       modalSelectStory: false,
 
@@ -53,15 +59,7 @@ export default {
       },
 
       message: '',
-      messages: [],
-      picked: [],
-      options: [],
-      onGoing: false,
-      modal: {
-        votation: emptyVotationModal
-      },
-      open: false,
-      votation: false
+      messages: []
     }
   },
 
@@ -72,38 +70,82 @@ export default {
       token: R.view(R.lensPath(['auth', 'token']))
     }),
 
-    timePassed() {
-      return {
-        seconds: (this.now - this.start) % 60,
-        minutes: Math.trunc((this.now - this.start) / 60) % 60
+    timer() {
+      if (!this.game.time ||
+          this.game.state === STATE.CREATED ||
+          this.game.state === STATE.IDLE)
+        return false
+
+      if (this.game.state === STATE.VOTING) {
+        if (this.game.time < this.now)
+          return false
+
+        const minutes =
+          padZero(Math.trunc((this.game.time - this.now) / 60) % 60)
+
+        const seconds =
+          padZero((this.game.time - this.now) % 60)
+
+        return {minutes, seconds}
       }
+
+      // TODO: stop using max(0, n) to prevent showing negative timers
+
+      const minutes =
+        padZero(R.max(0, Math.trunc((this.now - this.game.time) / 60) % 60))
+
+      const seconds =
+        padZero(R.max(0, (this.now - this.game.time) % 60))
+
+      return {minutes, seconds}
     },
 
-    discussionTimePassed() {
-      if (this.discussionTimer !== 0) {
-        return {
-          seconds: (this.now - this.discussionTimer) % 60,
-          minutes: Math.trunc((this.now - this.discussionTimer) / 60) % 60
-        }
-      }
-    },
 
-    votationTimePassed() {
-      if (this.voteTimer !== 0) {
-        do {
-          return {
-            seconds: (this.voteTimer - this.now) % 60,
-            minutes: Math.trunc((this.voteTimer - this.now) / 60) % 60
-          }
-        } while (this.votationTimePassed.seconds > 0)
-      }
+    votesColor() {
+      const defaultClass = 'is-success'
+
+      if (this.game.state === STATE.VOTING)
+        return defaultClass
+
+      if (!this.game.votes)
+        return defaultClass
+
+      const cards =
+        R.toPairs(this.game.votes)
+          .map(R.nth(1))
+
+      if (cards.some(card => card === 'Coffee' || card === 'Pass'))
+        return 'is-warning'
+
+      const indexes =
+          cards
+            .map(card => this.deck.findIndex(R.equals(card)))
+            .sort()
+
+      if (indexes.length === 1)
+        return defaultClass
+
+      const first = indexes.shift()
+      const last = indexes.pop()
+
+      return Math.abs(first - last) > 2
+        ? 'is-danger'
+        : defaultClass
     },
 
     users() {
+      const userVote = user => {
+        if (this.game.state === STATE.VOTING)
+          return this.game.votes.includes(user.id)
+
+        return this.game.votes && this.game.votes[user.id]
+      }
+
       return this.project.members
         .map(user => ({
           ...user,
-          online: this.online.includes(user.id)
+          online: this.online.includes(user.id),
+          vote: userVote(user)
         }))
         .sort((left, right) => left.online ? -1 : 1)
     },
@@ -134,17 +176,8 @@ export default {
   },
 
   methods: {
-    padZero(x, n = 2) {
-      const asStr = x.toString()
-      return `${'0'.repeat(n - asStr.length)}${asStr}`
-    },
-
     setSidebarTab(id) {
       this.sidebarTab = id
-    },
-
-    select(card) {
-      this.selected = card
     },
 
     cardClass(card) {
@@ -157,38 +190,6 @@ export default {
     sendMessage() {
       this.channel.push('message', {body: this.message})
       this.message = ''
-    },
-
-    openVotationModal() {
-      this.modal.votation.open = true
-    },
-
-    VotationTimer() {
-      var valid = /^\d*$/.test(this.modal.votation.time)
-
-      if (valid) {
-        this.voteTimer = (parseFloat(this.modal.votation.time) * 60) + Math.trunc((new Date()).getTime() / 1000)
-        this.modal.votation.open = false
-        this.modal.votation.time = null
-        this.votation = true
-      } else {
-        this.modal.votation.erro = true
-        this.modal.votation.time = null
-      }
-      console.log(this.votationTimePassed.seconds)
-    },
-
-    closeVotationModal() {
-      this.modal.votation = {
-        ...emptyVotationModal,
-        open: false,
-        erro: false,
-        time: null
-      }
-    },
-
-    startDicussionTimer() {
-      this.discussionTimer = Math.trunc((new Date()).getTime() / 1000)
     },
 
     // Story selection
@@ -204,6 +205,28 @@ export default {
     selectStory(story) {
       this.channel.push('select_story', story.id)
       this.closeSelectStoryModal()
+    },
+
+    // Votation
+
+    startVoting() {
+      this.channel.push('start_voting')
+    },
+
+    stopVoting() {
+      this.channel.push('stop_voting')
+    },
+
+    selectCard(card) {
+      if (this.game.state === STATE.VOTING) {
+        this.selectedCard = card
+        return this.channel.push('set_vote', card)
+      }
+
+      if (!this.isManager)
+        return
+
+      this.channel.push('set_score', card)
     },
 
     // Time

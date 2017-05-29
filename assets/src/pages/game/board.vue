@@ -2,22 +2,14 @@
   <div class="is-fullheight">
     <div class="columns is-fullheight">
       <div class="column board-sidebar">
-        <div v-if="!votation" class="timer title is-2">
-          {{padZero(timePassed.minutes)}}:{{padZero(timePassed.seconds)}}
+        <div v-if="timer" class="has-text-centered">
+          <span class="title">{{timer.minutes}}:{{timer.seconds}}</span>
         </div>
-        <div v-if="votation">
-          <div class="timer title is-2">
-            {{padZero(timePassed.minutes)}}:{{padZero(timePassed.seconds)}}
-          </div>
-          <div class="timer votetitle is-2">
-            {{padZero(votationTimePassed.minutes)}}:{{padZero(votationTimePassed.seconds)}}
-          </div>
-        </div>
+
         <div class="tabs is-centered">
           <ul>
             <li :class="{'is-active': sidebarTab === 1}" @click="() => setSidebarTab(1)"><a>Users</a></li>
             <li :class="{'is-active': sidebarTab === 2}" @click="() => setSidebarTab(2)"><a>Stories</a></li>
-            <li :class="{'is-active': sidebarTab === 3}" @click="() => setSidebarTab(3)"><a>Time</a></li>
           </ul>
         </div>
 
@@ -34,10 +26,28 @@
                   <p>
                     <strong>{{user.display_name}}</strong>
                     <span class="icon is-small" :class="{'is-online': user.online, 'is-offline': !user.online}">
-                      <i class="fa fa-circle"></i>
+                      <i class="fa" :class="{[user.vote ? 'fa-check' : 'fa-circle']: true}"></i>
                     </span>
                     <br>
-                    <small>@{{user.username}}</small>
+                    <span
+                      v-if="game.state !== STATE.VOTING && user.vote"
+                      class="tag is-medium"
+                      :class="{[votesColor]: true}"
+                    >
+                      <template v-if="user.vote === 'Pass'">
+                        <span class="icon is-small">
+                          <i class="fa fa-pause"></i>
+                        </span>
+                      </template>
+                      <template v-else-if="user.vote === 'Coffee'">
+                        <span class="icon is-small">
+                          <i class="fa fa-coffee"></i>
+                        </span>
+                      </template>
+                      <template v-else>
+                        {{user.vote}}
+                      </template>
+                    </span>
                   </p>
                 </div>
               </div>
@@ -49,12 +59,33 @@
           <article v-for="story in stories" class="media">
             <div class="media-content">
               <div class="content">
-                <p><strong>{{story.title}}</strong></p>
+                <p>
+                  <strong>{{story.title}}</strong>
+                  <br>
+
+                  <template v-if="game.scores && game.scores[story.id]">
+                    <template v-if="game.scores[story.id] === 'Pass'">
+                      <span class="icon is-small">
+                        <i class="fa fa-pause"></i>
+                      </span>
+                    </template>
+
+                    <template v-else-if="game.scores[story.id] === 'Coffee'">
+                      <span class="icon is-small">
+                        <i class="fa fa-coffee"></i>
+                      </span>
+                    </template>
+
+                    <template v-else>
+                      {{game.scores[story.id]}}
+                    </template>
+                  </template>
+                </p>
               </div>
             </div>
           </article>
         </div>
-              </div>
+      </div>
 
       <div class="column main-board">
         <section v-if="currentStory" class="hero is-primary">
@@ -75,6 +106,37 @@
               class="button is-primary"
             >
               Select story
+            </button>
+
+            <button
+              v-if="game.current_story && (game.state === STATE.CREATED || game.state === STATE.IDLE || game.state === STATE.DISCUSSION)"
+              @click="startVoting"
+              class="button is-info"
+            >
+              Start voting
+            </button>
+
+            <button
+              v-if="game.state === STATE.VOTING"
+              @click="stopVoting"
+              class="button is-danger"
+            >
+              Stop voting
+            </button>
+          </div>
+        </div>
+
+        <div
+          v-if="game.state === STATE.VOTING || (game.state === STATE.DISCUSSION && isManager)"
+          class="manager-controls"
+        >
+          <div class="block">
+            <button
+              v-for="card in deck"
+              @click="() => selectCard(card)"
+              class="button"
+            >
+              {{card}}
             </button>
           </div>
         </div>
@@ -117,68 +179,37 @@
                   <div class="media-content">
                     <div class="content">
                       <p>
-                        <strong>{{story.title}}</strong>
+                        <strong>
+                          {{story.title}}
+
+                          <template v-if="game.scores && game.scores[story.id]">
+                            <template v-if="game.scores[story.id] === 'Pass'">
+                              <span class="icon is-small">
+                                [<i class="fa fa-pause"></i>]
+                              </span>
+                            </template>
+
+                            <template v-else-if="game.scores[story.id] === 'Coffee'">
+                              <span class="icon is-small">
+                                [<i class="fa fa-coffee"></i>]
+                              </span>
+                            </template>
+
+                            <template v-else>
+                              [{{game.scores[story.id]}}]
+                            </template>
+                          </template>
+                        </strong>
+
                         <br>
+
                         {{story.description}}
                       </p>
                     </div>
                   </div>
                 </article>
               </section>
-
-              <footer class="modal-card-foot">
-                <a class="button is-success">Save changes</a>
-                <a class="button">Cancel</a>
-              </footer>
             </div>
-          </div>
-        </div>
-
-      <div v-if="modal.votation.open">
-        <div class="modal is-active">
-          <div class="modal-background"></div>
-          <div class="modal-card">
-            <header class="modal-card-head">
-              <p class="modal-card-title">Inform votation time</p>
-            </header>
-            <section class="modal-card-body">
-              <div class="field">
-                <form
-                  method="post"
-                  @submit.prevent="VotationTimer"
-                  @keyup.13="VotationTimer"
-                >
-                  <p class="control">
-                    <input
-                      class="input"
-                      placeholder="Votation time (min)"
-                      v-model="modal.votation.time"
-                    >
-                  </p>
-                </form>
-              </div>
-              <div v-if="modal.votation.erro" class="notification is-danger">
-                <button @click="modal.votation.erro = false" class="delete"></button>
-                Something went wrong
-              </div>
-            </section>
-            <footer class="modal-card-foot">
-              <a @click="VotationTimer" class="button is-success">Start</a>
-                <a @click="closeVotationModal">Cancel</a>
-              </footer>
-            </div>
-          </div>
-        </div>
-
-        <div v-if="false" class="deck">
-          <div v-for="card in deck" @click="() => select(card)" class="card" :class="cardClass(card)">
-            <span v-if="card === 'Pass'">
-              <i class="fa fa-forward"></i>
-            </span>
-            <span v-if="card === 'Coffee'">
-              <i class="fa fa-coffee"/></i>
-            </span>
-            <span v-if="!['Pass', 'Coffee'].includes(card)">{{card}}</span>
           </div>
         </div>
       </div>
