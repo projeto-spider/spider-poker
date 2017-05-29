@@ -22,35 +22,34 @@
         </div>
 
         <div v-if="sidebarTab === 1" class="connected-users">
-          <article v-for="user in users" class="media">
-            <figure class="media-left">
-              <p class="image is-48x48">
-                <gravatar :email="user.email" :size="48"></gravatar>
-              </p>
-            </figure>
-            <div class="media-content">
-              <div class="content">
-                <p>
-                  <strong>{{user.display_name}}</strong>
-                  <small>@{{user.username}}</small>
+          <transition-group name="flip-list" tag="div">
+            <article v-for="user in users" :key="user.id" class="media">
+              <figure class="media-left">
+                <p class="image is-48x48">
+                  <gravatar :email="user.email" :size="48"></gravatar>
                 </p>
+              </figure>
+              <div class="media-content">
+                <div class="content">
+                  <p>
+                    <strong>{{user.display_name}}</strong>
+                    <span class="icon is-small" :class="{'is-online': user.online, 'is-offline': !user.online}">
+                      <i class="fa fa-circle"></i>
+                    </span>
+                    <br>
+                    <small>@{{user.username}}</small>
+                  </p>
+                </div>
               </div>
-            </div>
-          </article>
+            </article>
+          </transition-group>
         </div>
 
         <div v-if="sidebarTab === 2" class="backlog">
-          <article v-for="story in picked" class="media">
+          <article v-for="story in stories" class="media">
             <div class="media-content">
               <div class="content">
-                <p>
-                  <strong>{{story.name}}</strong>
-                  <br>
-                  {{story.description}}
-                </p>
-                <small>
-                  <a @click="undo"> remove </a>
-                </small>
+                <p><strong>{{story.title}}</strong></p>
               </div>
             </div>
           </article>

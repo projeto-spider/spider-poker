@@ -40,12 +40,20 @@ export default {
         {username: 'bazbar', displayName: 'Bazbar', when: '45s', voted: 13},
         {username: 'quxbar', displayName: 'Quxbar', when: '1m', voted: 40}
       ],
+
+      online: [],
+
+      project: {
+        poId: null,
+        managerId: null,
+        members: [],
+      },
+
       backlog: {
         order: [],
         stories: {}
       },
-      players_ids: [],
-      player_db: {},
+
       message: '',
       messages: [],
       picked: [],
@@ -96,12 +104,28 @@ export default {
     },
 
     users() {
-      return R.map(R.flip(R.prop)(this.player_db), this.players_ids)
+      return this.project.members
+        .map(user => ({
+          ...user,
+          online: this.online.includes(user.id)
+        }))
+        .sort((left, right) => left.online ? -1 : 1)
+    },
+
+    isPo() {
+      return this.loggedUser.id === this.project.poId
+    },
+
+    isManager() {
+      return this.loggedUser.id === this.project.managerId
     },
 
     stories() {
       return this.backlog.order
-        .map(storyId => this.backlog.stories[id])
+        .map(id => ({
+          ...this.backlog.stories[id],
+          id
+        }))
     }
   },
 
@@ -154,6 +178,7 @@ export default {
       this.onGoing = true
     },
 
+    // Removes current story
     undo() {
       this.picked.shift()
       this.modal.stories.open = true
@@ -190,14 +215,13 @@ export default {
 
     applyLeaves(leaves) {
       R.mapObjIndexed((_, id) => {
-        this.players_ids = this.players_ids.filter(R.compose(R.not, R.equals(id)))
+        this.online = R.without([+id], this.online)
       }, leaves)
     },
 
     applyJoins(joins) {
-      R.mapObjIndexed(({user}, id) => {
-        this.players_ids.push(id)
-        this.player_db[id] = user
+      R.mapObjIndexed((_user, id) => {
+        this.online.push(+id)
       }, joins)
     },
 
@@ -212,10 +236,26 @@ export default {
     channelJoined() {
       const projectName = this.$route.params.project
 
+      // TODO: properly handle errors from these requests
+
       Projects.backlog(projectName)
-        .then(({meta: {order}, data}) => {
+        .then(({meta: {order}, data: stories}) => {
           this.backlog.order = order
-          this.backlog.stories = data
+          this.backlog.stories = stories
+        })
+
+      Projects.members.all(projectName)
+        .then(({data: members}) => {
+          this.project.members = members.map(R.prop('user'))
+
+          const po = members.find(R.propEq('role', 'po'))
+          const manager = members.find(R.propEq('role', 'manager'))
+
+          if (po)
+            this.project.poId = po.user.id
+
+          if (manager)
+            this.project.managerId = manager.user.id
         })
     },
 
