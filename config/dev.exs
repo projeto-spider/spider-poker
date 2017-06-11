@@ -10,9 +10,9 @@ config :poker, Poker.Web.Endpoint,
   http: [port: 4000],
   debug_errors: false,
   code_reloader: true,
-  check_origin: false,
-  watchers: [npm: ["run", "dev",
-                   cd: Path.expand("../assets", __DIR__)]]
+  check_origin: false
+  # watchers: [bash: ["./server",
+  #                  cd: Path.expand("../assets", __DIR__)]]
 
 # ## SSL Support
 #
