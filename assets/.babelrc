@@ -1,23 +1,5 @@
 {
-  "presets": [
-    ["env", { "modules": false }],
-    "stage-2"
-  ],
-  "plugins": [
-    "transform-runtime",
-    ["module-alias", [
-      { "src": "./src/components", "expose": "app/components" },
-      { "src": "./src/layouts", "expose": "app/layouts" },
-      { "src": "./src/api", "expose": "app/api" },
-      { "src": "./src/state/store.js", "expose": "app/store" },
-      { "src": "./src/utils.js", "expose": "app/utils" }
-    ]],
-  ],
-  "comments": false,
-  "env": {
-    "test": {
-      "presets": ["env", "stage-2"],
-      "plugins": [ "istanbul" ]
-    }
-  }
+  "presets": [["es2015", {"modules": false}], "stage-2"],
+  "plugins": ["transform-runtime"],
+  "comments": false
 }

@@ -11,7 +11,7 @@ config :poker, Poker.Web.Endpoint,
   debug_errors: false,
   code_reloader: true,
   check_origin: false,
-  watchers: [npm: ["run", "watch",
+  watchers: [npm: ["run", "dev",
                    cd: Path.expand("../assets", __DIR__)]]
 
 # ## SSL Support

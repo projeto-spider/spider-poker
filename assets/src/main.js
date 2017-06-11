@@ -1,26 +1,22 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+// === DEFAULT / CUSTOM STYLE ===
+// WARNING! always comment out ONE of the two require() calls below.
+// 1. use next line to activate CUSTOM STYLE (./src/themes)
+// require(`./themes/app.${__THEME}.styl`)
+// 2. or, use next line to activate DEFAULT QUASAR STYLE
+require(`quasar/dist/quasar.${__THEME}.css`)
+// ==============================
+
 import Vue from 'vue'
-import store from 'app/store'
-import NProgress from 'vue-nprogress'
-import {App} from 'app/components'
+import Quasar from 'quasar'
 import router from './router'
 
-const nprogress = new NProgress()
+Vue.use(Quasar) // Install Quasar Framework
 
-Vue.use(NProgress)
-Vue.config.productionTip = false
-
-/* eslint-disable no-new */
-const app = new Vue({
-  el: '#content',
-  router,
-  store,
-  nprogress,
-  template: '<App/>',
-  components: { App }
+Quasar.start(() => {
+  /* eslint-disable no-new */
+  new Vue({
+    el: '#q-app',
+    router,
+    render: h => h(require('./App'))
+  })
 })
-
-if (process.env.NODE_ENV === 'development') {
-  window.App = app
-}

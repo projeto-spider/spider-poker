@@ -1,38 +1,68 @@
-// see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
 
 module.exports = {
+  // Webpack aliases
+  aliases: {
+    quasar: path.resolve(__dirname, '../node_modules/quasar-framework/'),
+    src: path.resolve(__dirname, '../src'),
+    assets: path.resolve(__dirname, '../src/assets'),
+    components: path.resolve(__dirname, '../src/components')
+  },
+
+  // Progress Bar Webpack plugin format
+  // https://github.com/clessg/progress-bar-webpack-plugin#options
+  progressFormat: ' [:bar] ' + ':percent'.bold + ' (:msg)',
+
+  // Default theme to build with ('ios' or 'mat')
+  defaultTheme: 'mat',
+
   build: {
     env: require('./prod.env'),
     index: path.resolve(__dirname, '../dist/index.html'),
-    assetsRoot: path.resolve(__dirname, '../../priv/static/js'),
-    assetsSubDirectory: '',
-    assetsPublicPath: '/',
-    productionSourceMap: true,
-    // Gzip off by default as many popular static hosts such as
-    // Surge or Netlify already gzip all static assets for you.
-    // Before setting to `true`, make sure to:
-    // npm install --save-dev compression-webpack-plugin
-    productionGzip: false,
-    productionGzipExtensions: ['js', 'css'],
-    // Run the build command with an extra argument to
-    // View the bundle analyzer report after build finishes:
-    // `npm run build --report`
-    // Set to `true` or `false` to always turn it on or off
-    bundleAnalyzerReport: process.env.npm_config_report
+    publicPath: '',
+    productionSourceMap: false,
+
+    // Remove unused CSS
+    // Disable it if it has side-effects for your specific app
+    purifyCSS: true
   },
   dev: {
     env: require('./dev.env'),
+    cssSourceMap: true,
+    // auto open browser or not
+    openBrowser: true,
+    publicPath: '/',
     port: 8080,
-    autoOpenBrowser: true,
-    assetsSubDirectory: '',
-    assetsPublicPath: '/',
-    proxyTable: {},
-    // CSS Sourcemaps off by default because relative paths are "buggy"
-    // with this option, according to the CSS-Loader README
-    // (https://github.com/webpack/css-loader#sourcemaps)
-    // In our experience, they generally work as expected,
-    // just be aware of this issue when enabling this option.
-    cssSourceMap: false
+
+    // If for example you are using Quasar Play
+    // to generate a QR code then on each dev (re)compilation
+    // you need to avoid clearing out the console, so set this
+    // to "false", otherwise you can set it to "true" to always
+    // have only the messages regarding your last (re)compilation.
+    clearConsoleOnRebuild: false,
+
+    // Proxy your API if using any.
+    // Also see /build/script.dev.js and search for "proxy api requests"
+    // https://github.com/chimurai/http-proxy-middleware
+    proxyTable: {
+      '/api': {
+        target: 'http://localhost:4000'
+      }
+    }
   }
 }
+
+/*
+ * proxyTable example:
+ *
+   proxyTable: {
+      // proxy all requests starting with /api
+      '/api': {
+        target: 'https://some.address.com/api',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    }
+ */
