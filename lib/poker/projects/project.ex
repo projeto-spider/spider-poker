@@ -11,7 +11,7 @@ defmodule Poker.Projects.Project do
     field :display_name, :string
     field :description, :string
     field :backlog, {:array, :integer}, default: []
-    field :private, :boolean, default: false
+    field :private, :boolean, default: true
     belongs_to :organization, Poker.Organizations.Organization
     has_many :projects_members, Poker.Projects.Member, on_delete: :delete_all
     has_many :projects_stories, Poker.Projects.Story, on_delete: :delete_all
