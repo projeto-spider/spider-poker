@@ -69,7 +69,7 @@
           v-for="org in organizations"
           :key="`org-${org.id}`"
           :icon="org.private ? 'lock' : 'label'"
-          :label="org.name"
+          :label="org.display_name || org.name"
         >
           <router-link
             v-for="proj in projects.filter(proj => proj.organization_id === org.id)"
@@ -83,7 +83,7 @@
             <i class="item-primary">{{proj.private ? 'lock_outline' : 'label_outline'}}</i>
 
             <div class="item-content">
-              {{proj.name}}
+              {{proj.display_name || proj.name}}
             </div>
           </router-link>
         </q-collapsible>
