@@ -41,7 +41,7 @@
     <q-drawer ref="leftDrawer">
       <div class="list no-border platform-delimiter">
         <div
-          class="item item-link item-inset-delimiter"
+          class="item item-link"
           @click="$refs.organizationModal.open(), $refs.leftDrawer.close()"
         >
           <i class="item-primary">group_add</i>
@@ -52,7 +52,7 @@
         </div>
 
         <div
-          class="item item-link item-inset-delimiter"
+          class="item item-link"
           @click="$refs.projectModal.open(), $refs.leftDrawer.close()"
         >
           <i class="item-primary">playlist_add</i>
@@ -63,6 +63,8 @@
       </div>
 
       <div class="list platform-delimiter">
+        <div class="list-label">Organizations</div>
+
         <q-collapsible
           v-for="org in organizations"
           :key="`org-${org.id}`"
@@ -79,6 +81,7 @@
             @click.native="$refs.leftDrawer.close()"
           >
             <i class="item-primary">{{proj.private ? 'lock_outline' : 'label_outline'}}</i>
+
             <div class="item-content">
               {{proj.name}}
             </div>
