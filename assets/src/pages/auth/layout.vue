@@ -15,7 +15,6 @@ export default {
   .auth-title
     height 30vh
     width 100%
-    padding-top 5vh
     font-size 10vmax
     color rgba(255, 255, 255, .2)
     overflow hidden
