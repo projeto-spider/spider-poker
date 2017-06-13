@@ -42,7 +42,7 @@
       <div class="list no-border platform-delimiter">
         <div
           class="item item-link"
-          @click="$refs.organizationModal.open(), $refs.leftDrawer.close()"
+          @click="$refs.organizationModal.open()"
         >
           <i class="item-primary">group_add</i>
 
@@ -53,7 +53,7 @@
 
         <div
           class="item item-link"
-          @click="$refs.projectModal.open(), $refs.leftDrawer.close()"
+          @click="$refs.projectModal.open()"
         >
           <i class="item-primary">playlist_add</i>
           <div class="item-content">
@@ -92,14 +92,14 @@
 
     <router-view class="layout-view"></router-view>
 
-    <q-modal ref="organizationModal" content-css="min-width: 50vw; padding: 50px 1.5em">
+    <q-modal ref="organizationModal" content-classes="modal-creation">
       <add-organization-modal
         :modal="$refs.organizationModal"
         :organizations="organizations"
       ></add-organization-modal>
     </q-modal>
 
-    <q-modal ref="projectModal" content-css="min-width: 50vw; padding: 50px 1.5em">
+    <q-modal ref="projectModal" content-classes="modal-creation">
       <add-project-modal
         :modal="$refs.projectModal"
         :organizations="organizations"
@@ -110,3 +110,4 @@
 </template>
 
 <script src="./dashboard.js"></script>
+<style lang="sass" src="./dashboard.sass"></style>
