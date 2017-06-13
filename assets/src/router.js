@@ -28,22 +28,15 @@ export default new VueRouter({
     },
 
     {
-      name: 'Auth',
-      path: '/auth',
-      component: page('auth/layout'),
-      children: [
-        {
-          name: 'Login',
-          path: '/auth/login',
-          component: page('auth/login')
-        },
+      name: 'Login',
+      path: '/auth/login',
+      component: page('auth/login')
+    },
 
-        {
-          name: 'Logout',
-          path: '/auth/logout',
-          component: page('auth/logout')
-        }
-      ]
+    {
+      name: 'Logout',
+      path: '/auth/logout',
+      component: page('auth/logout')
     },
 
     {

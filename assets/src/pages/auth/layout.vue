@@ -1,6 +1,14 @@
 <template>
-  <div>
-    <router-view></router-view>
+  <div class="auth-page window-height window-width bg-light column items-center">
+    <div class="auth-title bg-primary flex items-center justify-center">
+      <slot name="title"></slot>
+    </div>
+
+    <div>
+      <div class="auth-card card bg-white">
+        <slot></slot>
+      </div>
+    </div>
   </div>
 </template>
 
