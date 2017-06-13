@@ -11,7 +11,7 @@
       </p>
     </form>
 
-    <p><button class="primary" @click="modal.close">Close</button></p>
+    <p><button class="primary" @click="modal.close()">Close</button></p>
   </div>
 </template>
 
