@@ -15,6 +15,7 @@
         <form @submit.prevent="create">
           <p>
             <q-select
+              label="Organization"
               type="list"
               class="full-width"
               v-model="organization"
