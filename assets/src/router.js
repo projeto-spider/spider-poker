@@ -13,6 +13,26 @@ const component = load('components')
 export default new VueRouter({
   routes: [
     {
+    {
+      name: 'Auth',
+      path: '/auth',
+      component: page('auth/layout'),
+      children: [
+        {
+          name: 'Login',
+          path: '/auth/login',
+          component: page('auth/login')
+        },
+
+    {
+          name: 'Logout',
+          path: '/auth/logout',
+          component: page('auth/logout')
+        }
+      ]
+    },
+
+    {
       path: '/',
       component: layout('base'),
       children: [
