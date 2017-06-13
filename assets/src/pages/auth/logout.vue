@@ -1,10 +1,10 @@
 <template>
-  <div class="error-page window-height window-width bg-light column items-center">
-    <div class="error-code bg-primary flex items-center justify-center">
+  <div class="auth-page window-height window-width bg-light column items-center">
+    <div class="auth-title bg-primary flex items-center justify-center">
       Logout
     </div>
     <div>
-      <div class="error-card card bg-white">
+      <div class="auth-card card bg-white">
         <p>Wait a minute.</p>
         <p>Redirecting you.</p>
       </div>
