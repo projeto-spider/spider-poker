@@ -3,13 +3,14 @@ import {mapGetters} from 'vuex'
 import axios from 'utils/axios'
 import Gravatar from 'components/gravatar.vue'
 import AddOrganizationModal from './modal/add-organization.vue'
+import EditOrganizationModal from './modal/edit-organization.vue'
 import AddProjectModal from './modal/add-project.vue'
 
 export default {
   name: 'Dashboard',
 
   components: {
-    Gravatar, AddOrganizationModal, AddProjectModal
+    Gravatar, AddOrganizationModal, EditOrganizationModal, AddProjectModal
   },
 
   data: () => ({
