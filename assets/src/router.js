@@ -40,6 +40,12 @@ export default new VueRouter({
     },
 
     {
+      name: 'Register',
+      path: '/auth/register',
+      component: page('auth/register')
+    },
+
+    {
       path: '/',
       component: layout('base'),
       children: [
