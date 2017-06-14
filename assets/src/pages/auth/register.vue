@@ -72,6 +72,10 @@
           <button type="submit" class="primary" @click="register">
             Register
           </button>
+
+          <router-link :to="{name: 'Login'}" tag="button" class="clear">
+            I already have an account
+          </router-link>
         </div>
       </p>
     </form>
