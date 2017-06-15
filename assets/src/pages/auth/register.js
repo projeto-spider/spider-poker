@@ -1,13 +1,6 @@
-import {Toast} from 'quasar'
+import {Toast, Loading} from 'quasar'
 import axios from 'utils/axios'
 import OneBoxLayout from 'components/layout/one-box-layout.vue'
-
-const emptyErrors = {
-  username: [],
-  password: [],
-  password_confirmation: [],
-  email: []
-}
 
 export default {
   name: 'Register',
@@ -20,7 +13,12 @@ export default {
     password: '',
     password_confirmation: '',
     email: '',
-    errors: emptyErrors
+    errors: {
+      username: [],
+      password: [],
+      password_confirmation: [],
+      email: []
+    }
   }),
 
   methods: {
@@ -30,6 +28,10 @@ export default {
       }
 
       this.loading = true
+      Loading.show({
+        message: 'Creating account',
+        delay: 0
+      })
       const {username, password, password_confirmation, email} = this
 
       axios.post('/users', {data: {username, password, password_confirmation, email}})
@@ -38,10 +40,12 @@ export default {
     },
 
     handleSuccess(response) {
+      Loading.hide()
       this.$router.push({name: 'Login'})
     },
 
     handleFail(error) {
+      Loading.hide()
       Toast.create.negative('Failed to register')
 
       const errors = error.response.data.errors
