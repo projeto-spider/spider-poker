@@ -1,9 +1,9 @@
-import AuthLayout from './layout'
+import OneBoxLayout from 'components/layout/one-box-layout.vue'
 
 export default {
   name: 'Logout',
 
-  components: {AuthLayout},
+  components: {OneBoxLayout},
 
   created() {
     this.$store.commit('set_token', '')

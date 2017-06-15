@@ -1,6 +1,6 @@
 import {Toast} from 'quasar'
 import axios from 'utils/axios'
-import AuthLayout from './layout'
+import OneBoxLayout from 'components/layout/one-box-layout.vue'
 
 const emptyErrors = {
   username: [],
@@ -12,7 +12,7 @@ const emptyErrors = {
 export default {
   name: 'Register',
 
-  components: {AuthLayout},
+  components: {OneBoxLayout},
 
   data: () => ({
     loading: false,

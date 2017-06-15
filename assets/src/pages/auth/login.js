@@ -1,11 +1,11 @@
-import {Toast} from 'quasar'
+import {Toast, Loading} from 'quasar'
 import axios from 'utils/axios'
-import AuthLayout from './layout'
+import OneBoxLayout from 'components/layout/one-box-layout.vue'
 
 export default {
   name: 'Login',
 
-  components: {AuthLayout},
+  components: {OneBoxLayout},
 
   data: () => ({
     loading: false,
@@ -20,6 +20,10 @@ export default {
       }
 
       this.loading = true
+      Loading.show({
+        message: 'Logging in',
+        delay: 0
+      })
       const {username, password} = this
 
       axios.post('/sessions', {data: {username, password}})
@@ -28,6 +32,7 @@ export default {
     },
 
     handleSuccess(response) {
+      Loading.hide()
       this.$store.commit('set_token', response.data.token)
 
       axios.get('/sessions')
@@ -38,6 +43,7 @@ export default {
     },
 
     handleFail(response) {
+      Loading.hide()
       Toast.create.negative('Failed to login')
       this.loading = false
     }

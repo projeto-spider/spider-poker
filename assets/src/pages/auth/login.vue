@@ -1,5 +1,5 @@
 <template>
-  <auth-layout>
+  <one-box-layout>
     <span slot="title">Login</span>
 
     <form @submit.prevent="login">
@@ -29,7 +29,7 @@
         </div>
       </p>
     </form>
-  </auth-layout>
+  </one-box-layout>
 </template>
 
 <script src="./login.js"></script>
