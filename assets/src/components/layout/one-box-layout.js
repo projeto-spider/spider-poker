@@ -1,3 +1,3 @@
 export default {
-  name: 'OneBoxPage'
+  name: 'OneBoxLayout'
 }
