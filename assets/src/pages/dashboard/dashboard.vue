@@ -70,6 +70,16 @@
             Edit Organization
           </div>
         </div>
+
+        <div
+          class="item item-link"
+          @click="$refs.editProjectModal.open()"
+        >
+          <i class="item-primary">list</i>
+          <div class="item-content">
+            Edit Project
+          </div>
+        </div>
       </div>
 
       <div class="list platform-delimiter">
@@ -122,6 +132,13 @@
         :organizations="organizations"
         :projects="projects"
       ></add-project-modal>
+    </q-modal>
+
+    <q-modal ref="editProjectModal" content-classes="modal-edition">
+      <edit-project-modal
+        :modal="$refs.editProjectModal"
+        :projects="projects"
+      ></edit-project-modal>
     </q-modal>
   </q-layout>
 </template>

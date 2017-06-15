@@ -5,12 +5,13 @@ import Gravatar from 'components/gravatar.vue'
 import AddOrganizationModal from './modal/add-organization.vue'
 import EditOrganizationModal from './modal/edit-organization.vue'
 import AddProjectModal from './modal/add-project.vue'
+import EditProjectModal from './modal/edit-project.vue'
 
 export default {
   name: 'Dashboard',
 
   components: {
-    Gravatar, AddOrganizationModal, EditOrganizationModal, AddProjectModal
+    Gravatar, AddOrganizationModal, EditOrganizationModal, AddProjectModal, EditProjectModal
   },
 
   data: () => ({
