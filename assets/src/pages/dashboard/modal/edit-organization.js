@@ -173,7 +173,7 @@ export default {
       this.loading = false
       Loading.hide()
 
-      this.organizations.splice(this.organizationIndexOnList)
+      this.organizations.splice(this.organizationIndexOnList, 1)
       this.organizationIndexOnList = -1
       this.form = {}
       this.members = []
