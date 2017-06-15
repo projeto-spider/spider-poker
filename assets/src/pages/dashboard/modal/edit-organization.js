@@ -241,9 +241,6 @@ export default {
 
     /* Role Update */
     updateRole(member, role) {
-      // this.$refs.memberPopover.close()
-      console.log(this.$refs.memberPopover)
-
       if (this.loading) {
         return
       }
