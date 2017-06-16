@@ -46,8 +46,6 @@ export default new VueRouter({
     },
 
     {
-
-    {
       name: 'UserSettings',
       path: '/user/settings',
       component: page('user/settings')
