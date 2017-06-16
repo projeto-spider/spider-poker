@@ -5,7 +5,7 @@
     </template>
 
     <template v-else>
-      <div class="story-form">
+      <div class="story-form" @keydown.enter="unshiftStory">
         <div class="list">
           <div class="item three-lines">
             <div class="item-content">
