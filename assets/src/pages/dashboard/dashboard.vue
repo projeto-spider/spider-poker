@@ -40,6 +40,19 @@
     <!-- Left-side Drawer -->
     <q-drawer ref="leftDrawer">
       <div class="list no-border platform-delimiter">
+        <router-link
+          v-if="selectedProjectId"
+          tag="div"
+          class="item item-link"
+          :to="{name: 'Game', params: {projectId: selectedProjectId}}"
+        >
+          <i class="item-primary">games</i>
+
+          <div class="item-content">
+            Start Game
+          </div>
+        </router-link>
+
         <div
           class="item item-link"
           @click="$refs.organizationModal.open()"
@@ -102,7 +115,7 @@
             <div class="item-content">
               {{proj.display_name || proj.name}}
             </div>
-            </div>
+          </div>
         </q-collapsible>
       </div>
     </q-drawer>
