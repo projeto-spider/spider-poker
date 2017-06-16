@@ -167,22 +167,22 @@ defmodule Poker.Projects do
   end
 
   def add_story(proj_id, attrs \\ %{}) do
+    attrs = Map.put(attrs, "project_id", proj_id)
+
     operation =
       %Story{}
       |> Story.changeset(attrs)
       |> Story.validate
       |> Repo.insert
 
-    with {:ok, %Story{id: story_id}} <- operation,
-         {:ok, project} <- get(proj_id)
+    with {:ok, %Story{} = story} <- operation,
+         {:ok, project}          <- get(proj_id),
+          backlog                <- Backlog.unshift(project.backlog, story.id),
+         {:ok, project}          <- project
+                                    |> Project.backlog_changeset(%{"backlog" => backlog})
+                                    |> Repo.update
     do
-      backlog =
-        project.backlog
-        |> Backlog.push(story_id)
-
-      project
-      |> Project.backlog_changeset(%{backlog: backlog})
-      |> Repo.update
+      {:ok, {backlog, story}}
     end
   end
 end
