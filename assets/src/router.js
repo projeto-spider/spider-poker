@@ -46,6 +46,12 @@ export default new VueRouter({
     },
 
     {
+      name: 'Profile',
+      path: '/user/profile/:username',
+      component: page('user/profile')
+    },
+
+    {
       name: 'UserSettings',
       path: '/user/settings',
       component: page('user/settings')
