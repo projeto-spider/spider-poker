@@ -4,6 +4,7 @@ defmodule Poker.Web.UserSocket do
   import Guardian.Phoenix.Socket
 
   ## Channels
+  channel "backlog:*", Poker.Web.BacklogChannel
   channel "game:*", Poker.Web.GameChannel
 
   ## Transports
