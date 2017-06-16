@@ -1,5 +1,6 @@
 defmodule Poker.Projects.Story do
   @moduledoc false
+  @derive {Poison.Encoder, only: [:id, :title, :description, :estimation]}
   use Poker.Web, :model
 
   alias Poker.Projects.Story
