@@ -2,6 +2,7 @@ import {Toast, AppFullscreen} from 'quasar'
 import {mapGetters} from 'vuex'
 import axios from 'utils/axios'
 import Gravatar from 'components/gravatar.vue'
+import Project from './project.vue'
 import AddOrganizationModal from './modal/add-organization.vue'
 import EditOrganizationModal from './modal/edit-organization.vue'
 import AddProjectModal from './modal/add-project.vue'
@@ -11,15 +12,29 @@ export default {
   name: 'Dashboard',
 
   components: {
-    Gravatar, AddOrganizationModal, EditOrganizationModal, AddProjectModal, EditProjectModal
+    Gravatar,
+    Project,
+    AddOrganizationModal,
+    EditOrganizationModal,
+    AddProjectModal,
+    EditProjectModal
   },
 
   data: () => ({
     organizations: [],
     projects: [],
+    selectedProjectId: false
   }),
 
-  computed: mapGetters(['loggedUser']),
+  computed: {
+    ...mapGetters(['loggedUser']),
+
+    selectedProject() {
+      return this.selectedProjectId
+        ? this.projects.find(proj => proj.id === this.selectedProjectId)
+        : false
+    }
+  },
 
   created() {
     const user = this.loggedUser

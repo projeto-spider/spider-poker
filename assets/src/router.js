@@ -17,14 +17,14 @@ export default new VueRouter({
       name: 'Dashboard',
       path: '/dashboard',
       component: page('dashboard/dashboard'),
-      beforeEnter: requireAuth,
-      children: [
-        {
-          name: 'Project',
-          path: '/dashboard/:projectId',
-          component: page('dashboard/project')
-        }
-      ]
+      beforeEnter: requireAuth
+    },
+
+    {
+      name: 'Game',
+      path: '/game/:projectId',
+      component: page('game/game'),
+      beforeEnter: requireAuth
     },
 
     {

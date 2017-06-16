@@ -91,26 +91,27 @@
           :icon="org.private ? 'lock' : 'label'"
           :label="org.display_name || org.name"
         >
-          <router-link
+          <div
             v-for="proj in projects.filter(proj => proj.organization_id === org.id)"
             :key="`proj-${proj.id}`"
-            tag="div"
             class="item item-link item-inset-delimiter"
-            :to="{name: 'Project', params: {projectId: proj.id}}"
-            :exact="true"
-            @click.native="$refs.leftDrawer.close()"
+            @click="selectedProjectId = proj.id"
           >
             <i class="item-primary">{{proj.private ? 'lock_outline' : 'label_outline'}}</i>
 
             <div class="item-content">
               {{proj.display_name || proj.name}}
             </div>
-          </router-link>
+            </div>
         </q-collapsible>
       </div>
     </q-drawer>
 
-    <router-view class="layout-view"></router-view>
+    <div class="layout-view">
+      <project
+        :project="selectedProject"
+       ></project>
+    </div>
 
     <q-modal ref="organizationModal" content-classes="modal-creation">
       <add-organization-modal
