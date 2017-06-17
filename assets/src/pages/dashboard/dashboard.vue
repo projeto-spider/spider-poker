@@ -108,7 +108,7 @@
             v-for="proj in projects.filter(proj => proj.organization_id === org.id)"
             :key="`proj-${proj.id}`"
             class="item item-link item-inset-delimiter"
-            @click="selectedProjectId = proj.id"
+            @click="selectProject(proj.id)"
           >
             <i class="item-primary">{{proj.private ? 'lock_outline' : 'label_outline'}}</i>
 

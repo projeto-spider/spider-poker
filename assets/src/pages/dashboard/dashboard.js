@@ -67,16 +67,33 @@ export default {
 
     handleOrganizationsLoadError(error) {
       Toast.create.negative('Failed to load organizations')
-      console.error(error)
     },
 
     handleProjectsLoaded(response) {
       this.projects = response.data
+
+      const lastProjectId = +localStorage.getItem('lastProjectId')
+
+      /*
+       * If there where a project selected last time
+       * And this project is in the list
+       * Select it.
+       */
+      if (lastProjectId && response.data.some(proj => proj.id === lastProjectId)) {
+        this.selectedProjectId = lastProjectId
+      }
     },
 
     handleProjectsLoadError(error) {
       Toast.create.negative('Failed to load projects')
-      console.error(error)
+    },
+
+    /* Select Project */
+    selectProject(id) {
+      this.selectedProjectId = id
+
+      // Persist last selected project
+      localStorage.setItem('lastProjectId', id)
     }
   }
 }
