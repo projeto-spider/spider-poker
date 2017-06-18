@@ -185,4 +185,15 @@ defmodule Poker.Projects do
       {:ok, {backlog, story}}
     end
   end
+
+  def move_story(proj_id, id, position) do
+    with {:ok, project} <- get(proj_id),
+          backlog       <- Backlog.move(project.backlog, id, position),
+         {:ok, project} <- project
+                           |> Project.backlog_changeset(%{"backlog" => backlog})
+                           |> Repo.update
+    do
+      {:ok, project.backlog}
+    end
+  end
 end
