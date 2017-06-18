@@ -32,8 +32,21 @@ defmodule Poker.Web.BacklogChannel do
       {:ok, {order, story}} ->
         broadcast!(socket, "unshift_story", ~M{order, story})
 
-      {:error, err} ->
+      {:error, _err} ->
         # TODO: properly tell he couldn't add a story
+        nil
+    end
+
+    {:noreply, socket}
+  end
+  def handle_in("move_story", %{"story_id" => story_id, "position" => position}, socket) do
+    case Projects.move_story(project_id(socket), story_id, position) do
+      {:ok, order} ->
+        broadcast!(socket, "order_change", ~M{order})
+
+      {:error, _err} ->
+        # TODO: properly tell he couldn't add a story
+        nil
     end
 
     {:noreply, socket}
