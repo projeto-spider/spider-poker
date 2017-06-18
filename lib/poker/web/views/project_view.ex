@@ -15,8 +15,8 @@ defmodule Poker.Web.ProjectView do
   def render("backlog.json", %{order: order, stories: stories}) do
     rendered =
       render_many(stories, __MODULE__, "story.json")
-      |> Enum.map(fn %{id: id} = attrs ->
-        {id, Map.delete(attrs, :id)}
+      |> Enum.map(fn attrs ->
+        {attrs.id, attrs}
       end)
       |> Enum.into(%{})
 
