@@ -33,24 +33,26 @@
       </div>
 
       <transition-group name="card-story" tag="div">
-        <div v-for="story in backlog" v-bind:key="story" class="card card-story bg-lime-2">
+        <div v-for="(story, position) in backlog" v-bind:key="story" class="card card-story bg-lime-2">
           <div class="card-title">
-            {{story.title}}
 
-            <button ref="target" class="clear pull-right">
+            <button ref="target" class="clear pull-right story-button">
               <i>more_vert</i>
 
               <q-popover ref="popover">
                 <div class="list item-delimiter highlight">
                   <div
                     class="item item-link"
-                    @click="doSomething(), $refs.popover.close()"
+                    @click="promptNewPosition(story, position), $refs.popover[position].close()"
                   >
-                    ...
+                    <div class="item-content">
+                      Move
+                    </div>
                   </div>
                 </div>
               </q-popover>
             </button>
+            {{story.title}}
           </div>
 
           <div v-if="story.description" class="card-content">

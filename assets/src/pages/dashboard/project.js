@@ -1,4 +1,4 @@
-import {Toast, Loading} from 'quasar'
+import {Toast, Loading, Dialog} from 'quasar'
 import {Socket} from 'phoenix'
 import {mapState, mapGetters} from 'vuex'
 import axios from 'utils/axios'
@@ -83,6 +83,7 @@ export default {
       this.channel = this.socket.channel(channelName, channelParams)
 
       this.channel.on('unshift_story', this.channelUnshiftStory)
+      this.channel.on('order_change', this.channelOrderChange)
 
       this.channel
         .join()
@@ -154,6 +155,40 @@ export default {
     channelUnshiftStory({story, order}) {
       this.stories[story.id] = story
       this.order = order
+    },
+
+    /* Story Reordering */
+    promptNewPosition(story, position) {
+      Dialog.create({
+        title: 'Changing Story Position',
+
+        form: {
+          position: {
+            type: 'numeric',
+            label: 'Next Position',
+            model: position + 1, // Do not show 0 index
+            min: 1,
+            max: this.order.length + 1 // Allow you put at the end
+          }
+        },
+
+        buttons: [
+          'Cancel',
+          {
+            label: 'Move',
+            handler: ({position}) => this.changeStoryPosition(story, position)
+          }
+        ]
+      })
+    },
+
+    changeStoryPosition(story, position) {
+      // Down by one since the user pick a position starting from 1, not 0
+      this.channel.push('move_story', {story_id: story.id, position: position - 1})
+    },
+
+    channelOrderChange({order}) {
+      this.order = order
     }
-  }
+  },
 }
