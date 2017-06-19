@@ -4,7 +4,6 @@ import axios from 'utils/axios'
 import Gravatar from 'components/gravatar.vue'
 import Project from './project.vue'
 import EditOrganizationModal from './modal/edit-organization.vue'
-import AddProjectModal from './modal/add-project.vue'
 import EditProjectModal from './modal/edit-project.vue'
 
 export default {
@@ -14,7 +13,6 @@ export default {
     Gravatar,
     Project,
     EditOrganizationModal,
-    AddProjectModal,
     EditProjectModal
   },
 
@@ -105,9 +103,7 @@ export default {
           }
         },
         buttons: [
-          {
-            label: 'Cancel'
-          },
+          'Cancel',
           {
             label: 'Create',
             classes: 'positive',
@@ -133,6 +129,71 @@ export default {
         error.response.data.errors.name
           .map(msg => 'Name ' + msg)
           .join('\n'))
+    },
+
+    askProjectName() {
+      Dialog.create({
+        title: 'Creating Project',
+        form: {
+          name: {
+            type: 'textbox',
+            label: 'Name',
+            model: ''
+          },
+
+          organizationId: {
+            type: 'radio',
+            label: 'Organization',
+            items: this.organizations
+              .map(({id: value, display_name: label}) => ({value, label}))
+          }
+        },
+        buttons: [
+          'Cancel',
+          {
+            label: 'Create',
+            classes: 'positive',
+            handler: this.createProject
+          }
+        ]
+      })
+    },
+
+    createProject({organizationId, name}) {
+      axios.post(`/organizations/${organizationId}/projects`, {data: {name}})
+        .then(this.handleProjectCreated)
+        .catch(this.handleProjectCreationFail)
+    },
+
+    handleProjectCreated(response) {
+      Toast.create.positive('Created project successfully')
+      this.projects.push(response.data)
+    },
+
+    handleProjectCreationFail(error) {
+      const {errors} = error.response.data
+
+      if (error.response.status === 400) {
+        return Toast.create.negative('Select an organization')
+      }
+
+      if (error.response.status !== 422) {
+        return Toast.create.negative('Something went wrong')
+      }
+
+      if (errors.organization) {
+        Toast.create.negative(
+          errors.organization
+            .map(msg => `Organization ${msg}`)
+            .join('\n'))
+      }
+
+      if (errors.name) {
+        Toast.create.negative(
+          errors.name
+            .map(msg => `Name ${msg}`)
+            .join('\n'))
+      }
     }
   }
 }
