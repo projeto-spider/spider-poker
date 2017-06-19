@@ -55,7 +55,7 @@
 
         <div
           class="item item-link"
-          @click="$refs.organizationModal.open()"
+          @click="askOrganizationName()"
         >
           <i class="item-primary">group_add</i>
 
@@ -125,13 +125,6 @@
         :project="selectedProject"
        ></project>
     </div>
-
-    <q-modal ref="organizationModal" content-classes="modal-creation">
-      <add-organization-modal
-        :modal="$refs.organizationModal"
-        :organizations="organizations"
-      ></add-organization-modal>
-    </q-modal>
 
     <q-modal ref="editOrganizationModal" content-classes="modal-edition">
       <edit-organization-modal

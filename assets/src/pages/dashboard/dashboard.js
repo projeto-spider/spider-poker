@@ -1,9 +1,8 @@
-import {Toast, AppFullscreen} from 'quasar'
+import {Toast, AppFullscreen, Dialog} from 'quasar'
 import {mapGetters} from 'vuex'
 import axios from 'utils/axios'
 import Gravatar from 'components/gravatar.vue'
 import Project from './project.vue'
-import AddOrganizationModal from './modal/add-organization.vue'
 import EditOrganizationModal from './modal/edit-organization.vue'
 import AddProjectModal from './modal/add-project.vue'
 import EditProjectModal from './modal/edit-project.vue'
@@ -14,7 +13,6 @@ export default {
   components: {
     Gravatar,
     Project,
-    AddOrganizationModal,
     EditOrganizationModal,
     AddProjectModal,
     EditProjectModal
@@ -94,6 +92,47 @@ export default {
 
       // Persist last selected project
       localStorage.setItem('lastProjectId', id)
+    },
+
+    askOrganizationName() {
+      Dialog.create({
+        title: 'Creating Organization',
+        form: {
+          name: {
+            type: 'textbox',
+            label: 'Name',
+            model: ''
+          }
+        },
+        buttons: [
+          {
+            label: 'Cancel'
+          },
+          {
+            label: 'Create',
+            classes: 'positive',
+            handler: this.createOrganization
+          }
+        ]
+      })
+    },
+
+    createOrganization({name}) {
+      axios.post('/organizations', {data: {name}})
+        .then(this.handleOrganizationCreated)
+        .catch(this.handleOrganizationCreationFail)
+    },
+
+    handleOrganizationCreated(response) {
+      Toast.create.positive('Created organization successfully')
+      this.organizations.push(response.data)
+    },
+
+    handleOrganizationCreationFail(error) {
+      Toast.create.negative(
+        error.response.data.errors.name
+          .map(msg => 'Name ' + msg)
+          .join('\n'))
     }
   }
 }
