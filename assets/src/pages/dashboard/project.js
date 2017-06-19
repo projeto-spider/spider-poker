@@ -168,7 +168,7 @@ export default {
             label: 'Next Position',
             model: position + 1, // Do not show 0 index
             min: 1,
-            max: this.order.length + 1 // Allow you put at the end
+            max: this.order.length
           }
         },
 
