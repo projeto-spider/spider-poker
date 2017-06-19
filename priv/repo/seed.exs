@@ -138,9 +138,9 @@ end)
 
 [
   {"planning-poker", [
-    %{title: "First", description: "Lorem"},
-    %{title: "Second", description: "Ipsum"},
-    %{title: "Third", description: "Sit"},
+    %{"title" => "First", "description" => "Lorem"},
+    %{"title" => "Second", "description" => "Ipsum"},
+    %{"title" => "Third", "description" => "Sit"},
   ]}
 ]
 |> Enum.map(fn {proj_name, stories} ->
@@ -149,7 +149,7 @@ end)
 
     stories
     |> Enum.map(fn attrs ->
-      data = Map.put(attrs, :project_id, proj_id)
+      data = Map.put(attrs, "project_id", proj_id)
       {:ok, _} = Projects.add_story(proj_id, data)
     end)
   end
