@@ -4,6 +4,16 @@ import {mapState, mapGetters} from 'vuex'
 import axios from 'utils/axios'
 import Gravatar from 'components/gravatar.vue'
 
+/*
+ * State Enum
+ * Replicates the server Enum.
+ * See: Poker.Web.Game
+ */
+const CREATED = 0
+const IDLE = 1
+const VOTING = 2
+const DISCUSSION = 3
+
 export default {
   name: 'Game',
 
@@ -13,6 +23,17 @@ export default {
     /* Socket */
     socket: false,
     channel: false,
+
+    /*
+     * Game
+     * This mimicks the server Poker.Web.Game module
+     * therefore we have snake_cased data.
+     */
+    state: 0,
+    current_story: false,
+    scores: {},
+    time: false,
+    votes: {},
 
     /* Chat */
     messages: [],
@@ -37,6 +58,23 @@ export default {
     backlog() {
       return this.order
         .map(id => this.stories[id])
+    },
+
+    /* State helpers */
+    created() {
+      return this.state === CREATED
+    },
+
+    idle() {
+      return this.state === IDLE
+    },
+
+    voting() {
+      return this.state === VOTING
+    },
+
+    discussion() {
+      return this.state === DISCUSSION
     }
   },
 
@@ -133,7 +171,6 @@ export default {
         return Toast.create.negative('Project not found')
       }
 
-      console.log({reason})
       Toast.create.negative('Failed to connect to game server')
     },
 
