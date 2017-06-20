@@ -26,9 +26,23 @@ export default {
     ...mapGetters(['loggedUser']),
 
     selectedProject() {
-      return this.selectedProjectId
-        ? this.projects.find(proj => proj.id === this.selectedProjectId)
-        : false
+      if (!this.selectedProjectId) {
+        return false
+      }
+
+      const project = this.projects
+        .find(proj => proj.id === this.selectedProjectId)
+
+      /*
+       * If you delete a project while you're at it
+       * bad things would happen, so let me prevent it.
+      */
+      if (!project) {
+        this.selectedProjectId = false
+        return false
+      }
+
+      return project
     }
   },
 
@@ -44,7 +58,6 @@ export default {
       )
       .catch(this.handleOrganizationsLoadError)
   },
-
 
   methods: {
     /* Full Screen */
