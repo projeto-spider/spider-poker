@@ -45,9 +45,21 @@
                     class="item item-link"
                     @click="promptNewPosition(story, position), $refs.popover[position].close()"
                   >
-                    <div class="item-content">
-                      Move
-                    </div>
+                    <div class="item-content">Move</div>
+                  </div>
+
+                  <div
+                    class="item item-link"
+                    @click="promptStoryUpdate(story), $refs.popover[position].close()"
+                  >
+                    <div class="item-content">Edit</div>
+                  </div>
+
+                  <div
+                    class="item item-link"
+                    @click="confirmStoryDeletion(story), $refs.popover[position].close()"
+                  >
+                    <div class="item-content">Delete</div>
                   </div>
                 </div>
               </q-popover>

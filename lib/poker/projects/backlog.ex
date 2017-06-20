@@ -9,6 +9,10 @@ defmodule Poker.Projects.Backlog do
     Enum.concat(backlog, [id])
   end
 
+  def remove(backlog, id) do
+    Enum.reject(backlog, &(&1 == id))
+  end
+
   def move(backlog, id, 0),    do: [id | Enum.reject(backlog, &(&1 == id))]
   def move([], id, _position), do: [id]
   def move([head|tail], id, position) do

@@ -30,10 +30,34 @@ defmodule Poker.Web.BacklogChannel do
   def handle_in("unshift_story", ~m{title, description}, socket) do
     case Projects.add_story(project_id(socket), ~m{title, description}) do
       {:ok, {order, story}} ->
-        broadcast!(socket, "unshift_story", ~M{order, story})
+        broadcast!(socket, "unshift_story", ~m{order, story})
 
       {:error, _err} ->
         # TODO: properly tell he couldn't add a story
+        nil
+    end
+
+    {:noreply, socket}
+  end
+  def handle_in("update_story", ~m{story_id, title, description}, socket) do
+    case Projects.update_story(story_id, ~m{title, description}) do
+      {:ok, story} ->
+        broadcast!(socket, "story_updated", ~m{story})
+
+      {:error, err} ->
+        # TODO: properly tell he couldn't update a story
+        nil
+    end
+
+    {:noreply, socket}
+  end
+  def handle_in("delete_story", ~m{story_id}, socket) do
+    case Projects.delete_story(story_id) do
+      {:ok, {order, story}} ->
+        broadcast!(socket, "story_deleted", ~m{order, story})
+
+      {:error, err} ->
+        # TODO: properly tell he couldn't remove a story
         nil
     end
 
@@ -45,7 +69,7 @@ defmodule Poker.Web.BacklogChannel do
         broadcast!(socket, "order_change", ~M{order})
 
       {:error, _err} ->
-        # TODO: properly tell he couldn't add a story
+        # TODO: properly tell he couldn't move a story
         nil
     end
 

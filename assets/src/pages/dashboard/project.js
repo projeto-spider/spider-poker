@@ -83,6 +83,8 @@ export default {
       this.channel = this.socket.channel(channelName, channelParams)
 
       this.channel.on('unshift_story', this.channelUnshiftStory)
+      this.channel.on('story_updated', this.channelStoryUpdated)
+      this.channel.on('story_deleted', this.channelStoryDeleted)
       this.channel.on('order_change', this.channelOrderChange)
 
       this.channel
@@ -155,6 +157,72 @@ export default {
     channelUnshiftStory({story, order}) {
       this.stories[story.id] = story
       this.order = order
+    },
+
+    /* Story Update */
+    promptStoryUpdate(story) {
+      Dialog.create({
+        title: 'Updating Story',
+
+        form: {
+          title: {
+            type: 'textbox',
+            label: 'Title',
+            model: story.title
+          },
+
+          description: {
+            type: 'textarea',
+            label: 'Description',
+            model: story.description
+          }
+        },
+
+        buttons: [
+          'Cancel',
+          {
+            label: 'Update',
+            handler: data => this.updateStory(story, data)
+          }
+        ]
+      })
+    },
+
+    updateStory(story, {title, description}) {
+      this.channel.push('update_story', {story_id: story.id, title, description})
+    },
+
+    channelStoryUpdated({story}) {
+      this.stories[story.id] = story
+    },
+
+    /* Story Deletion */
+    confirmStoryDeletion(story) {
+      Dialog.create({
+        title: 'Danger',
+        message: "You can't undo a deletion!",
+        buttons: [
+          {
+            label: 'Confirm',
+            classes: 'negative',
+            handler: () => this.deleteStory(story)
+          },
+
+          {
+            label: 'Cancel',
+            classes: 'positive clear'
+          }
+        ]
+      })
+    },
+
+    deleteStory({id: story_id}) {
+      this.channel.push('delete_story', {story_id})
+    },
+
+    channelStoryDeleted({order, story}) {
+      this.order = order
+      this.stories[story.id] = null
     },
 
     /* Story Reordering */

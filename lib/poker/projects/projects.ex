@@ -186,6 +186,29 @@ defmodule Poker.Projects do
     end
   end
 
+  def update_story(id, attrs \\ %{}) do
+    with {:ok, story} <- Repo.soft_get(Story, id),
+         {:ok, story} <- story
+                         |> Story.changeset(attrs)
+                         |> Repo.update
+    do
+      {:ok, story}
+    end
+  end
+
+  def delete_story(id) do
+    with {:ok, story} <- Repo.soft_get(Story, id),
+         {:ok, proj}  <- get(story.project_id),
+         backlog      <- Backlog.remove(proj.backlog, id),
+         {:ok, project} <- (proj
+                           |> Project.backlog_changeset(%{"backlog" => backlog})
+                           |> Repo.update),
+         {:ok, story} <- Repo.delete(story)
+    do
+      {:ok, {backlog, story}}
+    end
+  end
+
   def move_story(proj_id, id, position) do
     with {:ok, project} <- get(proj_id),
           backlog       <- Backlog.move(project.backlog, id, position),
