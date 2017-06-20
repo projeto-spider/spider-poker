@@ -35,6 +35,18 @@ export default {
     time: false,
     votes: {},
 
+    /*
+     * Presence
+     * Users works like a database to cache user data
+     * instead of receiving everytime we receive messages
+     * and other things.
+     * Users start false to not render anything on the template
+     * Online and offline state are computed values.
+     */
+    users: false,
+    onlineIds: [],
+    offlineIds: [],
+
     /* Chat */
     messages: [],
     message: '',
@@ -60,6 +72,23 @@ export default {
         .map(id => this.stories[id])
     },
 
+    /* Membership */
+    role() {
+      const membership = this.users[this.loggedUser.id]
+      return membership.role || 'team'
+    },
+
+    /* Presence */
+    online() {
+      return this.onlineIds
+        .map(id => this.users[id])
+    },
+
+    offline() {
+      return Object.values(this.users)
+        .filter(user => !this.onlineIds.includes(user.id))
+    },
+
     /* State helpers */
     created() {
       return this.state === CREATED
@@ -80,6 +109,12 @@ export default {
 
   created() {
     this.connectToGame()
+  },
+
+  beforeDestroy() {
+    if (this.channel) {
+      this.channel.leave()
+    }
   },
 
   watch: {
@@ -112,6 +147,8 @@ export default {
 
       this.channel.on('game_state', this.channelGameState)
       this.channel.on('message', this.channelMessage)
+      this.channel.on('presence_state', this.channelPresenceState)
+      this.channel.on('presence_diff', this.channelPresenceDiff)
 
       this.channel.join()
         .receive('ok', this.channelJoined)
@@ -126,7 +163,15 @@ export default {
     },
 
     membersLoaded(response) {
-      this.members = response.data
+      this.users = response.data.reduce((acc, member) =>
+        Object.assign(acc, {
+          [member.user.id]: {
+            ...member.user,
+            // useful for tests later
+            role: member.role
+          }
+        })
+      , {})
     },
 
     membersLoadFail(_error) {
@@ -180,6 +225,19 @@ export default {
 
     channelMessage(message) {
       this.messages.push(message)
+    },
+
+    channelPresenceState(joins) {
+      this.channelPresenceDiff({joins, leaves: {}})
+    },
+
+    channelPresenceDiff({leaves, joins}) {
+      const joinsIds = Object.keys(joins).map(Number)
+      const leavesIds = Object.keys(leaves).map(Number)
+
+      this.onlineIds = this.onlineIds
+        .filter(id => !leavesIds.some(idB => idB === id))
+        .concat(joinsIds)
     },
 
     /* Full Screen */

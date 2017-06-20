@@ -31,36 +31,34 @@
         </q-toolbar-title>
       </div>
 
-      <div class="list no-border platform-delimiter">
+      <div v-if="users" class="list no-border platform-delimiter">
         <div class="list-label">Online</div>
 
-        <div class="item">
-          <gravatar email="lubien1996@gmail.com" :circle="true" class="item-primary"></gravatar>
-          <div class="item-content has-secondary">
-            João Ferreira
-          </div>
-        </div>
+        <transition-group name="user-presence">
+          <div v-for="user in online" :key="user" class="item">
+            <gravatar :email="user.email" :circle="true" class="item-primary"></gravatar>
+            <div class="item-content has-secondary">{{user.display_name}}</div>
 
-        <div class="item">
-          <gravatar email="leonardo.chfc@gmail.com" :circle="true" class="item-primary"></gravatar>
-          <div class="item-content has-secondary">
-            Leonardo Costa
+            <i class="item-secondary">
+              done
+            </i>
           </div>
-          <i class="item-secondary">
-            done
-          </i>
-        </div>
+        </transition-group>
 
         <hr>
 
         <div class="list-label">Offline</div>
 
-        <div class="item">
-          <gravatar email="fake@gmail.com" :circle="true" class="item-primary"></gravatar>
-          <div class="item-content">
-            John Doe
+        <transition-group name="user-presence">
+          <div v-for="user in offline" :key="user" class="item">
+            <gravatar :email="user.email" :circle="true" class="item-primary"></gravatar>
+            <div class="item-content has-secondary">{{user.display_name}}</div>
+
+            <i class="item-secondary">
+              done
+            </i>
           </div>
-        </div>
+        </transition-group>
       </div>
     </q-drawer>
 
