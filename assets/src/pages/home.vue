@@ -1,44 +1,42 @@
 <template>
-  <div>
-    <q-layout>
-      <div class="layout-view">
-        <div class="columns">
-          <div class="column is-half">
-            <div class="title-box">
-              <h1 class="title">
-                <b>Planning</b>Poker
-              </h1>
-              <p class="subtitle">Built to improve your complexity analysis</p>
-            </div>
-          </div>
-          <div class="column">
-            <div class="layout-padding">
-              <div class="box">
-                <div class="floating-label">
-                  <input required class="full-width">
-                  <label>User name</label>
-                </div>
-                <div class="floating-label">
-                  <input required class="full-width">
-                  <label>Email</label>
-                </div>
-                <div class="floating-label">
-                  <input required class="full-width">
-                  <label>Password</label>
-                </div>
-                <div class="floating-label">
-                  <input required class="full-width">
-                  <label>Confirm password</label>
-                </div>
-                <br/>
-                <button class="button is-primary is-fullwidth"> Sing up </button>
-              </div>
-          </div>
+  <q-layout class="bg-light-blue-1">
+    <div slot="header" class="toolbar bg-light-blue-5">
+      <div class="toolbar-content">
+        <div class="toolbar-title" :padding="1">
+          Spider Poker
         </div>
+      </div>
+      <button v-link="'/auth/login'">Sing in</button>
+      <button v-link="'/auth/register'">Sing up</button>
+    </div>
+
+    <div class="layout-view">
+      <div class="logo">
+        <img src="../assets/SpiderPoker.png" height="300" width="300">
+        <h1><b>Spider</b>Poker</h1>
+        <h2>Built to improve your complexity analysis.</h2>
+
+        <br/>
+
+        <button class="primary" v-link="'/auth/register'">
+          <i>whatshot</i>
+          I wanna start!
+        </button>
+        <a href="https://github.com/projeto-spider/planning-poker" target="_blank">
+          <button class="primary" >
+            <i>cloud</i>
+            know more
+          </button>
+        </a>
+        <a href="http://www.spider.ufpa.br/" target="_blank">
+          <button class="primary">
+            <i>account_circle</i>
+            Spider project
+          </button>
+        </a>
       </div>
     </div>
     </q-layout>
-  </div>
 </template>
 
 <script>
@@ -51,18 +49,15 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-.layout-view
-  dispay: flex
-  flex-direction: column
-.box
-  margin: 20% auto
-.title-box
-  color: black
-  width: 340px;
-  margin: 40% 30%;
-.title
-  font-size: 50px
-  color: #88c139
-.subtitle
-  color: white
+.logo
+  margin: 5% auto
+  text-align: center
+
+  h1
+    font-size: 50px
+    color: #3c5675
+
+  h2
+    font-size: 30px
+    color: #3c5675
 </style>
