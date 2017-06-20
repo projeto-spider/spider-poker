@@ -155,7 +155,14 @@ export default {
     },
 
     channelUnshiftStory({story, order}) {
-      this.stories[story.id] = story
+      /*
+       * A new object is assigned since Vue needs to make
+       * our new story observable otherwise editions won't work!
+      */
+      this.stories = {
+        ...this.stories,
+        [story.id]: story
+      }
       this.order = order
     },
 
@@ -258,5 +265,5 @@ export default {
     channelOrderChange({order}) {
       this.order = order
     }
-  },
+  }
 }
