@@ -30,7 +30,8 @@ export default new VueRouter({
     {
       name: 'Login',
       path: '/auth/login',
-      component: page('auth/login')
+      component: page('auth/login'),
+      beforeEnter: notAuthenticated
     },
 
     {
@@ -42,7 +43,8 @@ export default new VueRouter({
     {
       name: 'Register',
       path: '/auth/register',
-      component: page('auth/register')
+      component: page('auth/register'),
+      beforeEnter: notAuthenticated
     },
 
     {
@@ -65,7 +67,8 @@ export default new VueRouter({
         {
           name: 'Home',
           path: '/',
-          component: page('home')
+          component: page('home'),
+          beforeEnter: notAuthenticated
         },
 
         {
@@ -97,4 +100,12 @@ function requireAuth(to, from, next) {
   return next({
     name: 'Login'
   })
+}
+
+function notAuthenticated(to, from, next) {
+  if (store.getters.isAuthenticated) {
+    return next({name: 'Dashboard'})
+  }
+
+  return next()
 }
