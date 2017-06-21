@@ -64,6 +64,12 @@
                 </div>
               </q-popover>
             </button>
+
+            <span v-if="story.estimation" class="label bg-primary text-white">
+              <template v-if="story.estimation === 'time'"><i>access_time</i></template>
+              <template v-else>{{story.estimation}}</template>
+            </span>
+
             {{story.title}}
           </div>
 
