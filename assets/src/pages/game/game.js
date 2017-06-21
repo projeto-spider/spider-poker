@@ -39,6 +39,9 @@ export default {
     /* Time */
     now: 0,
 
+    /* Selected Card */
+    selectedCard: false,
+
     /*
      * Game
      * This mimicks the server Poker.Web.Game module
@@ -268,6 +271,28 @@ export default {
       this.channel.push('select_story', story.id)
     },
 
+    /* Voting */
+    startVoting() {
+      this.channel.push('start_voting')
+    },
+
+    stopVoting() {
+      this.channel.push('stop_voting')
+    },
+
+    selectCard(card) {
+      if (this.voting) {
+        this.selectedCard = card
+        return this.channel.push('set_vote', card)
+      }
+
+      if (!this.role === 'manager') {
+        return
+      }
+
+      this.channel.push('set_score', card)
+    },
+
     /* Channel Events */
     channelJoined() {
       Loading.hide()
@@ -295,6 +320,11 @@ export default {
     },
 
     channelGameState({game}) {
+      // Reset selected card when a new voting start
+      if (this.state !== game.state) {
+        this.selectedCard = false
+      }
+
       Object.assign(this, game)
     },
 

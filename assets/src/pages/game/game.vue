@@ -22,6 +22,22 @@
       <q-tab icon="chat" name="tab-chat">Chat</q-tab>
       <q-tab icon="list" name="tab-stories">Stories</q-tab>
       <q-tab icon="timeline" name="tab-events">Events</q-tab>
+      <div
+        v-if="role === 'manager' && current_story && (created || idle || discussion)"
+        @click.prevent="startVoting"
+        class="q-tab tab-control items-centter justify-center"
+      >
+        <i class="q-tabs-icon">star_rate</i>
+        <span class="q-tab-label">Start Voting</span>
+      </div>
+      <div
+        v-if="role === 'manager' && voting"
+        @click.prevent="stopVoting"
+        class="q-tab tab-control items-centter justify-center"
+      >
+        <i class="q-tabs-icon">star_rate</i>
+        <span class="q-tab-label">Stop Voting</span>
+      </div>
     </q-tabs>
 
     <q-drawer ref="leftDrawer">
@@ -39,9 +55,24 @@
             <gravatar :email="user.email" :circle="true" class="item-primary"></gravatar>
             <div class="item-content has-secondary">{{user.display_name}}</div>
 
-            <i class="item-secondary">
-              done
-            </i>
+            <template>
+              <i
+                v-if="voting && votes.includes(user.id)"
+                class="item-secondary"
+              >
+                done
+              </i>
+
+              <template v-else-if="discussion && votes[user.id]">
+                <i v-if="votes[user.id] === 'time'" class="item-secondary">
+                  access_time
+                </i>
+
+                <span v-else class="item-secondary">
+                  {{votes[user.id]}}
+                </span>
+              </template>
+            </template>
           </div>
         </transition-group>
 
@@ -84,7 +115,7 @@
         </div>
 
         <div ref="tab-stories">
-          <div v-for="(story, position) in backlog" v-bind:key="story" class="card card-story bg-lime-2">
+          <div v-for="(story, position) in backlog" v-if="story" class="card card-story bg-lime-2">
             <div class="card-title">
 
               <button v-if="role === 'manager'" ref="target" class="clear pull-right story-button">
@@ -114,7 +145,7 @@
       </div>
     </div>
 
-    <q-drawer ref="rightDrawer" v-if="current_story" right-side>
+    <q-drawer ref="rightDrawer" v-if="stories[current_story]" right-side>
       <div class="toolbar bg-secondary">
         <q-toolbar-title>
           Current Story
@@ -130,20 +161,26 @@
         </div>
       </div>
 
-      <div class="flex wrap small-gutter cards" style="padding: 5px 15px">
-          <button class="light big auto">0</button>
-          <button class="light big auto">1/2</button>
-          <button class="light big auto">1</button>
-          <button class="light big auto">2</button>
-          <button class="light big auto">3</button>
-          <button class="light big auto">5</button>
-          <button class="light big auto">8</button>
-          <button class="light big auto">13</button>
-          <button class="light big auto">20</button>
-          <button class="light big auto">40</button>
-          <button class="light big auto">100</button>
-          <button class="light big auto">?</button>
-          <button class="light big auto"><i>access_time</i></button>
+      <div
+        v-if="voting || (discussion && role === 'manager')"
+        class="flex wrap small-gutter cards"
+        style="padding: 5px 15px"
+      >
+        <button
+          v-for="card in [1, '1/2', 2, 3, 5, 8, 13, 20, 40, 100, '?', 'time']"
+          @click="selectCard(card)"
+          class="big auto"
+          :class="{[selectedCard === card ? 'primary' : 'light']: true}"
+          :disabled="selectedCard === card"
+        >
+          <template v-if="card === 'time'">
+            <i>access_time</i>
+          </template>
+
+          <template v-else>
+            {{card}}
+          </template>
+        </button>
       </div>
     </q-drawer>
 
