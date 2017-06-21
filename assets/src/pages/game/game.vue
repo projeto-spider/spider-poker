@@ -167,13 +167,23 @@
         </div>
       </div>
 
+      <p class="caption" style="padding: 5px 15px">
+        <template v-if="voting">
+          Choose your vote
+        </template>
+
+        <template v-else-if="discussion && role === 'manager'">
+          Choose the final estimation
+        </template>
+      </p>
+
       <div
         v-if="voting || (discussion && role === 'manager')"
         class="flex wrap small-gutter cards"
         style="padding: 5px 15px"
       >
         <button
-          v-for="card in [1, '1/2', 2, 3, 5, 8, 13, 20, 40, 100, '?', 'time']"
+          v-for="card in [1, '1/2', 2, 3, 5, 8, 13, 20, 40, 100, '?', 'time'].filter(card => voting ? true : !isNaN(card))"
           @click="selectCard(card)"
           class="big auto"
           :class="{[selectedCard === card ? 'primary' : 'light']: true}"
