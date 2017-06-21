@@ -80,11 +80,6 @@ export default new VueRouter({
     },
 
     {
-      path: '/init',
-      component: page('init')
-    },
-
-    {
       name: 'Error',
       path: '*',
       component: component('Error404')
