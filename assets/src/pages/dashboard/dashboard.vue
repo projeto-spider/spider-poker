@@ -26,6 +26,20 @@
           <div class="list item-delimiter highlight">
             <div
               class="item item-link"
+              @click="$refs.userPopover.close(), $router.push({name: 'Profile', params: {username: loggedUser.username}})"
+            >
+              <div class="item-content">Profile</div>
+            </div>
+
+            <div
+              class="item item-link"
+              @click="$refs.userPopover.close(), $router.push({name: 'UserSettings'})"
+            >
+              <div class="item-content">Settings</div>
+            </div>
+
+            <div
+              class="item item-link"
               @click="$refs.userPopover.close(), $router.push({name: 'Logout'})"
             >
               <div class="item-content">
