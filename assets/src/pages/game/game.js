@@ -63,7 +63,6 @@ export default {
      */
     users: false,
     onlineIds: [],
-    offlineIds: [],
 
     /* Chat */
     messages: [],
