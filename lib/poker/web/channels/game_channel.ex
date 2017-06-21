@@ -76,7 +76,8 @@ defmodule Poker.Web.GameChannel do
     {:ok, game} = Game.for(socket)
 
     if Game.manager?(game, user) do
-      duration = 3 * 60 # TODO: not hardcode this time
+      {:ok, proj} = Projects.get(game.project_name)
+      duration = proj.votation_time * 60 # TODO: cache this
       time_to_end = System.system_time(:seconds) + duration
 
       {:ok, game} = Game.start_voting(game, time_to_end)
