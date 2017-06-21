@@ -90,7 +90,9 @@ export default {
     /* Membership */
     role() {
       const membership = this.users[this.loggedUser.id]
-      return membership.role || 'team'
+      return membership
+        ? membership.role
+        : 'team'
     },
 
     /* Presence */
