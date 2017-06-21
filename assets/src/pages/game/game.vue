@@ -38,6 +38,14 @@
         <i class="q-tabs-icon">star_rate</i>
         <span class="q-tab-label">Stop Voting</span>
       </div>
+      <div
+        v-if="role === 'manager'"
+        @click.prevent="finishGame"
+        class="q-tab tab-control items-centter justify-center"
+      >
+        <i class="q-tabs-icon">close</i>
+        <span class="q-tab-label">Finish Game</span>
+      </div>
     </q-tabs>
 
     <q-drawer ref="leftDrawer">

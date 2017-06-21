@@ -81,6 +81,10 @@ defmodule Poker.Web.Game do
     GenServer.call(__MODULE__, {:set_score, game, score})
   end
 
+  def finish(game) do
+    GenServer.call(__MODULE__, {:finish, game})
+  end
+
   # Callbacks
 
   def handle_call({:create, project_name}, _from, state) do
@@ -158,5 +162,9 @@ defmodule Poker.Web.Game do
 
       {:reply, {:ok, {story, updated_game}}, next_state}
     end
+  end
+
+  def handle_call({:finish, game}, _from, state) do
+    {:reply, {:ok, game}, Map.delete(state, game.project_name)}
   end
 end

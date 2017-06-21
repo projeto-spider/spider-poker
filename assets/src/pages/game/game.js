@@ -213,6 +213,7 @@ export default {
       this.channel.on('story_updated', this.channelStoryUpdated)
       this.channel.on('presence_state', this.channelPresenceState)
       this.channel.on('presence_diff', this.channelPresenceDiff)
+      this.channel.on('game_finished', this.channelGameFinished)
 
       this.channel.join()
         .receive('ok', this.channelJoined)
@@ -294,6 +295,11 @@ export default {
       this.channel.push('set_score', card)
     },
 
+    /* Finish Game */
+    finishGame() {
+      this.channel.push('finish_game')
+    },
+
     /* Channel Events */
     channelJoined() {
       Loading.hide()
@@ -369,6 +375,11 @@ export default {
       })
 
       this.onlineIds = next
+    },
+
+    channelGameFinished() {
+      console.log('finished')
+      this.$router.push({name: 'Dashboard'})
     },
 
     /* Time */

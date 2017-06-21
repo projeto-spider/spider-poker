@@ -132,6 +132,18 @@ defmodule Poker.Web.GameChannel do
     {:noreply, socket}
   end
 
+  def handle_in("finish_game", _, socket) do
+    user = socket.assigns.user
+    {:ok, game} = Game.for(socket)
+
+    if Game.manager?(game, user) do
+      {:ok, game} = Game.finish(game)
+      broadcast!(socket, "game_finished", game)
+    end
+
+    {:noreply, socket}
+  end
+
   def handle_out("game_state", game, socket) do
     payload = Game.display_public(game)
     push(socket, "game_state", %{game: payload})
