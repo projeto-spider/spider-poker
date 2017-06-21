@@ -42,9 +42,11 @@ defmodule Poker.Web.GameChannel do
     {:noreply, socket}
   end
 
-  def handle_in("message", %{"body" => body}, socket) do
+  def handle_in("message", %{"anonymous" => anonymous?, "body" => body}, socket) do
+    user_id = if anonymous?, do: 0, else: socket.assigns.user.id
+
     message = %{
-      user_id: socket.assigns.user.id,
+      user_id: user_id,
       body: body
     }
 

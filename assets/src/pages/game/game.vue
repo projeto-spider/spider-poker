@@ -47,6 +47,19 @@
         </q-toolbar-title>
       </div>
 
+      <div class="list no-border platform-delimiter">
+        <div
+          class="item item-link"
+          @click="anonymous = !anonymous"
+        >
+          <i class="item-primary">security</i>
+
+          <div class="item-content">
+            {{anonymous ? 'Disable' : 'Enable'}} Anonymous Chat
+          </div>
+        </div>
+      </div>
+
       <div v-if="users" class="list no-border platform-delimiter">
         <div class="list-label">Online</div>
 
@@ -103,8 +116,10 @@
               class="chat-message"
               :class="{[message.user_id === loggedUser.id ? 'chat-you' : 'chat-other']: true}"
             >
+              <div v-if="message.user_id === 0" class="chat-date">Anonymous</div>
+
               <div class="chat-user">
-                <gravatar :email="users[message.user_id].email"></gravatar>
+                <gravatar :email="message.user_id === 0 ? '' : users[message.user_id].email"></gravatar>
               </div>
 
               <div class="chat-message">

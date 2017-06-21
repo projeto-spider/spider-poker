@@ -65,6 +65,7 @@ export default {
     onlineIds: [],
 
     /* Chat */
+    anonymous: false,
     messages: [],
     message: '',
 
@@ -262,7 +263,7 @@ export default {
         return
       }
 
-      this.channel.push('message', {body: this.message})
+      this.channel.push('message', {anonymous: this.anonymous, body: this.message})
       this.message = ''
     },
 
