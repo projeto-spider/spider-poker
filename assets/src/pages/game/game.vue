@@ -25,9 +25,9 @@
     </q-tabs>
 
     <q-drawer ref="leftDrawer">
-      <div class="toolbar">
+      <div v-if="timer" class="toolbar">
         <q-toolbar-title style="text-align: center">
-          1:32
+          {{timer.minutes}}:{{timer.seconds}}
         </q-toolbar-title>
       </div>
 
