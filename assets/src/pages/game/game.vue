@@ -83,12 +83,38 @@
           </transition-group>
         </div>
 
-        <div ref="tab-stories">Stories</div>
+        <div ref="tab-stories">
+          <div v-for="(story, position) in backlog" v-bind:key="story" class="card card-story bg-lime-2">
+            <div class="card-title">
+
+              <button v-if="role === 'manager'" ref="target" class="clear pull-right story-button">
+                <i>more_vert</i>
+
+                <q-popover ref="popover">
+                  <div class="list item-delimiter highlight">
+                    <div
+                      v-if="current_story !== story.id"
+                      class="item item-link"
+                      @click="selectStory(story), $refs.popover[position].close()"
+                    >
+                      <div class="item-content">Select</div>
+                    </div>
+                  </div>
+                </q-popover>
+              </button>
+              {{story.title}}
+            </div>
+
+            <div v-if="story.description" class="card-content">
+              {{story.description}}
+            </div>
+          </div>
+        </div>
         <div ref="tab-events">Events</div>
       </div>
     </div>
 
-    <q-drawer ref="rightDrawer" right-side>
+    <q-drawer ref="rightDrawer" v-if="current_story" right-side>
       <div class="toolbar bg-secondary">
         <q-toolbar-title>
           Current Story
@@ -97,10 +123,10 @@
 
       <div class="card bg-lime-2">
         <div class="card-title">
-          As an authorized user I may register new organizations.
+          {{stories[current_story].title}}
         </div>
-        <div class="card-content">
-          Some important note here.
+        <div v-if="stories[current_story].description" class="card-content">
+          {{stories[current_story].description}}
         </div>
       </div>
 

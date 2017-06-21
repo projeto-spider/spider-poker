@@ -261,6 +261,11 @@ export default {
       this.message = ''
     },
 
+    /* Select Story */
+    selectStory(story) {
+      this.channel.push('select_story', story.id)
+    },
+
     /* Channel Events */
     channelJoined() {
       Loading.hide()
