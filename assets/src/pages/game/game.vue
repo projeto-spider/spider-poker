@@ -117,22 +117,20 @@
         <div ref="tab-stories">
           <div v-for="(story, position) in backlog.sort((a, b) => a.estimation - b.estimation)" v-if="story" class="card card-story bg-lime-2">
             <div class="card-title">
+              <template v-if="role === 'manager' && !voting && !discussion">
+                <button
+                  v-if="role === 'manager' && current_story != story.id"
+                  @click="selectStory(story)"
+                  class="clear pull-right story-button"
+                  style="margin-top: -7px"
+                >
+                  <i>star_border</i>
+                </button>
 
-              <button v-if="role === 'manager'" ref="target" class="clear pull-right story-button">
-                <i>more_vert</i>
-
-                <q-popover ref="popover">
-                  <div class="list item-delimiter highlight">
-                    <div
-                      v-if="current_story !== story.id"
-                      class="item item-link"
-                      @click="selectStory(story), $refs.popover[position].close()"
-                    >
-                      <div class="item-content">Select</div>
-                    </div>
-                  </div>
-                </q-popover>
-              </button>
+                <button v-else disabled class="clear pull-right" style="margin-top: -7px">
+                  <i>star</i>
+                </button>
+              </template>
 
               <span v-if="story.estimation" class="label bg-primary text-white">
                 <template v-if="story.estimation === 'time'"><i>access_time</i></template>
