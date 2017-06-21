@@ -4,3 +4,24 @@
 .user-presence-enter-active, .user-presence-leave-active, .user-presence-enter, .user-presence-leave-to
   opacity: 0
   transform: translateY(30px)
+
+.tab-chat
+  padding-bottom: 40px
+  
+.chat-message
+  margin-top: 10px
+  transition: all ease .1s
+
+  .chat-user
+    margin-top: -20px
+
+    img
+      width: 48px
+      height: auto
+  
+  &.chat-you .chat-message
+    margin-right: 70px
+
+  &.chat-other .chat-message
+    margin-left: 70px
+  

@@ -231,6 +231,15 @@ export default {
       this.channelPresenceDiff({joins, leaves: {}})
     },
 
+    channelMessage({message}) {
+      this.messages.push(message)
+
+      const ref = this.$refs['layout-view']
+      ref.scrollTop = ref.scrollHeight
+      const ref2 = this.$refs['layout-padding']
+      ref2.scrollTop = ref2.scrollHeight
+    },
+
     channelPresenceDiff({leaves, joins}) {
       const joinsIds = Object.keys(joins).map(Number)
       const leavesIds = Object.keys(leaves).map(Number)

@@ -62,32 +62,25 @@
       </div>
     </q-drawer>
 
-    <div class="layout-view">
-      <div class="layout-padding">
-        <div ref="tab-chat">
-          <div class="chat-other">
-            <div class="chat-user">
-              <gravatar email="leonardo.chfc@gmail.com"></gravatar>
-            </div>
-            <div class="chat-date">
-              7 minutes ago
-            </div>
-            <div class="chat-message">
-              <p>I think we should handle this story more carefully</p>
-            </div>
-          </div>
+    <div ref="layout-view" class="layout-view">
+      <div ref="layout-padding" class="layout-padding">
+        <div ref="tab-chat" class="tab-chat">
+          <transition-group name="user-presence">
+            <div
+              v-for="message in messages"
+              :key="message"
+              class="chat-message"
+              :class="{[message.user_id === loggedUser.id ? 'chat-you' : 'chat-other']: true}"
+            >
+              <div class="chat-user">
+                <gravatar :email="users[message.user_id].email"></gravatar>
+              </div>
 
-          <div class="chat-you">
-            <div class="chat-user">
-              <gravatar email="lubien1996@gmail.com"></gravatar>
+              <div class="chat-message">
+                <p>{{message.body}}</p>
+              </div>
             </div>
-            <div class="chat-date">
-              6 minutes ago
-            </div>
-            <div class="chat-message">
-              <p>Indeed. Let's play another round.</p>
-            </div>
-          </div>
+          </transition-group>
         </div>
 
         <div ref="tab-stories">Stories</div>
@@ -135,6 +128,7 @@
         placeholder="Type your messages"
         icon="send"
         class="primary"
+        @enter="sendMessage"
       ></q-search>
     </div>
   </q-layout>
