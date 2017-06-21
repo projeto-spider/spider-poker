@@ -118,20 +118,14 @@
                     more_vert
                     <q-popover ref="memberPopover">
                       <div class="list" @click="$refs.memberPopover[index].close()">
-                        <div
-                          v-if="member.role !== 'po'"
-                          class="item item-link"
-                          @click="updateRole(member, 'po')"
-                        >
-                          <div class="item-content">Grant Product Owner</div>
-                        </div>
-
-                        <div
-                          v-if="member.role !== 'manager'"
-                          class="item item-link"
-                          @click="updateRole(member, 'manager')"
-                        >
-                          <div class="item-content">Grant Manager</div>
+                        <div v-if="hasPo === 0">
+                          <div
+                            v-if="member.role !== 'po'"
+                            class="item item-link"
+                            @click="updateRole(member, 'po')"
+                          >
+                            <div class="item-content">Grant Product Owner</div>
+                          </div>
                         </div>
 
                         <div

@@ -52,6 +52,12 @@ export default {
           member.user.id === this.loggedUser.id &&
           member.role === 'manager'
         )
+    },
+
+    hasPo() {
+      return this.members
+        .filter(member => member.role === 'po')
+        .length
     }
   },
 
