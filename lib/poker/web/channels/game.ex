@@ -145,15 +145,18 @@ defmodule Poker.Web.Game do
   end
 
   def handle_call({:set_score, game, score}, _from, state) do
-    updated_scores =
-      Map.update(game.scores, game.current_story, score, fn _ -> score end)
+    with {:ok, story} <- Projects.update_story(game.current_story, %{estimation: score}) do
+      updated_scores =
+        Map.update(game.scores, game.current_story, score, fn _ -> score end)
 
-    updated_game = %Game{game | state: @state.idle,
-                                current_story: nil,
-                                votes: %{},
-                                time: nil,
-                                scores: updated_scores}
-    next_state = Map.put(state, game.project_name, updated_game)
-    {:reply, {:ok, updated_game}, next_state}
+      updated_game = %Game{game | state: @state.idle,
+                                  current_story: nil,
+                                  votes: %{},
+                                  time: nil,
+                                  scores: updated_scores}
+      next_state = Map.put(state, game.project_name, updated_game)
+
+      {:reply, {:ok, {story, updated_game}}, next_state}
+    end
   end
 end

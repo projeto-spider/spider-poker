@@ -115,7 +115,7 @@
         </div>
 
         <div ref="tab-stories">
-          <div v-for="(story, position) in backlog" v-if="story" class="card card-story bg-lime-2">
+          <div v-for="(story, position) in backlog.sort((a, b) => a.estimation - b.estimation)" v-if="story" class="card card-story bg-lime-2">
             <div class="card-title">
 
               <button v-if="role === 'manager'" ref="target" class="clear pull-right story-button">

@@ -122,8 +122,9 @@ defmodule Poker.Web.GameChannel do
     {:ok, game} = Game.for(socket)
 
     if Game.manager?(game, user) do
-      {:ok, game} = Game.set_score(game, score)
+      {:ok, {story, game}} = Game.set_score(game, score)
       broadcast!(socket, "game_state", game)
+      broadcast!(socket, "story_updated", %{"story" => story})
     end
 
     {:noreply, socket}

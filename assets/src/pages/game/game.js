@@ -210,6 +210,7 @@ export default {
 
       this.channel.on('game_state', this.channelGameState)
       this.channel.on('message', this.channelMessage)
+      this.channel.on('story_updated', this.channelStoryUpdated)
       this.channel.on('presence_state', this.channelPresenceState)
       this.channel.on('presence_diff', this.channelPresenceDiff)
 
@@ -330,6 +331,13 @@ export default {
 
     channelMessage(message) {
       this.messages.push(message)
+    },
+
+    channelStoryUpdated({story}) {
+      this.stories = {
+        ...this.stories,
+        [story.id]: story
+      }
     },
 
     channelPresenceState(joins) {
