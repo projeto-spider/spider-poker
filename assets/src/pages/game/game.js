@@ -193,6 +193,16 @@ export default {
       Toast.create.negative('Failed to load backlog')
     },
 
+    /* Message Passing */
+    sendMessage() {
+      if (!this.message.length) {
+        return
+      }
+
+      this.channel.push('message', {body: this.message})
+      this.message = ''
+    },
+
     /* Channel Events */
     channelJoined() {
       Loading.hide()
