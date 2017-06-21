@@ -251,12 +251,21 @@ export default {
     },
 
     channelPresenceDiff({leaves, joins}) {
+      // TODO: handle multiple devices properly
       const joinsIds = Object.keys(joins).map(Number)
       const leavesIds = Object.keys(leaves).map(Number)
 
-      this.onlineIds = this.onlineIds
-        .filter(id => !leavesIds.some(idB => idB === id))
-        .concat(joinsIds)
+      const next = [...this.onlineIds].concat(joinsIds)
+
+      leavesIds.forEach(id => {
+        const index = next.findIndex(idX => idX === id)
+
+        if (index !== -1) {
+          next.splice(index, 1)
+        }
+      })
+
+      this.onlineIds = next
     },
 
     /* Full Screen */
