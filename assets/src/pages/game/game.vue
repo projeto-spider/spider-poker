@@ -127,10 +127,6 @@
           <div v-for="user in offline" :key="user" class="item">
             <gravatar :email="user.email" :circle="true" class="item-primary"></gravatar>
             <div class="item-content has-secondary">{{user.display_name}}</div>
-
-            <i class="item-secondary">
-              done
-            </i>
           </div>
         </transition-group>
       </div>
