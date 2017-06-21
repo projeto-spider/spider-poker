@@ -156,6 +156,7 @@ export default {
 
           organizationId: {
             type: 'radio',
+            model: 0,
             label: 'Organization',
             items: this.organizations
               .map(({id: value, display_name: label}) => ({value, label}))
