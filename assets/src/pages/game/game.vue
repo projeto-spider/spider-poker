@@ -66,6 +66,28 @@
             {{anonymous ? 'Disable' : 'Enable'}} Anonymous Chat
           </div>
         </div>
+
+        <div
+          class="item item-link"
+          @click="downloadChat"
+        >
+          <i class="item-primary">file_download</i>
+
+          <div class="item-content">
+            Download Chat
+          </div>
+        </div>
+
+        <div
+          class="item item-link"
+          @click="clearChat"
+        >
+          <i class="item-primary">delete</i>
+
+          <div class="item-content">
+            Clear Chat
+          </div>
+        </div>
       </div>
 
       <div v-if="users" class="list no-border platform-delimiter">

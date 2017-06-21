@@ -335,10 +335,6 @@ export default {
       Object.assign(this, game)
     },
 
-    channelMessage(message) {
-      this.messages.push(message)
-    },
-
     channelStoryUpdated({story}) {
       this.stories = {
         ...this.stories,
@@ -357,6 +353,15 @@ export default {
       ref.scrollTop = ref.scrollHeight
       const ref2 = this.$refs['layout-padding']
       ref2.scrollTop = ref2.scrollHeight
+
+      const storageKey = `chat-${this.projectId}`
+      const log = localStorage.getItem(storageKey) || ''
+
+      const nextLine = message.user_id === 0
+        ? `Anonymous: ${message.body}`
+        : `${this.users[message.user_id].display_name}: ${message.body}`
+
+      localStorage.setItem(storageKey, `${log}${nextLine}\n`)
     },
 
     channelPresenceDiff({leaves, joins}) {
@@ -378,7 +383,6 @@ export default {
     },
 
     channelGameFinished() {
-      console.log('finished')
       this.$router.push({name: 'Dashboard'})
     },
 
@@ -394,6 +398,23 @@ export default {
       }
 
       AppFullscreen.request()
+    },
+
+    downloadChat() {
+      const element = document.createElement('a')
+      const text = localStorage.getItem(`chat-${this.projectId}`) || ''
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
+      element.setAttribute('download', `chat-${this.projectId}.txt`)
+      element.style.display = 'none'
+      document.body.appendChild(element)
+      element.click()
+      document.body.removeChild(element)
+    },
+
+    clearChat() {
+      this.messages = []
+      localStorage.setItem(`chat-${this.projectId}`, '')
+      Toast.create.positive('Chat cleared')
     }
   }
 }
