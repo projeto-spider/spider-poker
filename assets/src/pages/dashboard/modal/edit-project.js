@@ -141,6 +141,14 @@ export default {
       this.loading = false
     },
 
+    closeModal() {
+      this.form = Object.assign({}, this.project)
+      this.errors = {
+        name: [],
+        display_name: []
+      }
+    },
+
     /* Deletion */
     confirmDeleteProject() {
       Dialog.create({

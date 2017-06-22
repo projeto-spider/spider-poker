@@ -135,6 +135,14 @@ export default {
       this.loading = false
     },
 
+    closeModal() {
+      this.form = Object.assign({}, this.organization)
+      this.errors = {
+        name: [],
+        display_name: []
+      }
+    },
+
     /* Deletion */
     confirmDeleteOrganization() {
       Dialog.create({

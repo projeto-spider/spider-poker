@@ -2,7 +2,7 @@
   <q-layout>
     <div slot="header" class="toolbar">
       <q-toolbar-title :padding="1">
-        <button @click="modal.close()">
+        <button @click="modal.close(closeModal)">
           <i>keyboard_arrow_left</i>
         </button>
 
