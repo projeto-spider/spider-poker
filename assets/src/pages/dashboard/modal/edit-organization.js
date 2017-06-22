@@ -20,7 +20,11 @@ export default {
     checkingAuthorization: false,
     form: {},
     memberToAdd: '',
-    members: []
+    members: [],
+    errors: {
+      name: [],
+      display_name: []
+    }
   }),
 
   computed: {
@@ -120,15 +124,15 @@ export default {
     },
 
     handleEditFail(error) {
-      this.loading = false
       Loading.hide()
+      Toast.create.negative('Failed to Upadate')
 
-      // TODO: properly handle errors
-      Toast.create.negative(
-        error.response.data.errors.name
-          .map(msg => 'Name ' + msg)
-          .join('\n')
-      )
+      const errors = error.response.data.errors
+      this.errors = {
+        name: errors.name || [],
+        display_name: errors.display_name || []
+      }
+      this.loading = false
     },
 
     /* Deletion */

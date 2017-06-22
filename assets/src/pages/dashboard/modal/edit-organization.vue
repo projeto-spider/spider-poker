@@ -40,6 +40,11 @@
                       <input required autofocus class="full-width" v-model="form.name">
                       <label>Name</label>
                     </div>
+                    <ul>
+                      <li v-for="error in errors.name" class="text-negative">
+                        {{error}}
+                      </li>
+                    </ul>
                   </div>
                 </div>
 
@@ -51,6 +56,11 @@
                       <input required class="full-width" v-model="form.display_name">
                       <label>Display Name</label>
                     </div>
+                    <ul>
+                      <li v-for="error in errors.display_name" class="text-negative">
+                        {{error}}
+                      </li>
+                    </ul>
                   </div>
                 </div>
 
