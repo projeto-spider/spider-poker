@@ -6,8 +6,8 @@
           Spider Poker
         </div>
       </div>
-      <button v-link="'/auth/login'">Sing in</button>
-      <button v-link="'/auth/register'">Sing up</button>
+      <button v-link="'/auth/login'">Sign in</button>
+      <button v-link="'/auth/register'">Sign up</button>
     </div>
 
     <div class="layout-view">
