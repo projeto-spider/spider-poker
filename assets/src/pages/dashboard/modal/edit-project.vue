@@ -64,6 +64,18 @@
                   </div>
                 </div>
 
+                <div class="item multiple-lines">
+                  <div class="item-content">
+                    <span class="item-label">Votation time (min): </span>
+                    <q-numeric
+                      v-model="form.votation_time"
+                      :min="1"
+                      :max="100"
+                    >
+                    </q-numeric>
+                  </div>
+                </div>
+
                 <hr>
 
                 <label class="item two-lines">

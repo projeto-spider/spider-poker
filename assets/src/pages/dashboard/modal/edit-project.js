@@ -109,11 +109,10 @@ export default {
         message: 'Updating'
       })
 
-
-      const {name, display_name, private: isPrivate} = this.form
+      const {name, display_name, votation_time, private: isPrivate} = this.form
 
       axios.put(`/projects/${this.project.id}`, {
-        data: {name, display_name, private: isPrivate}
+        data: {name, display_name, votation_time, private: isPrivate}
       })
         .then(this.handleEdited)
         .catch(this.handleEditFail)
