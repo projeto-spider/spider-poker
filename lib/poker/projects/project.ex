@@ -23,7 +23,7 @@ defmodule Poker.Projects.Project do
 
   def changeset(%Project{} = project, attrs \\ %{}) do
     project
-    |> cast(attrs, [:name, :display_name, :description, :private])
+    |> cast(attrs, [:name, :display_name, :description, :private, :votation_time])
   end
 
   def validate(changeset) do
