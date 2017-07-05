@@ -63,7 +63,7 @@ export default {
     /* Socket Connection */
     channelConnect() {
       Loading.show({
-        message: 'Connecting to server',
+        message: 'Connecting to backlog server',
         delay: 0
       })
 
