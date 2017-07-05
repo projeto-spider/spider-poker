@@ -1,4 +1,4 @@
-import {Toast, AppFullscreen, Dialog} from 'quasar'
+import {Toast, Loading, AppFullscreen, Dialog} from 'quasar'
 import {Socket} from 'phoenix'
 import {mapState, mapGetters} from 'vuex'
 import axios from 'utils/axios'
@@ -64,6 +64,12 @@ export default {
       this.socket.connect()
     }
 
+    if (this.notificationChannel) {
+      this.notificationChannel.leave()
+    }
+
+    this.channelConnect()
+
     axios.get(`users/${user.id}/organizations`)
       .then(this.handleOrganizationsLoaded)
       .then(() =>
@@ -75,13 +81,38 @@ export default {
   },
 
   methods: {
-    /* Full Screen */
-    tryFullScreen() {
-      if (AppFullscreen.isActive()) {
-        return AppFullscreen.toggle()
-      }
+    /* Socket Connection */
+    channelConnect() {
+      Loading.show({
+        message: 'Connecting to notification server',
+        delay: 0
+      })
 
-      AppFullscreen.request()
+      const user = this.loggedUser
+      const channelName = `notifications:${user.id}`
+      const channelParams = {}
+      this.notificationChannel = this.socket.channel(channelName, channelParams)
+
+      this.notificationChannel.on('joined_organization', this.channelJoinedOrganization)
+      this.notificationChannel.on('joined_project', this.channelJoinedProject)
+      this.notificationChannel.on('left_organization', this.channelLeftOrganization)
+      this.notificationChannel.on('left_project', this.channelLeftProject)
+
+      this.notificationChannel
+        .join()
+        .receive('ok', this.channelJoined)
+        .receive('error', this.channelRejected)
+    },
+
+    channelJoined() {
+      Loading.hide()
+    },
+
+    channelRejected(reason) {
+      Loading.hide()
+
+      if (reason === 'unauthorized')
+        return Toast.create.negative('Unauthorized to join at notifications server')
     },
 
     /* Startup Load Handlers */
@@ -223,6 +254,90 @@ export default {
             .map(msg => `Name ${msg}`)
             .join('\n'))
       }
+    },
+
+    /* Channel */
+    channelJoinedOrganization({id}) {
+      axios.get(`/organizations/${id}`)
+        .then(this.handleOrganizationJoinedLoad)
+        .catch(this.handleOrganizationJoinedFail)
+    },
+
+    handleOrganizationJoinedLoad(response) {
+      const {data: organization} = response
+      Toast.create.info(`Entered organization ${organization.display_name}`)
+      /* Check if organization already is in list */
+      const idx = this.organizations.findIndex(org => org.id === organization.id)
+
+      if (idx !== -1) {
+        /*
+         * Here's a nasty hack to trigger Vue's reactiveness
+         * since if you just assign, Vue will not now any change
+         */
+        Object.assign(this.organizations[idx], organization)
+      } else {
+        this.organizations.push(organization)
+      }
+    },
+
+    handleOrganizationJoinedFail(error) {
+      Toast.create.negative('Failed to load an organization you just joined. Please refresh the page.')
+    },
+
+    channelLeftOrganization({id}) {
+      const idx = this.organizations.findIndex(org => org.id === id)
+
+      if (idx !== -1) {
+        const organization = this.organizations[idx]
+        Toast.create.negative(`You where removed from the organization ${organization.display_name}`)
+        this.organizations.splice(idx, 1)
+      }
+    },
+
+    channelJoinedProject({id}) {
+      axios.get(`/projects/${id}`)
+        .then(this.handleProjectJoinedLoad)
+        .catch(this.handleProjectJoinedFail)
+    },
+
+    handleProjectJoinedLoad(response) {
+      const {data: project} = response
+      Toast.create.info(`Entered project ${project.display_name}`)
+      /* Check if project already is in list */
+      const idx = this.projects.findIndex(proj => proj.id === project.id)
+
+      if (idx !== -1) {
+        /*
+         * Here's a nasty hack to trigger Vue's reactiveness
+         * since if you just assign, Vue will not now any change
+         */
+        Object.assign(this.projects[idx], project)
+      } else {
+        this.projects.push(project)
+      }
+    },
+
+    channelLeftProject({id}) {
+      const idx = this.projects.findIndex(proj => proj.id === id)
+
+      if (idx !== -1) {
+        const project = this.projects[idx]
+        Toast.create.negative(`You where removed from the project ${project.display_name}`)
+        this.projects.splice(idx, 1)
+      }
+    },
+
+    handleProjectJoinedFail(error) {
+      Toast.create.negative('Failed to load a project you just joined. Please refresh the page.')
+    },
+
+    /* Full Screen */
+    tryFullScreen() {
+      if (AppFullscreen.isActive()) {
+        return AppFullscreen.toggle()
+      }
+
+      AppFullscreen.request()
     }
   }
 }
