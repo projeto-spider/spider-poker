@@ -1,6 +1,7 @@
 defmodule Poker.Projects do
   @moduledoc false
   import Ecto.{Query, Changeset}, warn: false
+  alias Poker.Web.Endpoint
   alias Poker.Repo
   alias Poker.Pattern
   alias Poker.Accounts.User
@@ -100,14 +101,27 @@ defmodule Poker.Projects do
     end
   end
 
-  def add_member(proj_id, user_id, role \\ "team") do
+  def add_member(proj_id, user_id, role \\ "team", opts \\ []) do
+    notify? = Keyword.get(opts, :notify?, true)
     attrs = %{project_id: proj_id, user_id: user_id, role: role}
 
-    %Member{}
-    |> Member.changeset(attrs)
-    |> Member.validate
-    |> Member.validate_duplicated
-    |> Repo.insert
+    operation =
+      %Member{}
+      |> Member.changeset(attrs)
+      |> Member.validate
+      |> Member.validate_duplicated
+      |> Repo.insert
+
+    if notify? do
+      with {ok, member} <- operation do
+        channel_name = "notifications:" <> Integer.to_string(member.user_id)
+        Endpoint.broadcast! channel_name, "joined_project", %{id: member.project_id}
+
+        operation
+      end
+    else
+      operation
+    end
   end
 
   def update_member(%Member{} = member, attrs) do
@@ -117,9 +131,19 @@ defmodule Poker.Projects do
     |> Repo.update
   end
 
-  def delete_member(proj_id, user_id) do
-    with {:ok, member} <- get_member(proj_id, user_id) do
-      Repo.delete(member)
+  def delete_member(proj_id, user_id, opts \\ []) do
+    notify? = Keyword.get(opts, :notify?, true)
+
+    with {:ok, member} <- get_member(proj_id, user_id),
+         operation     <- Repo.delete(member),
+         {:ok, member} <- operation
+    do
+      if notify? do
+        channel_name = "notifications:" <> Integer.to_string(member.user_id)
+        Endpoint.broadcast! channel_name, "left_project", %{id: member.project_id}
+      end
+
+      operation
     end
   end
 
