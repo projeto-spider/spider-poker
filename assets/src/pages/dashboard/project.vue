@@ -9,7 +9,7 @@
     </template>
 
     <template v-else>
-      <ul class="breadcrumb pull-right">
+      <ul class="breadcrumb">
         <li><a>Dashboard</a></li>
         <li><a>{{organization.display_name || organization.name}}</a></li>
         <li><a>{{project.display_name || project.name}}</a></li>
