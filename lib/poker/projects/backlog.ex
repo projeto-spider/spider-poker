@@ -22,4 +22,13 @@ defmodule Poker.Projects.Backlog do
       [head | move(tail, id, position - 1)]
     end
   end
+
+  def insert_substories([], ids, _position), do: ids
+  def insert_substories([head|tail], ids, parent_id) do
+    if head == parent_id do
+      [head | Enum.concat(ids, tail)]
+    else
+      [head | insert_substories(tail, ids, parent_id)]
+    end
+  end
 end
