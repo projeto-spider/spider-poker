@@ -237,6 +237,22 @@
           </template>
         </button>
       </div>
+
+      <template v-if="discussion && role === 'manager'">
+        <p class="caption" style="padding: 5px 15px">
+          ...Or separate it into stories.
+        </p>
+
+        <div v-for="(model, i) in substories" :key="`substory-${i}`" class="stacked-label" style="padding: 5px 15px">
+          <input class="full-width" v-model="substories[i]">
+          <button @click.prevent="substories.splice(i, 1)" :disabled="substories.length === 1" class="negative pull-right">Remove</button>
+        </div>
+
+        <div style="padding: 0 15px">
+          <button @click.prevent="substories.push('')" class="secondary"><i>add</i> More</button>
+          <button @click.prevent="createSubstories" :disabled="substories.length === 1 && substories[0].trim() === ''" class="primary"><i>done</i> Create</button>
+        </div>
+      </template>
     </q-drawer>
 
     <div slot="footer" class="toolbar">

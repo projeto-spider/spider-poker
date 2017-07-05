@@ -64,6 +64,9 @@ export default {
     users: false,
     onlineIds: [],
 
+    /* Stories to Create */
+    substories: [''],
+
     /* Chat */
     anonymous: false,
     messages: [],
@@ -210,6 +213,7 @@ export default {
 
       this.channel.on('game_state', this.channelGameState)
       this.channel.on('message', this.channelMessage)
+      this.channel.on('added_substories', this.channelAddedSubstories)
       this.channel.on('story_updated', this.channelStoryUpdated)
       this.channel.on('presence_state', this.channelPresenceState)
       this.channel.on('presence_diff', this.channelPresenceDiff)
@@ -293,6 +297,12 @@ export default {
       }
 
       this.channel.push('set_score', card)
+    },
+
+    /* Create Substories */
+    createSubstories() {
+      this.channel.push('create_substories', {stories: this.substories})
+      this.substories = ['']
     },
 
     /* Finish Game */
@@ -400,6 +410,16 @@ export default {
       })
 
       this.onlineIds = next
+    },
+
+    channelAddedSubstories({order, stories}) {
+      this.stories =
+        stories.reduce((acc, story) =>
+          Object.assign(acc, {[story.id]: story}),
+          Object.assign({}, this.stories)
+        )
+
+      this.order = order
     },
 
     channelGameFinished() {
