@@ -3,7 +3,9 @@ defmodule Poker.Web.GameChannel do
   use Phoenix.Channel
   alias Poker.Web.Game
   alias Poker.Projects
+  alias Poker.Repo
   alias Poker.Projects.Project
+  alias Poker.Projects.Backlog
   alias Poker.Accounts.User
   alias Poker.Web.Presence
 
@@ -84,6 +86,29 @@ defmodule Poker.Web.GameChannel do
       broadcast!(socket, "game_state", game)
 
       :timer.send_after(duration * 1000, self(), :stop_voting)
+    end
+
+    {:noreply, socket}
+  end
+  def handle_in("create_substories", %{"stories" => titles}, socket) do
+    user = socket.assigns.user
+    {:ok, game} = Game.for(socket)
+
+    if Game.manager?(game, user) do
+      {:ok, proj} = Projects.get(game.project_name)
+
+      attrs_list =
+        titles
+        |> Stream.map(fn title ->
+          %{"title" => title}
+        end)
+
+      # TODO: verify if there's a current_story
+      {:ok, {backlog, stories}} = Projects.add_substories(game.project_name, attrs_list, game.current_story)
+
+      IO.inspect {"back", backlog, stories}
+
+      broadcast!(socket, "added_substories", %{"stories" => stories, "order" => backlog})
     end
 
     {:noreply, socket}
