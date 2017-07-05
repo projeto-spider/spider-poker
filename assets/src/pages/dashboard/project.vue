@@ -4,6 +4,10 @@
       Select a project to start
     </template>
 
+    <template v-else-if="!socket">
+      Not connected to server
+    </template>
+
     <template v-else>
       <div class="story-form" @keydown.enter="unshiftStory">
         <div class="list">

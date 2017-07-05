@@ -1,5 +1,6 @@
 import {Toast, AppFullscreen, Dialog} from 'quasar'
-import {mapGetters} from 'vuex'
+import {Socket} from 'phoenix'
+import {mapState, mapGetters} from 'vuex'
 import axios from 'utils/axios'
 import Gravatar from 'components/gravatar.vue'
 import Project from './project.vue'
@@ -17,6 +18,11 @@ export default {
   },
 
   data: () => ({
+    /* Socket */
+    socket: false,
+    notificationChannel: false,
+
+    /* Sidebar */
     organizations: [],
     projects: [],
     selectedProjectId: false
@@ -24,6 +30,10 @@ export default {
 
   computed: {
     ...mapGetters(['loggedUser']),
+
+    ...mapState({
+      token: state => state.auth.token
+    }),
 
     selectedProject() {
       if (!this.selectedProjectId) {
@@ -48,6 +58,11 @@ export default {
 
   created() {
     const user = this.loggedUser
+
+    if (!this.socket) {
+      this.socket = new Socket('/socket', {params: {token: this.token}})
+      this.socket.connect()
+    }
 
     axios.get(`users/${user.id}/organizations`)
       .then(this.handleOrganizationsLoaded)

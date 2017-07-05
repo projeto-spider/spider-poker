@@ -136,6 +136,7 @@
 
     <div class="layout-view">
       <project
+        :socket="socket"
         :project="selectedProject"
        ></project>
     </div>

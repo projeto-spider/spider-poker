@@ -1,18 +1,17 @@
 import {Toast, Loading, Dialog} from 'quasar'
-import {Socket} from 'phoenix'
-import {mapState, mapGetters} from 'vuex'
+import {mapGetters} from 'vuex'
 import axios from 'utils/axios'
 
 export default {
   name: 'Project',
 
   props: {
+    socket: [Object, Boolean],
     project: [Object, Boolean]
   },
 
   data: () => ({
     /* Socket */
-    socket: false,
     channel: false,
 
     /* Backlog */
@@ -26,10 +25,6 @@ export default {
 
   computed: {
     ...mapGetters(['loggedUser']),
-
-    ...mapState({
-      token: state => state.auth.token
-    }),
 
     backlog() {
       return this.order
@@ -57,11 +52,6 @@ export default {
     projectChanged() {
       this.order = []
       this.stories = {}
-
-      if (!this.socket) {
-        this.socket = new Socket('/socket', {params: {token: this.token}})
-        this.socket.connect()
-      }
 
       if (this.channel) {
         this.channel.leave()
