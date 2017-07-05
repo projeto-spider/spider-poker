@@ -210,6 +210,33 @@ defmodule Poker.Projects do
     end
   end
 
+  def add_substories(proj_id, attrs_list, parent_id) do
+    with {:ok, project} <- get(proj_id) do
+      stories =
+        attrs_list
+        |> Stream.map(&(Map.put(&1, "project_id", proj_id)))
+        |> Enum.map(fn attrs ->
+          {:ok, story} =
+            %Story{}
+            |> Story.changeset(attrs)
+            |> Story.validate
+            |> Repo.insert
+          story
+        end)
+
+      ids = Enum.map(stories, fn story -> story.id end)
+
+      backlog = Backlog.insert_substories(project.backlog, ids, parent_id)
+
+      with {:ok, project} <- project
+                             |> Project.backlog_changeset(%{"backlog" => backlog})
+                             |> Repo.update
+      do
+        {:ok, {backlog, stories}}
+      end
+    end
+  end
+
   def update_story(id, attrs \\ %{}) do
     with {:ok, story} <- Repo.soft_get(Story, id),
          {:ok, story} <- story
