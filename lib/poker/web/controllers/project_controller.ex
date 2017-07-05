@@ -41,7 +41,7 @@ defmodule Poker.Web.ProjectController do
          {:ok, data}   <- Param.fetch(params, "data"),
          attrs         <- Map.put_new(data, "organization_id", org_id),
          {:ok, proj}   <- Projects.create(attrs),
-         {:ok, _role}  <- Projects.add_member(proj.id, user.id, "manager")
+         {:ok, _role}  <- Projects.add_member(proj.id, user.id, "manager", notify?: false)
     do
       conn
       |> put_status(:created)

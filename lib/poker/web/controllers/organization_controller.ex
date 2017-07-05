@@ -17,7 +17,7 @@ defmodule Poker.Web.OrganizationController do
     with :ok          <- authorize(conn, :create),
          {:ok, org}   <- Organizations.create(data),
          {:ok, admin} <- Session.user(conn),
-         {:ok, _role} <- Organizations.add_member(org.id, admin.id, "admin")
+         {:ok, _role} <- Organizations.add_member(org.id, admin.id, "admin", notify?: false)
     do
       conn
       |> put_status(:created)
