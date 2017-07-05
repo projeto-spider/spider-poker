@@ -6,6 +6,7 @@ defmodule Poker.Web.UserSocket do
   ## Channels
   channel "backlog:*", Poker.Web.BacklogChannel
   channel "game:*", Poker.Web.GameChannel
+  channel "notifications:*", Poker.Web.NotificationsChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
