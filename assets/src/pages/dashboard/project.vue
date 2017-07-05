@@ -9,6 +9,14 @@
     </template>
 
     <template v-else>
+      <ul class="breadcrumb pull-right">
+        <li><a>Dashboard</a></li>
+        <li><a>{{organization.display_name || organization.name}}</a></li>
+        <li><a>{{project.display_name || project.name}}</a></li>
+      </ul>
+
+      <div style="clear: both"></div>
+
       <div class="story-form" @keydown.enter="unshiftStory">
         <div class="list">
           <div class="item three-lines">

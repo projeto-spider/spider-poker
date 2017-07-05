@@ -53,6 +53,14 @@ export default {
       }
 
       return project
+    },
+
+    selectedOrganization() {
+      if (!this.selectedProject) {
+        return false
+      }
+
+      return this.organizations.find(org => org.id === this.selectedProject.organization_id)
     }
   },
 

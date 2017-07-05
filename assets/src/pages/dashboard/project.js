@@ -7,6 +7,7 @@ export default {
 
   props: {
     socket: [Object, Boolean],
+    organization: [Object, Boolean],
     project: [Object, Boolean]
   },
 
