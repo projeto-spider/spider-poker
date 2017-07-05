@@ -300,6 +300,22 @@ export default {
       this.channel.push('finish_game')
     },
 
+    /* Put in the log the selected story */
+    logChangedStory(id) {
+      const story = this.stories[id]
+
+      if (!id || !story) {
+        return
+      }
+
+      const storageKey = `chat-${this.projectId}`
+      const log = localStorage.getItem(storageKey) || ''
+
+      const nextLine = `**Selected Story "${story.title}"**`
+
+      localStorage.setItem(storageKey, `${log}${nextLine}\n`)
+    },
+
     /* Channel Events */
     channelJoined() {
       Loading.hide()
@@ -330,6 +346,10 @@ export default {
       // Reset selected card when a new voting start
       if (this.state !== game.state) {
         this.selectedCard = false
+      }
+
+      if (this.state.current_story !== game.current_story) {
+        this.logChangedStory(game.current_story)
       }
 
       Object.assign(this, game)
