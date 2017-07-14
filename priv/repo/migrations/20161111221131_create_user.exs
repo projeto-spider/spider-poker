@@ -11,6 +11,7 @@ defmodule Poker.Repo.Migrations.CreateUser do
       add :location, :string
       add :contact, :string
       add :url, :text
+      add :admin?, :boolean, default: false
 
       timestamps()
     end
