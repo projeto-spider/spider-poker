@@ -53,6 +53,9 @@ export default {
     time: false,
     votes: {},
 
+    /* Tracks what happens during the game */
+    events: [],
+
     /*
      * Presence
      * Users works like a database to cache user data
@@ -212,6 +215,7 @@ export default {
       this.channel = this.socket.channel(channelName, channelParams)
 
       this.channel.on('game_state', this.channelGameState)
+      this.channel.on('track', this.channelTrack)
       this.channel.on('message', this.channelMessage)
       this.channel.on('added_substories', this.channelAddedSubstories)
       this.channel.on('story_updated', this.channelStoryUpdated)
@@ -363,6 +367,10 @@ export default {
       }
 
       Object.assign(this, game)
+    },
+
+    channelTrack(payload) {
+      this.events.unshift(payload)
     },
 
     channelStoryUpdated({story}) {

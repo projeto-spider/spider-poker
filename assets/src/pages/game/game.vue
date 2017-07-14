@@ -186,7 +186,35 @@
             </div>
           </div>
         </div>
-        <div ref="tab-events">Events</div>
+        <div ref="tab-events">
+          <template v-for="ev in events">
+            <div class="card">
+              <div v-if="ev.type === 'user_joined'" class="card-title bg-primary text-white">
+                {{ev.name}} joined
+              </div>
+
+              <div v-else-if="ev.type === 'story_selected' && stories[ev.story_id]" class="card-title bg-secondary text-white">
+                Story "{{stories[ev.story_id].title}}" selected
+              </div>
+
+              <div v-else-if="ev.type === 'started_voting'" class="card-title bg-warning text-white">
+                Started voting
+              </div>
+
+              <div v-else-if="ev.type === 'stopped_voting'" class="card-title bg-negative text-white">
+                Stopped voting
+              </div>
+
+              <div v-else-if="ev.type === 'set_score'" class="card-title bg-info text-white">
+                Set score to {{ev.score}}
+              </div>
+
+              <div v-else-if="ev.type === 'game_finished'" class="card-title bg-primary text-white">
+                Game finished
+              </div>
+            </div>
+          </template>
+        </div>
       </div>
     </div>
 

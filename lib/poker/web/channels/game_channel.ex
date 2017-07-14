@@ -41,6 +41,8 @@ defmodule Poker.Web.GameChannel do
       online_at: inspect(System.system_time(:seconds))
     })
 
+    broadcast!(socket, "track", %{"type" => "user_joined", name: socket.assigns.user.display_name})
+
     {:noreply, socket}
   end
 
@@ -65,6 +67,7 @@ defmodule Poker.Web.GameChannel do
     if Game.manager?(game, user) do
       {:ok, game} = Game.select_story(game, story_id)
       broadcast!(socket, "game_state", game)
+      broadcast!(socket, "track", %{"type" => "story_selected", "story_id" => story_id})
     end
 
     {:noreply, socket}
@@ -84,6 +87,7 @@ defmodule Poker.Web.GameChannel do
 
       {:ok, game} = Game.start_voting(game, time_to_end)
       broadcast!(socket, "game_state", game)
+      broadcast!(socket, "track", %{"type" => "started_voting"})
 
       :timer.send_after(duration * 1000, self(), :stop_voting)
     end
@@ -130,6 +134,7 @@ defmodule Poker.Web.GameChannel do
     if Game.manager?(game, user) do
       {:ok, game} = Game.stop_voting(game)
       broadcast!(socket, "game_state", game)
+      broadcast!(socket, "track", %{"type" => "stopped_voting"})
     end
 
     {:noreply, socket}
@@ -153,6 +158,7 @@ defmodule Poker.Web.GameChannel do
       {:ok, {story, game}} = Game.set_score(game, score)
       broadcast!(socket, "game_state", game)
       broadcast!(socket, "story_updated", %{"story" => story})
+      broadcast!(socket, "track", %{"type" => "set_score", "score" => score})
     end
 
     {:noreply, socket}
@@ -165,6 +171,7 @@ defmodule Poker.Web.GameChannel do
     if Game.manager?(game, user) do
       {:ok, game} = Game.finish(game)
       broadcast!(socket, "game_finished", game)
+      broadcast!(socket, "track", %{"type" => "game_finished"})
     end
 
     {:noreply, socket}
