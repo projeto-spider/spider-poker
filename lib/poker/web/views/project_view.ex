@@ -28,6 +28,6 @@ defmodule Poker.Web.ProjectView do
 
   def render("story.json", %{project: story}) do
     story
-    |> Map.take([:id, :title, :description, :estimation])
+    |> Map.take([:id, :title, :description, :estimation, :backlog])
   end
 end
