@@ -1,6 +1,6 @@
 defmodule Poker.Projects.Story do
   @moduledoc false
-  @derive {Poison.Encoder, only: [:id, :title, :description, :estimation]}
+  @derive {Poison.Encoder, only: [:id, :title, :description, :estimation, :backlog]}
   use Poker.Web, :model
 
   alias Poker.Projects.Story
@@ -9,6 +9,7 @@ defmodule Poker.Projects.Story do
     field :title, :string
     field :description, :string
     field :estimation, :integer
+    field :backlog, {:array, :integer}, default: []
     belongs_to :project, Poker.Projects.Project
 
     timestamps()

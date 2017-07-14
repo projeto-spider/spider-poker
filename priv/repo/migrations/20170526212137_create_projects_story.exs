@@ -6,6 +6,7 @@ defmodule Poker.Repo.Migrations.CreatePoker.Projects.Story do
       add :title, :string
       add :description, :string
       add :estimation, :integer
+      add :backlog, {:array, :integer}, default: []
       add :project_id, references(:projects, on_delete: :delete_all)
 
       timestamps()
