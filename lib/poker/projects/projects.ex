@@ -19,7 +19,10 @@ defmodule Poker.Projects do
     where: o.private == false and p.private == false
   end
 
-  def query_visible_to(%User{id: user_id}) do
+  def query_visible_to(%User{admin?: true}) do
+    Project
+  end
+  def query_visible_to(%User{id: user_id} = user) do
     from p in Project,
     distinct: p.id,
     join: o in assoc(p, :organization),

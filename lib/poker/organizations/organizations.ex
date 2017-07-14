@@ -17,6 +17,9 @@ defmodule Poker.Organizations do
     |> where(private: false)
   end
 
+  def query_visible_to(%User{admin?: true}) do
+    Organization
+  end
   def query_visible_to(%User{id: user_id}) do
     from o in Organization,
     distinct: o.id,
