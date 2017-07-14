@@ -33,6 +33,11 @@ defmodule Poker.Accounts.User do
                     :display_name, :location, :contact, :url])
   end
 
+  def role_changeset(%User{} = user, attrs) do
+    user
+    |> cast(attrs, [:admin?])
+  end
+
   def validate(changeset) do
     changeset
     |> validate_required([:username, :email, :display_name])

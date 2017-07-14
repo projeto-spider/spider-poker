@@ -34,7 +34,22 @@ defmodule Poker.Accounts do
     |> Repo.update
   end
 
+  def grant_admin(%User{} = user) do
+    update_role(user, :grant)
+  end
+
+  def revoke_admin(%User{} = user) do
+    update_role(user, :revoke)
+  end
+
   def delete(%User{} = user) do
     Repo.delete(user)
+  end
+
+  defp update_role(%User{} = user, to) do
+    user
+    |> User.role_changeset(%{admin?: to == :grant})
+    |> User.validate
+    |> Repo.update
   end
 end
