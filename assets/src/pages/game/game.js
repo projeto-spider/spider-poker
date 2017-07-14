@@ -93,7 +93,9 @@ export default {
 
     backlog() {
       return this.order
-        .map(id => this.stories[id])
+        .map(id => Object.assign({
+          children: this.stories[id].backlog.map(child => this.stories[child])
+        }, this.stories[id]))
     },
 
     /* Membership */
@@ -427,7 +429,7 @@ export default {
           Object.assign({}, this.stories)
         )
 
-      this.order = order
+      this.stories[this.current_story].backlog = order
     },
 
     channelGameFinished() {

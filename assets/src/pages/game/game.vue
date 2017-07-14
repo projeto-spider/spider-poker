@@ -156,35 +156,78 @@
         </div>
 
         <div ref="tab-stories">
-          <div v-for="(story, position) in backlog" v-if="story" class="card card-story bg-lime-2">
-            <div class="card-title">
-              <template v-if="role === 'manager' && !voting && !discussion">
-                <button
-                  v-if="role === 'manager' && current_story != story.id"
-                  @click="selectStory(story)"
-                  class="clear pull-right story-button"
-                  style="margin-top: -7px"
-                >
-                  <i>star_border</i>
-                </button>
+          <template v-for="(story, position) in backlog">
+            <div v-if="story" class="card card-story bg-lime-2">
+              <div class="card-title">
+                <template v-if="role === 'manager' && !voting && !discussion">
+                  <button
+                    v-if="role === 'manager' && current_story != story.id"
+                    @click="selectStory(story)"
+                    class="clear pull-right story-button"
+                    style="margin-top: -7px"
+                  >
+                    <i>star_border</i>
+                  </button>
 
-                <button v-else disabled class="clear pull-right" style="margin-top: -7px">
-                  <i>star</i>
-                </button>
-              </template>
+                  <button v-else disabled class="clear pull-right" style="margin-top: -7px">
+                    <i>star</i>
+                  </button>
+                </template>
 
-              <span v-if="story.estimation" class="label bg-primary text-white">
-                <template v-if="story.estimation === 'time'"><i>access_time</i></template>
-                <template v-else>{{story.estimation}}</template>
-              </span>
+                <template>
+                  <span v-if="!story.children.length && story.estimation" class="label bg-primary text-white">
+                    <template v-if="story.estimation === 'time'"><i>access_time</i></template>
+                    <template v-else>{{story.estimation}}</template>
+                  </span>
 
-              {{story.title}}
+                  <span v-if="story.children.length" class="label bg-primary text-white">
+                    {{
+                        story.children
+                          .map(child => child.estimation || 0)
+                          .reduce((x, y) => x + y)
+                    }}
+                  </span>
+                </template>
+
+                {{story.title}}
+              </div>
+
+              <div v-if="story.description" class="card-content">
+                {{story.description}}
+              </div>
             </div>
 
-            <div v-if="story.description" class="card-content">
-              {{story.description}}
+
+            <div v-for="child in story.children" v-if="child" class="card card-story bg-lime-4" style="left: 15px">
+              <div class="card-title">
+                <template v-if="role === 'manager' && !voting && !discussion">
+                  <button
+                    v-if="role === 'manager' && current_story != child.id"
+                    @click="selectStory(child)"
+                    class="clear pull-right story-button"
+                    style="margin-top: -7px"
+                  >
+                    <i>star_border</i>
+                  </button>
+
+                  <button v-else disabled class="clear pull-right" style="margin-top: -7px">
+                    <i>star</i>
+                  </button>
+                </template>
+
+                <span v-if="child.estimation" class="label bg-primary text-white">
+                  <template v-if="child.estimation === 'time'"><i>access_time</i></template>
+                  <template v-else>{{child.estimation}}</template>
+                </span>
+
+                {{child.title}}
+              </div>
+
+              <div v-if="story.description" class="card-content">
+                {{child.description}}
+              </div>
             </div>
-          </div>
+          </template>
         </div>
         <div ref="tab-events">
           <template v-for="ev in events">
@@ -270,7 +313,7 @@
         </button>
       </div>
 
-      <template v-if="discussion && role === 'manager'">
+      <template v-if="discussion && role === 'manager' && order.find(id => id === current_story)">
         <p class="caption" style="padding: 5px 15px">
           ...Or separate it into stories.
         </p>
