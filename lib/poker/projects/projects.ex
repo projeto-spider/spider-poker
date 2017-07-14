@@ -275,4 +275,15 @@ defmodule Poker.Projects do
       {:ok, project.backlog}
     end
   end
+
+  def move_substory(parent_id, id, position) do
+    with {:ok, story}  <- Repo.soft_get(Story, parent_id),
+          backlog      <- Backlog.move(story.backlog, id, position),
+         {:ok, story}  <- story
+                          |> Story.backlog_changeset(%{"backlog" => backlog})
+                          |> Repo.update
+    do
+      {:ok, story}
+    end
+  end
 end

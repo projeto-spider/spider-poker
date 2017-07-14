@@ -45,50 +45,97 @@
       </div>
 
       <transition-group name="card-story" tag="div">
-        <div v-for="(story, position) in backlog" v-bind:key="story" class="card card-story bg-lime-2">
-          <div class="card-title">
+        <template v-for="(story, position) in backlog">
+          <div v-bind:key="story" class="card card-story bg-lime-2">
+            <div class="card-title">
 
-            <button ref="target" class="clear pull-right story-button">
-              <i>more_vert</i>
+              <button ref="target" class="clear pull-right story-button">
+                <i>more_vert</i>
 
-              <q-popover ref="popover">
-                <div class="list item-delimiter highlight">
-                  <div
-                    class="item item-link"
-                    @click="promptNewPosition(story, position), $refs.popover[position].close()"
-                  >
-                    <div class="item-content">Move</div>
+                <q-popover ref="popover">
+                  <div class="list item-delimiter highlight">
+                    <div
+                      class="item item-link"
+                      @click="promptNewPosition(story, position), $refs.popover[position].close()"
+                    >
+                      <div class="item-content">Move</div>
+                    </div>
+
+                    <div
+                      class="item item-link"
+                      @click="promptStoryUpdate(story), $refs.popover[position].close()"
+                    >
+                      <div class="item-content">Edit</div>
+                    </div>
+
+                    <div
+                      class="item item-link"
+                      @click="confirmStoryDeletion(story), $refs.popover[position].close()"
+                    >
+                      <div class="item-content">Delete</div>
+                    </div>
                   </div>
+                </q-popover>
+              </button>
 
-                  <div
-                    class="item item-link"
-                    @click="promptStoryUpdate(story), $refs.popover[position].close()"
-                  >
-                    <div class="item-content">Edit</div>
-                  </div>
+              <span v-if="story.estimation" class="label bg-primary text-white">
+                <template v-if="story.estimation === 'time'"><i>access_time</i></template>
+                <template v-else>{{story.estimation}}</template>
+              </span>
 
-                  <div
-                    class="item item-link"
-                    @click="confirmStoryDeletion(story), $refs.popover[position].close()"
-                  >
-                    <div class="item-content">Delete</div>
-                  </div>
-                </div>
-              </q-popover>
-            </button>
+              {{story.title}}
+            </div>
 
-            <span v-if="story.estimation" class="label bg-primary text-white">
-              <template v-if="story.estimation === 'time'"><i>access_time</i></template>
-              <template v-else>{{story.estimation}}</template>
-            </span>
-
-            {{story.title}}
+            <div v-if="story.description" class="card-content">
+              {{story.description}}
+            </div>
           </div>
 
-          <div v-if="story.description" class="card-content">
-            {{story.description}}
+          <div v-for="(child, child_position) in story.children" v-if="child" :key="`id-${child.id}`" class="card card-story bg-lime-4" style="left: 15px">
+            <div class="card-title">
+
+              <button ref="target" class="clear pull-right story-button">
+                <i>more_vert</i>
+
+                <q-popover ref="popover">
+                  <div class="list item-delimiter highlight">
+                    <div
+                      class="item item-link"
+                      @click="promptNewPosition(child, child_position, story), $refs.popover[child_position].close()"
+                    >
+                      <div class="item-content">Move</div>
+                    </div>
+
+                    <div
+                      class="item item-link"
+                      @click="promptStoryUpdate(child), $refs.popover[child_position].close()"
+                    >
+                      <div class="item-content">Edit</div>
+                    </div>
+
+                    <div
+                      class="item item-link"
+                      @click="confirmStoryDeletion(child), $refs.popover[child_position].close()"
+                    >
+                      <div class="item-content">Delete</div>
+                    </div>
+                  </div>
+                </q-popover>
+              </button>
+
+              <span v-if="child.estimation" class="label bg-primary text-white">
+                <template v-if="child.estimation === 'time'"><i>access_time</i></template>
+                <template v-else>{{child.estimation}}</template>
+              </span>
+
+              {{child.title}}
+            </div>
+
+            <div v-if="child.description" class="card-content">
+              {{child.description}}
+            </div>
           </div>
-        </div>
+        </template>
       </transition-group>
     </template>
   </div>

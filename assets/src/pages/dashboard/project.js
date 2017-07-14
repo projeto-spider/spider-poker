@@ -29,8 +29,10 @@ export default {
 
     backlog() {
       return this.order
-        .map(id => this.stories[id])
-    }
+        .map(id => Object.assign({
+          children: this.stories[id].backlog.map(child => this.stories[child])
+        }, this.stories[id]))
+    },
   },
 
   watch: {
@@ -222,7 +224,7 @@ export default {
     },
 
     /* Story Reordering */
-    promptNewPosition(story, position) {
+    promptNewPosition(story, position, parent = false) {
       Dialog.create({
         title: 'Changing Story Position',
 
@@ -232,7 +234,7 @@ export default {
             label: 'Next Position',
             model: position + 1, // Do not show 0 index
             min: 1,
-            max: this.order.length
+            max: parent ? parent.backlog.length : this.order.length
           }
         },
 
@@ -240,15 +242,15 @@ export default {
           'Cancel',
           {
             label: 'Move',
-            handler: ({position}) => this.changeStoryPosition(story, position)
+            handler: ({position}) => this.changeStoryPosition(story, position, parent)
           }
         ]
       })
     },
 
-    changeStoryPosition(story, position) {
+    changeStoryPosition(story, position, parent) {
       // Down by one since the user pick a position starting from 1, not 0
-      this.channel.push('move_story', {story_id: story.id, position: position - 1})
+      this.channel.push('move_story', {story_id: story.id, position: position - 1, parent_id: parent && parent.id})
     },
 
     channelOrderChange({order}) {
