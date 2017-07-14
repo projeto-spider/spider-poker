@@ -108,11 +108,13 @@ defmodule Poker.Web.GameChannel do
         end)
 
       # TODO: verify if there's a current_story
-      {:ok, {backlog, stories}} = Projects.add_substories(game.project_name, attrs_list, game.current_story)
-
-      IO.inspect {"back", backlog, stories}
+      {:ok, {backlog, stories}} = Projects.add_substories(game.project_name, game.current_story, attrs_list)
+      # Set score 0 since score will be shown as the sum of the children estimations
+      {:ok, {story, game}} = Game.set_score(game, 0)
 
       broadcast!(socket, "added_substories", %{"stories" => stories, "order" => backlog})
+      broadcast!(socket, "game_state", game)
+      broadcast!(socket, "track", %{"type" => "added_substories"})
     end
 
     {:noreply, socket}

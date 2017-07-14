@@ -209,6 +209,10 @@
                 Set score to {{ev.score}}
               </div>
 
+              <div v-else-if="ev.type === 'added_substories'" class="card-title bg-info text-white">
+                Added substories
+              </div>
+
               <div v-else-if="ev.type === 'game_finished'" class="card-title bg-primary text-white">
                 Game finished
               </div>
