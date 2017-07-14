@@ -3,7 +3,7 @@ defmodule Poker.Web.Notification.Policy do
   alias Poker.Notification
   alias Poker.Accounts.User
 
-  def can?(%user{admin?: true}, _action, _data), do true
+  def can?(%user{admin?: true}, _action, _data), do: true
 
   def can?(%User{id: id}, action, resource)
   when action in [:update, :delete] do

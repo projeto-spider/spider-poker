@@ -6,7 +6,7 @@ defmodule Poker.Web.Policy.Project do
   alias Poker.Organizations
   alias Poker.Accounts.User
 
-  def can?(%user{admin?: true}, _action, _data), do true
+  def can?(%user{admin?: true}, _action, _data), do: true
 
   def can?(%User{id: user_id}, :create, %{organization_id: org_id}) do
     Organizations.member?(org_id, user_id)
