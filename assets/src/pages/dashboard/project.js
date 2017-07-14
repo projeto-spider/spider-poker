@@ -118,13 +118,11 @@ export default {
       const order = response.meta.order.reverse()
       // shamelessly push stories with intervals of 50ms
       // just to have a neat enter animation :D
-      const interval = setInterval(() => {
-        if (!order.length) {
-          return clearInterval(interval)
-        }
-
-        this.order.push(order.pop())
-      }, 50)
+      const interval = setInterval(() =>
+        order.length
+          ? this.order.push(order.pop())
+          : clearInterval(interval)
+      , 50)
     },
 
     handleLoadBacklogFail(error) {
