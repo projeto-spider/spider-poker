@@ -4,6 +4,8 @@ defmodule Poker.Web.Policy.User do
 
   alias Poker.Accounts.User
 
+  def can?(%user{admin?: true}, _action, _data), do true
+
   def can?(%User{id: user_id}, action, %{user: user})
   when action in [:update, :delete] do
     user_id == user.id
