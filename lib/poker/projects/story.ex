@@ -20,6 +20,11 @@ defmodule Poker.Projects.Story do
     |> cast(attrs, [:title, :description, :estimation, :project_id])
   end
 
+  def backlog_changeset(%Story{} = project, attrs \\ %{}) do
+    project
+    |> cast(attrs, [:backlog])
+  end
+
   def validate(story) do
     story
     |> validate_required([:title, :project_id])

@@ -23,6 +23,8 @@ defmodule Poker.Projects.Backlog do
     end
   end
 
+  def concat(backlog, others), do: Enum.concat(backlog, others)
+
   def insert_substories([], ids, _position), do: ids
   def insert_substories([head|tail], ids, parent_id) do
     if head == parent_id do

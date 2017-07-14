@@ -213,8 +213,10 @@ defmodule Poker.Projects do
     end
   end
 
-  def add_substories(proj_id, attrs_list, parent_id) do
-    with {:ok, project} <- get(proj_id) do
+  def add_substories(proj_id, parent_id, attrs_list) do
+    with {:ok, proj} <- get(proj_id),
+         {:ok, parent} <- Repo.soft_get(Story, parent_id)
+    do
       stories =
         attrs_list
         |> Stream.map(&(Map.put(&1, "project_id", proj_id)))
@@ -229,11 +231,11 @@ defmodule Poker.Projects do
 
       ids = Enum.map(stories, fn story -> story.id end)
 
-      backlog = Backlog.insert_substories(project.backlog, ids, parent_id)
+      backlog = Backlog.concat(parent.backlog, ids)
 
-      with {:ok, project} <- project
-                             |> Project.backlog_changeset(%{"backlog" => backlog})
-                             |> Repo.update
+      with {:ok, parent} <- parent
+                            |> Story.backlog_changeset(%{"backlog" => backlog})
+                            |> Repo.update
       do
         {:ok, {backlog, stories}}
       end
