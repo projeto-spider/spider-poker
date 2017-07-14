@@ -33,6 +33,8 @@ slug_to_display_name = fn slug ->
   |> Enum.join(" ")
 end
 
+admins = ["administer", "lubien", "leochrisis"]
+
 [
   "administer",
   {"lubien", "lubien1996@gmail.com"},
@@ -53,7 +55,12 @@ end
     attrs = %{"username" => username, "email" => email,
               "password" => "123456", "password_confirmation" => "123456"}
 
-    {:ok, %User{id: id}} = Accounts.create(attrs)
+    {:ok, %User{id: id} = user} = Accounts.create(attrs)
+
+    if Enum.find(admins, false, &(&1 == user.username)) do
+      {:ok, _user} = Accounts.grant_admin(user)
+    end
+
     ID.add(:user, username, id)
   end
 end)
