@@ -158,77 +158,34 @@
         <div ref="tab-stories">
           <template v-for="(story, position) in backlog">
             <div v-if="story" class="card card-story bg-lime-2">
-              <div class="card-title">
-                <template v-if="role === 'manager' && !voting && !discussion">
-                  <button
-                    v-if="role === 'manager' && current_story != story.id"
-                    @click="selectStory(story)"
-                    class="clear pull-right story-button"
-                    style="margin-top: -7px"
-                  >
-                    <i>star_border</i>
-                  </button>
-
-                  <button v-else disabled class="clear pull-right" style="margin-top: -7px">
-                    <i>star</i>
-                  </button>
-                </template>
-
-                <template>
-                  <span v-if="!story.children.length && story.estimation" class="label bg-primary text-white">
-                    <template v-if="story.estimation === 'time'"><i>access_time</i></template>
-                    <template v-else>{{story.estimation}}</template>
-                  </span>
-
-                  <span v-if="story.children.length" class="label bg-primary text-white">
-                    {{
-                        story.children
-                          .map(child => child.estimation || 0)
-                          .reduce((x, y) => x + y)
-                    }}
-                  </span>
-                </template>
-
-                {{story.title}}
-              </div>
-
-              <div v-if="story.description" class="card-content">
-                {{story.description}}
-              </div>
+              <game-story
+                :story="story"
+                :isChild="false"
+                :selectStory="() => selectStory(story)"
+                :role="role"
+                :voting="voting"
+                :discussion="discussion"
+                :currentStory="current_story"
+              >
+              </game-story>
             </div>
 
-
-            <div v-for="child in story.children" v-if="child" class="card card-story bg-lime-4" style="left: 15px">
-              <div class="card-title">
-                <template v-if="role === 'manager' && !voting && !discussion">
-                  <button
-                    v-if="role === 'manager' && current_story != child.id"
-                    @click="selectStory(child)"
-                    class="clear pull-right story-button"
-                    style="margin-top: -7px"
-                  >
-                    <i>star_border</i>
-                  </button>
-
-                  <button v-else disabled class="clear pull-right" style="margin-top: -7px">
-                    <i>star</i>
-                  </button>
-                </template>
-
-                <span v-if="child.estimation" class="label bg-primary text-white">
-                  <template v-if="child.estimation === 'time'"><i>access_time</i></template>
-                  <template v-else>{{child.estimation}}</template>
-                </span>
-
-                {{child.title}}
-              </div>
-
-              <div v-if="story.description" class="card-content">
-                {{child.description}}
-              </div>
-            </div>
+            <game-story 
+              :story="child"
+              :isChild="true"
+              :selectStory="() => selectStory(child)"
+              :role="role"
+              :voting="voting"
+              :discussion="discussion"
+              v-for="child in story.children" 
+              v-if="child" 
+              class="card card-story bg-lime-4" 
+              style="left: 15px"
+            >
+            </game-story>
           </template>
         </div>
+
         <div ref="tab-events">
           <template v-for="ev in events">
             <div class="card">

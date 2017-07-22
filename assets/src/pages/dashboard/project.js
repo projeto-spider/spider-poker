@@ -1,9 +1,12 @@
 import {Toast, Loading, Dialog} from 'quasar'
 import {mapGetters} from 'vuex'
 import axios from 'utils/axios'
+import ProjectStory from 'components/story/project-story.vue'
 
 export default {
   name: 'Project',
+
+  components: {ProjectStory},
 
   props: {
     socket: [Object, Boolean],

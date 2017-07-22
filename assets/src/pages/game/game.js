@@ -3,6 +3,7 @@ import {Socket} from 'phoenix'
 import {mapState, mapGetters} from 'vuex'
 import axios from 'utils/axios'
 import Gravatar from 'components/gravatar.vue'
+import GameStory from 'components/story/game-story.vue'
 
 /*
  * Make a numerical string with at least two diigits.
@@ -29,7 +30,7 @@ const DISCUSSION = 3
 export default {
   name: 'Game',
 
-  components: {Gravatar},
+  components: {Gravatar, GameStory},
 
   data: () => ({
     /* Socket */
