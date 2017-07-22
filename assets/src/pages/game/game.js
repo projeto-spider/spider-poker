@@ -18,11 +18,6 @@ const twoDigits = x => {
     : str
 }
 
-/*
- * State Enum
- * Replicates the server Enum.
- * See: Poker.Web.Game
- */
 const {CREATED, IDLE, VOTING, DISCUSSION} = STATE
 
 export default {
