@@ -5,33 +5,19 @@ import axios from 'utils/axios'
 import {STATE} from 'utils/enums'
 import Gravatar from 'components/gravatar.vue'
 import GameStory from 'components/story/game-story.vue'
-
-/*
- * Make a numerical string with at least two diigits.
- * Useful for our clock.
- */
-const twoDigits = x => {
-  const str = x.toString()
-
-  return str.length === 1
-    ? `0${str}`
-    : str
-}
+import Timer from './timer.vue'
 
 const {CREATED, IDLE, VOTING, DISCUSSION} = STATE
 
 export default {
   name: 'Game',
 
-  components: {Gravatar, GameStory},
+  components: {Gravatar, GameStory, Timer},
 
   data: () => ({
     /* Socket */
     socket: false,
     channel: false,
-
-    /* Time */
-    now: 0,
 
     /* Selected Card */
     selectedCard: false,
@@ -111,46 +97,6 @@ export default {
         .filter(user => !this.onlineIds.includes(user.id))
     },
 
-    /* Timer */
-    timer() {
-      /*
-       * If there's no timer we can't count.
-       * If the game was just created, we don't need a timer.
-       * If it's idle we don't need it too.
-       */
-      if (!this.time || this.created || this.idle) {
-        return false
-      }
-
-      /*
-       * Voting has a countdown.
-       * this.time will hold the end.
-       * this.time - this.now shows our time
-       */
-      if (this.voting) {
-        if (this.time < this.now) {
-          return false
-        }
-
-        const difference = this.time - this.now
-        return {
-          minutes: twoDigits(Math.trunc(difference / 60) % 60),
-          seconds: twoDigits(difference % 60)
-        }
-      }
-
-      /*
-       * Discussion timer is a chronometer.
-       * this.time holds the start.
-       * this.now - this.time shows our time
-       */
-      const difference = this.now - this.time
-      return {
-        minutes: twoDigits(Math.max(0, Math.trunc(difference /60) % 60)),
-        seconds: twoDigits(Math.max(0, difference % 60))
-      }
-    },
-
     /* State helpers */
     created() {
       return this.state === CREATED
@@ -170,13 +116,10 @@ export default {
   },
 
   created() {
-    setInterval(this.tick, 500)
     this.connectToGame()
   },
 
   beforeDestroy() {
-    clearInterval(this.tick)
-
     if (this.channel) {
       this.channel.leave()
     }
@@ -428,11 +371,6 @@ export default {
 
     channelGameFinished() {
       this.$router.push({name: 'Dashboard'})
-    },
-
-    /* Time */
-    tick() {
-      this.now = Math.trunc((new Date()).getTime() / 1000)
     },
 
     /* Full Screen */

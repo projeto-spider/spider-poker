@@ -49,11 +49,10 @@
     </q-tabs>
 
     <q-drawer ref="leftDrawer">
-      <div v-if="timer" class="toolbar">
-        <q-toolbar-title style="text-align: center">
-          {{timer.minutes}}:{{timer.seconds}}
-        </q-toolbar-title>
-      </div>
+      <timer
+        :state="state"
+        :time="time"
+      ></timer>
 
       <div class="list no-border platform-delimiter">
         <div
