@@ -2,6 +2,7 @@ import {Toast, Loading, AppFullscreen} from 'quasar'
 import {Socket} from 'phoenix'
 import {mapState, mapGetters} from 'vuex'
 import axios from 'utils/axios'
+import {STATE} from 'utils/enums'
 import Gravatar from 'components/gravatar.vue'
 import GameStory from 'components/story/game-story.vue'
 
@@ -22,10 +23,7 @@ const twoDigits = x => {
  * Replicates the server Enum.
  * See: Poker.Web.Game
  */
-const CREATED = 0
-const IDLE = 1
-const VOTING = 2
-const DISCUSSION = 3
+const {CREATED, IDLE, VOTING, DISCUSSION} = STATE
 
 export default {
   name: 'Game',
