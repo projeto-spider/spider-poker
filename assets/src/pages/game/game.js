@@ -5,6 +5,7 @@ import axios from 'utils/axios'
 import {STATE} from 'utils/enums'
 import Gravatar from 'components/gravatar.vue'
 import GameStory from 'components/story/game-story.vue'
+import UserPresence from 'components/user-presence.vue'
 import Timer from './timer.vue'
 
 const {CREATED, IDLE, VOTING, DISCUSSION} = STATE
@@ -12,7 +13,7 @@ const {CREATED, IDLE, VOTING, DISCUSSION} = STATE
 export default {
   name: 'Game',
 
-  components: {Gravatar, GameStory, Timer},
+  components: {Gravatar, GameStory, Timer, UserPresence},
 
   data: () => ({
     /* Socket */
