@@ -106,22 +106,13 @@
       <div ref="layout-padding" class="layout-padding">
         <div ref="tab-chat" class="tab-chat">
           <transition-group name="user-presence">
-            <div
+            <message
               v-for="message in messages"
               :key="message"
-              class="chat-message"
-              :class="{[message.user_id === loggedUser.id ? 'chat-you' : 'chat-other']: true}"
+              :message="message"
+              :user="users[message.user_id]"
             >
-              <div v-if="message.user_id === 0" class="chat-date">Anonymous</div>
-
-              <div class="chat-user">
-                <gravatar :email="message.user_id === 0 ? '' : users[message.user_id].email"></gravatar>
-              </div>
-
-              <div class="chat-message">
-                <p>{{message.body}}</p>
-              </div>
-            </div>
+            </message>
           </transition-group>
         </div>
 
@@ -258,14 +249,9 @@
     </q-drawer>
 
     <div slot="footer" class="toolbar">
-      <q-search
-        v-model="message"
-        :debounce="0"
-        placeholder="Type your messages"
-        icon="send"
-        class="primary"
-        @enter="sendMessage"
-      ></q-search>
+      <message-input
+        :sendMessage="(message) => sendMessage(message)"
+      ></message-input>
     </div>
   </q-layout>
 </template>
