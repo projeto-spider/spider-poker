@@ -7,6 +7,7 @@ import Gravatar from 'components/gravatar.vue'
 import GameStory from 'components/story/game-story.vue'
 import UserPresence from 'components/user-presence.vue'
 import Timer from './timer.vue'
+import Events from './events.vue'
 import Message from './chat/message.vue'
 import MessageInput from './chat/message-input.vue'
 
@@ -15,7 +16,9 @@ const {CREATED, IDLE, VOTING, DISCUSSION} = STATE
 export default {
   name: 'Game',
 
-  components: {Gravatar, GameStory, Timer, UserPresence, Message, MessageInput},
+  components: {
+    Gravatar, GameStory, Timer, UserPresence, Message, MessageInput, Events
+  },
 
   data: () => ({
     /* Socket */
