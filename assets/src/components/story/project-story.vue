@@ -1,7 +1,9 @@
 <template>
-  <div>
-    <div class="card-title">
-      
+  <story
+    :story="story"
+    :isChild="isChild"
+  >
+    <span slot="rigth-button">
       <button ref="target" class="clear pull-right story-button">
         <i>more_vert</i>
 
@@ -30,19 +32,8 @@
           </div>
         </q-popover>
       </button>
-
-      <span v-if="story.estimation" class="label bg-primary text-white">
-        <template v-if="story.estimation === 'time'"><i>access_time</i></template>
-        <template v-else>{{story.estimation}}</template>
-      </span>
-
-      {{story.title}}
-    </div>
-
-    <div v-if="story.description" class="card-content">
-      {{story.description}}
-    </div>
-  </div>
+    </span>
+  </story>
 </template>
 
 <script src="./project-story.js"></script>

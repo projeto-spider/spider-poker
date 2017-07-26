@@ -118,7 +118,7 @@
 
         <div ref="tab-stories">
           <template v-for="(story, position) in backlog">
-            <div v-if="story" class="card card-story bg-lime-2">
+            <div v-if="story">
               <game-story
                 :story="story"
                 :isChild="false"
@@ -131,17 +131,16 @@
               </game-story>
             </div>
 
-            <game-story 
+            <game-story
               :story="child"
               :isChild="true"
               :selectStory="() => selectStory(child)"
               :role="role"
               :voting="voting"
               :discussion="discussion"
-              v-for="child in story.children" 
-              v-if="child" 
-              class="card card-story bg-lime-4" 
-              style="left: 15px"
+              v-for="child in story.children"
+              :key="child"
+              v-if="child"
             >
             </game-story>
           </template>

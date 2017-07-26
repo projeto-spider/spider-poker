@@ -1,5 +1,9 @@
+import Story from "./story.vue"
+
 export default {
   name: 'GameStory',
+
+  components: {Story},
 
   props: {
     story: Object,
@@ -8,6 +12,9 @@ export default {
     role: String,
     voting: Boolean,
     discussion: Boolean,
-    currentStory: Number
+    currentStory:{
+      type: [Number, Boolean],
+      default: false
+    }
   }
 }
