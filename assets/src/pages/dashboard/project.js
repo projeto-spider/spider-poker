@@ -35,7 +35,7 @@ export default {
         .map(id => Object.assign({
           children: this.stories[id].backlog.map(child => this.stories[child])
         }, this.stories[id]))
-    },
+    }
   },
 
   watch: {
