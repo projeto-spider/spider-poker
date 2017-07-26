@@ -8,6 +8,7 @@ import GameStory from 'components/story/game-story.vue'
 import UserPresence from 'components/user-presence.vue'
 import Timer from './timer.vue'
 import Events from './events.vue'
+import VotationDrawer from './votation-drawer.vue'
 import Message from './chat/message.vue'
 import MessageInput from './chat/message-input.vue'
 
@@ -17,7 +18,7 @@ export default {
   name: 'Game',
 
   components: {
-    Gravatar, GameStory, Timer, UserPresence, Message, MessageInput, Events
+    Gravatar, GameStory, Timer, UserPresence, Message, MessageInput, Events, VotationDrawer
   },
 
   data: () => ({
