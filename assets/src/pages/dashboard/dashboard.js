@@ -3,6 +3,7 @@ import {Socket} from 'phoenix'
 import {mapState, mapGetters} from 'vuex'
 import axios from 'utils/axios'
 import Gravatar from 'components/gravatar.vue'
+import ProjectPicker from 'components/project-picker.vue'
 import Project from './project.vue'
 import EditOrganizationModal from './modal/edit-organization.vue'
 import EditProjectModal from './modal/edit-project.vue'
@@ -14,7 +15,8 @@ export default {
     Gravatar,
     Project,
     EditOrganizationModal,
-    EditProjectModal
+    EditProjectModal,
+    ProjectPicker
   },
 
   data: () => ({

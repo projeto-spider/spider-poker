@@ -111,26 +111,15 @@
 
       <div class="list platform-delimiter">
         <div class="list-label">Organizations</div>
-
-        <q-collapsible
-          v-for="org in organizations"
-          :key="`org-${org.id}`"
-          :icon="org.private ? 'lock' : 'label'"
-          :label="org.display_name || org.name"
-        >
-          <div
+        <div v-for="org in organizations" :key="`org-${org.id}`">
+          <project-picker
             v-for="proj in projects.filter(proj => proj.organization_id === org.id)"
             :key="`proj-${proj.id}`"
-            class="item item-link item-inset-delimiter"
-            @click="selectProject(proj.id)"
-          >
-            <i class="item-primary">{{proj.private ? 'lock_outline' : 'label_outline'}}</i>
-
-            <div class="item-content">
-              {{proj.display_name || proj.name}}
-            </div>
-          </div>
-        </q-collapsible>
+            :organization="org"
+            :project="proj"
+            :selectProject="selectProject"
+          ></project-picker>
+        </div>
       </div>
     </q-drawer>
 
