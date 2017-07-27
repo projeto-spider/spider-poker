@@ -9,12 +9,12 @@ export default {
 
   data: () => ({
     loading: false,
-    username: '',
+    name: '',
     password: '',
     password_confirmation: '',
     email: '',
     errors: {
-      username: [],
+      name: [],
       password: [],
       password_confirmation: [],
       email: []
@@ -32,9 +32,9 @@ export default {
         message: 'Creating account',
         delay: 0
       })
-      const {username, password, password_confirmation, email} = this
+      const {name, password, password_confirmation, email} = this
 
-      axios.post('/users', {data: {username, password, password_confirmation, email}})
+      axios.post('/users', {data: {name, password, password_confirmation, email}})
         .then(this.handleSuccess)
         .catch(this.handleFail)
     },
@@ -50,7 +50,7 @@ export default {
 
       const errors = error.response.data.errors
       this.errors = {
-        username: errors.username || [],
+        name: errors.name || [],
         password: errors.password || [],
         password_confirmation: errors.password_confirmation || [],
         email: errors.email || []

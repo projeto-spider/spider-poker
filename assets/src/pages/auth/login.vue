@@ -5,8 +5,8 @@
     <form @submit.prevent="login">
       <p>
         <div class="floating-label">
-          <input required class="full-width" v-model="username">
-          <label>Username</label>
+          <input required class="full-width" v-model="email">
+          <label>Email</label>
         </div>
       </p>
 

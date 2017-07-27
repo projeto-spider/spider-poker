@@ -7,13 +7,13 @@
         <div class="floating-label">
           <input
             required class="full-width"
-            :class="{'has-errors': errors.username.length}"
-            v-model="username"
+            :class="{'has-errors': errors.name.length}"
+            v-model="name"
           >
-          <label>Username</label>
+          <label>Display name</label>
         </div>
         <ul>
-          <li v-for="error in errors.username" class="text-negative">
+          <li v-for="error in errors.name" class="text-negative">
             {{error}}
           </li>
         </ul>

@@ -9,7 +9,7 @@ export default {
 
   data: () => ({
     loading: false,
-    username: '',
+    email: '',
     password: ''
   }),
 
@@ -24,9 +24,9 @@ export default {
         message: 'Logging in',
         delay: 0
       })
-      const {username, password} = this
+      const {email, password} = this
 
-      axios.post('/sessions', {data: {username, password}})
+      axios.post('/sessions', {data: {email, password}})
         .then(this.handleSuccess)
         .catch(this.handleFail)
     },
