@@ -83,9 +83,9 @@
     </q-drawer>
 
     <div class="layout-view">
-      <project
+      <backlog
         :socket="socket"
-       ></project>
+       ></backlog>
     </div>
   </q-layout>
 </template>

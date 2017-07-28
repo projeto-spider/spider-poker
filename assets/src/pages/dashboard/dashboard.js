@@ -4,14 +4,14 @@ import {mapState, mapGetters, mapActions} from 'vuex'
 import axios from 'utils/axios'
 import Gravatar from 'components/gravatar.vue'
 import MainDrawerProject from './main-drawer/project.vue'
-import Project from './project.vue'
+import Backlog from './backlog.vue'
 
 export default {
   name: 'Dashboard',
 
   components: {
     Gravatar,
-    Project,
+    Backlog,
     MainDrawerProject
   },
 

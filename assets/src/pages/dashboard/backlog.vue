@@ -73,5 +73,5 @@
   </div>
 </template>
 
-<script src="./project.js"></script>
-<style lang="sass" src="./project.sass"></style>
+<script src="./backlog.js"></script>
+<style lang="sass" src="./backlog.sass"></style>
