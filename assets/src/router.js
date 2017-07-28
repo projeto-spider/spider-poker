@@ -7,7 +7,7 @@ Vue.use(VueRouter)
 const load = type => name => () =>
   System.import(`./${type}/${name}.vue`)
 
-const layout = load('layouts')
+const layout = load('components/layout')
 const page = load('pages')
 const component = load('components')
 
