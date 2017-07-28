@@ -82,7 +82,7 @@ export default new VueRouter({
     {
       name: 'Error',
       path: '*',
-      component: component('Error404')
+      component: component('error-404')
     }
   ]
 })
