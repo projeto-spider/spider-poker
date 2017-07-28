@@ -4,7 +4,7 @@ import axios from 'utils/axios'
 import Gravatar from 'components/gravatar.vue'
 
 export default {
-  name: 'MainDrawerProject',
+  name: 'ProjecMemberstModal',
 
   components: {Gravatar},
 

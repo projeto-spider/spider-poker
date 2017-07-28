@@ -74,11 +74,11 @@
           <div class="item-secondary"><i @click="promptCreateProject" style="cursor: pointer">add</i></div>
         </div>
 
-        <main-drawer-project
+        <project-item
           v-for="project in projects"
           :key="project"
           :project="project"
-        ></main-drawer-project>
+        ></project-item>
       </div>
     </q-drawer>
 

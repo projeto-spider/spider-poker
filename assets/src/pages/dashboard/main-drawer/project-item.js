@@ -1,12 +1,12 @@
 import {Dialog, Toast} from 'quasar'
 import {mapGetters, mapMutations, mapActions} from 'vuex'
-import ProjectMembersModal from './project-members-modal.vue'
+import ProjectMembers from './project-members.vue'
 
 export default {
-  name: 'ProjectPicker',
+  name: 'ProjectItem',
 
   components: {
-    ProjectMembersModal
+    ProjectMembers
   },
 
   props: {

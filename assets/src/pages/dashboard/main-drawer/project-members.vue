@@ -92,4 +92,4 @@
   </q-layout>
 </template>
 
-<script src="./project-members-modal.js"></script>
+<script src="./project-members.js"></script>

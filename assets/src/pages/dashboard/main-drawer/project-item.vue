@@ -38,13 +38,13 @@
     </div>
 
     <q-modal ref="modal" content-classes="modal-edition">
-      <project-members-modal
+      <project-members
         ref="modalChild"
         :modal="$refs.modal"
         :project="project"
-      ></project-members-modal>
+      ></project-members>
     </q-modal>
   </div>
 </template>
 
-<script src="./project.js"></script>
+<script src="./project-item.js"></script>

@@ -3,7 +3,7 @@ import {Socket} from 'phoenix'
 import {mapState, mapGetters, mapActions} from 'vuex'
 import axios from 'utils/axios'
 import Gravatar from 'components/gravatar.vue'
-import MainDrawerProject from './main-drawer/project.vue'
+import ProjectItem from './main-drawer/project-item.vue'
 import Backlog from './backlog.vue'
 
 export default {
@@ -12,7 +12,7 @@ export default {
   components: {
     Gravatar,
     Backlog,
-    MainDrawerProject
+    ProjectItem
   },
 
   data: () => ({
