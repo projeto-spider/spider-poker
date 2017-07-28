@@ -11,8 +11,8 @@
     <template v-else>
       <ul class="breadcrumb">
         <li><a>Dashboard</a></li>
-        <li><a>{{organization.display_name || organization.name}}</a></li>
-        <li><a>{{project.display_name || project.name}}</a></li>
+        <li v-if="project.organization"><a>{{project.organization}}</a></li>
+        <li><a>{{project.name}}</a></li>
       </ul>
 
       <div style="clear: both"></div>

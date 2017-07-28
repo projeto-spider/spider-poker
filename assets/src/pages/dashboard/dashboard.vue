@@ -55,10 +55,10 @@
     <q-drawer ref="leftDrawer">
       <div class="list no-border platform-delimiter">
         <router-link
-          v-if="selectedProjectId"
+          v-if="selectedProject"
           tag="div"
           class="item item-link"
-          :to="{name: 'Game', params: {projectId: selectedProjectId}}"
+          :to="{name: 'Game', params: {projectId: selectedProject.id}}"
         >
           <i class="item-primary">games</i>
 
@@ -66,84 +66,27 @@
             Start Game
           </div>
         </router-link>
-
-        <div
-          class="item item-link"
-          @click="askOrganizationName"
-        >
-          <i class="item-primary">group_add</i>
-
-          <div class="item-content">
-            Create Organization
-          </div>
-        </div>
-
-        <div
-          class="item item-link"
-          @click="askProjectName"
-        >
-          <i class="item-primary">playlist_add</i>
-          <div class="item-content">
-            Create Project
-          </div>
-        </div>
-
-        <div
-          class="item item-link"
-          @click="$refs.editOrganizationModal.open()"
-        >
-          <i class="item-primary">group</i>
-          <div class="item-content">
-            Edit Organization
-          </div>
-        </div>
-
-        <div
-          class="item item-link"
-          @click="$refs.editProjectModal.open()"
-        >
-          <i class="item-primary">list</i>
-          <div class="item-content">
-            Edit Project
-          </div>
-        </div>
       </div>
 
       <div class="list platform-delimiter">
-        <div class="list-label">Organizations</div>
-        <div v-for="org in organizations" :key="`org-${org.id}`">
-          <project-picker
-            v-for="proj in projects.filter(proj => proj.organization_id === org.id)"
-            :key="`proj-${proj.id}`"
-            :organization="org"
-            :project="proj"
-            :selectProject="selectProject"
-          ></project-picker>
+        <div class="item">
+          <div class="item-content"><small class="text-faded">Projects</small></div>
+          <div class="item-secondary"><i @click="promptCreateProject" style="cursor: pointer">add</i></div>
         </div>
+
+        <main-drawer-project
+          v-for="project in projects"
+          :key="project"
+          :project="project"
+        ></main-drawer-project>
       </div>
     </q-drawer>
 
     <div class="layout-view">
       <project
         :socket="socket"
-        :organization="selectedOrganization"
-        :project="selectedProject"
        ></project>
     </div>
-
-    <q-modal ref="editOrganizationModal" content-classes="modal-edition">
-      <edit-organization-modal
-        :modal="$refs.editOrganizationModal"
-        :organizations="organizations"
-      ></edit-organization-modal>
-    </q-modal>
-
-    <q-modal ref="editProjectModal" content-classes="modal-edition">
-      <edit-project-modal
-        :modal="$refs.editProjectModal"
-        :projects="projects"
-      ></edit-project-modal>
-    </q-modal>
   </q-layout>
 </template>
 

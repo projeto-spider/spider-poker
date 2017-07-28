@@ -9,9 +9,7 @@ export default {
   components: {ProjectStory},
 
   props: {
-    socket: [Object, Boolean],
-    organization: [Object, Boolean],
-    project: [Object, Boolean]
+    socket: [Object, Boolean]
   },
 
   data: () => ({
@@ -29,6 +27,9 @@ export default {
 
   computed: {
     ...mapGetters(['loggedUser']),
+    ...mapGetters({
+      project: 'selectedProject'
+    }),
 
     backlog() {
       return this.order
