@@ -5,6 +5,8 @@ import VuexPersistence from 'vuex-persist'
 
 import * as auth from './modules/auth'
 import * as projects from './modules/projects'
+import * as socket from './modules/socket'
+import * as notifications from './modules/notifications'
 
 Vue.use(Vuex)
 Vue.config.debug = true
@@ -31,6 +33,8 @@ export default new Vuex.Store({
 
   modules: {
     auth,
+    socket,
+    notifications,
     projects
   },
 

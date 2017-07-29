@@ -4,13 +4,9 @@ import axios from 'utils/axios'
 import ProjectStory from 'components/story/project-story.vue'
 
 export default {
-  name: 'Project',
+  name: 'Backlog',
 
   components: {ProjectStory},
-
-  props: {
-    socket: [Object, Boolean]
-  },
 
   data: () => ({
     /* Socket */
@@ -26,7 +22,7 @@ export default {
   }),
 
   computed: {
-    ...mapGetters(['loggedUser']),
+    ...mapGetters(['loggedUser', 'socket']),
     ...mapGetters({
       project: 'selectedProject'
     }),
@@ -46,9 +42,9 @@ export default {
   },
 
   /*
-  *  With hot reloading we keep the state and Vue watcher
-  *  doesn't trigger reload stories so I'm using this workaround
-  */
+   * With hot reloading we keep the state and Vue watcher
+   * doesn't trigger reload stories so I'm using this workaround
+   */
   created() {
     if (this.project) {
       this.projectChanged()
