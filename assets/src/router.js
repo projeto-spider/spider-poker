@@ -69,12 +69,6 @@ export default new VueRouter({
           path: '/',
           component: page('home'),
           beforeEnter: notAuthenticated
-        },
-
-        {
-          name: 'About',
-          path: 'about',
-          component: page('about')
         }
       ]
     },
