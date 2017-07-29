@@ -55,7 +55,6 @@ export default {
       Loading.hide()
       Toast.create.negative('Failed to register')
 
-      console.log(error.response)
       const errors = error.response.data.errors
       this.errors = {
         name: errors.name || [],
