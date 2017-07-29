@@ -2,7 +2,7 @@
   <one-box-layout>
     <span slot="title">Login</span>
 
-    <form @submit.prevent="login">
+    <form @submit.prevent="tryLogin">
       <p>
         <div class="floating-label">
           <input required class="full-width" v-model="email">
@@ -19,7 +19,7 @@
 
       <p>
         <div class="flex">
-          <button type="submit" class="primary" @click="login">
+          <button type="submit" class="primary" @click="tryLogin">
             Login
           </button>
 

@@ -1,3 +1,4 @@
+import {mapActions} from 'vuex'
 import OneBoxLayout from 'components/layout/one-box-layout.vue'
 
 export default {
@@ -6,8 +7,11 @@ export default {
   components: {OneBoxLayout},
 
   created() {
-    this.$store.commit('set_token', '')
-    this.$store.commit('set_user', null)
+    this.logout()
     this.$router.push({name: 'Login'})
+  },
+
+  methods: {
+    ...mapActions(['logout'])
   }
 }

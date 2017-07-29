@@ -2,7 +2,7 @@
   <one-box-layout>
     <span slot="title">Register</span>
 
-    <form @submit.prevent="register">
+    <form @submit.prevent="tryRegister">
       <p>
         <div class="floating-label">
           <input
@@ -38,22 +38,6 @@
       <p>
         <div class="floating-label">
           <input
-            type="password" required class="full-width"
-            :class="{'has-errors': errors.password_confirmation.length}"
-            v-model="password_confirmation"
-          >
-          <label>Confirm Password</label>
-        </div>
-        <ul>
-          <li v-for="error in errors.password_confirmation" class="text-negative">
-            {{error}}
-          </li>
-        </ul>
-      </p>
-
-      <p>
-        <div class="floating-label">
-          <input
             type="Email" required class="full-width"
             :class="{'has-errors': errors.email.length}"
             v-model="email"
@@ -69,7 +53,7 @@
 
       <p>
         <div class="flex">
-          <button type="submit" class="primary" @click="register">
+          <button type="submit" class="primary" @click="tryRegister">
             Register
           </button>
 

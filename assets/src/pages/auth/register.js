@@ -1,5 +1,5 @@
 import {Toast, Loading} from 'quasar'
-import axios from 'utils/axios'
+import {mapActions} from 'vuex'
 import OneBoxLayout from 'components/layout/one-box-layout.vue'
 
 export default {
@@ -22,9 +22,17 @@ export default {
   }),
 
   methods: {
-    register() {
+    ...mapActions(['register']),
+
+    tryRegister() {
       if (this.loading) {
         return
+      }
+
+      const {name, password, password_confirmation: confirmation, email} = this
+
+      if (password !== confirmation) {
+        return Toast.create.negative('Password and confirmation don\'t match')
       }
 
       this.loading = true
@@ -32,27 +40,26 @@ export default {
         message: 'Creating account',
         delay: 0
       })
-      const {name, password, password_confirmation, email} = this
 
-      axios.post('/users', {data: {name, password, password_confirmation, email}})
+      this.register({name, email, password})
         .then(this.handleSuccess)
         .catch(this.handleFail)
     },
 
     handleSuccess(response) {
       Loading.hide()
-      this.$router.push({name: 'Login'})
+      this.$router.push({name: 'Dashboard'})
     },
 
     handleFail(error) {
       Loading.hide()
       Toast.create.negative('Failed to register')
 
+      console.log(error.response)
       const errors = error.response.data.errors
       this.errors = {
         name: errors.name || [],
         password: errors.password || [],
-        password_confirmation: errors.password_confirmation || [],
         email: errors.email || []
       }
       this.loading = false

@@ -1,13 +1,15 @@
+import axios from 'utils/axios'
+
 export const state = {
   token: '',
   user: null
 }
 
 export const mutations = {
-  set_token(state, token) {
+  setToken(state, token) {
     state.token = token
   },
-  set_user(state, user) {
+  setUser(state, user) {
     state.user = user
   }
 }
@@ -19,5 +21,25 @@ export const getters = {
 
   loggedUser(state) {
     return state.user
+  }
+}
+
+export const actions = {
+  async login({commit}, data) {
+    const {data: {token}} = await axios.post('/sessions', {data})
+    commit('setToken', token)
+    const {data: user} = await axios.get('/sessions')
+    commit('setUser', user)
+  },
+
+  logout({commit}) {
+    commit('setToken', '')
+    commit('setUser', null)
+  },
+
+  async register({dispatch, commit}, data) {
+    const {email, password} = data
+    await axios.post('/users', {data})
+    return dispatch('login', {email, password})
   }
 }
