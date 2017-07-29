@@ -12,7 +12,7 @@
 
     <div class="layout-view">
       <div class="logo">
-        <img src="../assets/SpiderPoker.png" height="300" width="300">
+        <img src="../assets/logo-full.png" height="300" width="300">
         <h1><b>Spider</b>Poker</h1>
         <h2>Built to improve your complexity analysis.</h2>
 

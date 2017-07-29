@@ -2,7 +2,7 @@
   <q-layout>
     <!-- Header -->
     <div slot="header" class="toolbar">
-      <!-- opens left-side drawer using its ref -->
+      <img src="../../assets/logo-mini.png">
       <button class="hide-on-drawer-visible" @click="$refs.leftDrawer.open()">
         <i>menu</i>
       </button>

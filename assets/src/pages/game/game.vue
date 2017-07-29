@@ -5,6 +5,8 @@
         <i>menu</i>
       </button>
 
+      <img src="../../assets/logo-mini.png">
+
       <q-toolbar-title :padding="1">
         Spider Poker
       </q-toolbar-title>
