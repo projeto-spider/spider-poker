@@ -15,7 +15,7 @@ export const mutations = {
   },
 
   pushProject(state, project) {
-    state.projects.push(project)
+    state.projects = state.projects.concat([project])
   },
 
   updateProject(state, {projectId: updatedId, updatedData}) {
