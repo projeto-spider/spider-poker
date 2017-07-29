@@ -77,7 +77,7 @@
 
         <project-item
           v-for="project in projects"
-          :key="project"
+          :key="project.id"
           :project="project"
         ></project-item>
       </div>
