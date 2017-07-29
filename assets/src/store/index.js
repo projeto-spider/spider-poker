@@ -15,7 +15,15 @@ const persistence = new VuexPersistence({
     auth, projects: {projects, selectedProjectId}
   }),
   filter: ({type}) =>
-    ['setToken', 'setUser', 'projectsSynced', 'selectProject'].includes(type)
+    [
+      'setToken',
+      'setUser',
+      'projectsSynced',
+      'selectProject',
+      'pushProject',
+      'updateProject',
+      'removeProject'
+    ].includes(type)
 })
 
 export default new Vuex.Store({
