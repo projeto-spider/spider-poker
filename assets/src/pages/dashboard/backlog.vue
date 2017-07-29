@@ -9,11 +9,10 @@
     </template>
 
     <template v-else>
-      <ul class="breadcrumb">
-        <li><a>Dashboard</a></li>
-        <li v-if="project.organization"><a>{{project.organization}}</a></li>
-        <li><a>{{project.name}}</a></li>
-      </ul>
+      <h5>
+        {{project.name}}
+        <small v-if="project.organization" class="text-faded pull-right">{{project.organization}}</small>
+      </h5>
 
       <div style="clear: both"></div>
 
