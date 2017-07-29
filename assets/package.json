@@ -23,7 +23,8 @@
     "roboto-fontface": "^0.7.0",
     "vue": "^2.3.0",
     "vue-router": "^2.0.0",
-    "vuex": "^2.3.1"
+    "vuex": "^2.3.1",
+    "vuex-persist": "^0.1.8"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",

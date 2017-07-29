@@ -8,6 +8,15 @@ import * as projects from './modules/projects'
 Vue.use(Vuex)
 Vue.config.debug = true
 
+const persistence = new VuexPersistence({
+  storage: window.localStorage,
+  reducer: ({auth, projects: {projects, selectedProjectId}}) => ({
+    auth, projects: {projects, selectedProjectId}
+  }),
+  filter: ({type}) =>
+    ['set_token', 'set_user', 'projectsSynced', 'selectProject'].includes(type)
+})
+
 export default new Vuex.Store({
   strict: true,
 
@@ -17,6 +26,7 @@ export default new Vuex.Store({
   },
 
   plugins: [
+    persistence.plugin,
     Logger()
   ]
 })

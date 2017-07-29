@@ -12,7 +12,6 @@ export const mutations = {
 
   selectProject(state, projectId) {
     state.selectedProjectId = projectId
-    localStorage.setItem('lastProjectId', projectId)
   },
 
   pushProject(state, project) {
@@ -49,19 +48,6 @@ export const actions = {
   async syncProjects({state, commit}) {
     const {data: projects} = await axios.get('/projects')
     commit('projectsSynced', projects)
-
-    /*
-     * On the first page load (when there's no project selected)
-     * If there where a project selected last time
-     * And this project is in the list
-     * Select it.
-     */
-    if (state.selectedProjectId) return
-
-    const lastProjectId = localStorage.getItem('lastProjectId')
-    if (lastProjectId && projects.some(proj => proj.id === lastProjectId)) {
-      commit('selectProject', lastProjectId)
-    }
   },
 
   async createProject({commit}, data) {
