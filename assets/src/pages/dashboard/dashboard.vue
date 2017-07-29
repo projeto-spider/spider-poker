@@ -2,10 +2,11 @@
   <q-layout>
     <!-- Header -->
     <div slot="header" class="toolbar">
-      <img src="../../assets/logo-mini.png">
-      <button class="hide-on-drawer-visible" @click="$refs.leftDrawer.open()">
+      <button class="hide-on-drawer-visible menu-button" @click="$refs.leftDrawer.open()">
         <i>menu</i>
       </button>
+
+      <img src="../../assets/logo-mini.png">
 
       <q-toolbar-title :padding="1">
         Spider Poker
