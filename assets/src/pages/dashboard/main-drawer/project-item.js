@@ -43,6 +43,13 @@ export default {
             label: 'Organization name (optional)',
             model: this.project.organization
           },
+
+          votation_time: {
+            type: 'numeric',
+            label: 'Voting time (minutes)',
+            model: this.project.votation_time,
+            min: 1
+          }
         },
 
         buttons: [
@@ -88,7 +95,7 @@ export default {
 
       Dialog.create({
         title: 'Danger',
-        message: "You are leaving this project",
+        message: 'You are leaving this project',
         buttons: [
           {
             label: 'Confirm',

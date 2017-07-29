@@ -76,7 +76,7 @@ export default {
             type: 'textbox',
             label: 'Organization name (optional)',
             model: ''
-          },
+          }
         },
 
         buttons: [
