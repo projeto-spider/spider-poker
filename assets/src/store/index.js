@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Logger from 'vuex/dist/logger'
+import VuexPersistence from 'vuex-persist'
 
 import * as auth from './modules/auth'
 import * as projects from './modules/projects'
@@ -14,7 +15,7 @@ const persistence = new VuexPersistence({
     auth, projects: {projects, selectedProjectId}
   }),
   filter: ({type}) =>
-    ['set_token', 'set_user', 'projectsSynced', 'selectProject'].includes(type)
+    ['setToken', 'setUser', 'projectsSynced', 'selectProject'].includes(type)
 })
 
 export default new Vuex.Store({
