@@ -9,7 +9,7 @@ export default {
 
   data: () => ({
     loading: false,
-    email: '',
+    email: localStorage.getItem('lastUsedEmail') || '',
     password: ''
   }),
 
@@ -36,6 +36,7 @@ export default {
 
     handleSuccess(response) {
       Loading.hide()
+      localStorage.setItem('lastUsedEmail', this.email)
       this.$router.push({name: 'Dashboard'})
     },
 
