@@ -2,14 +2,14 @@ import {Toast, Loading, AppFullscreen, Dialog} from 'quasar'
 import {mapGetters, mapActions} from 'vuex'
 import Gravatar from 'components/gravatar.vue'
 import ProjectItem from './main-drawer/project-item.vue'
-import Backlog from './backlog.vue'
+import Stories from './backlog/stories.vue'
 
 export default {
   name: 'Dashboard',
 
   components: {
     Gravatar,
-    Backlog,
+    Stories,
     ProjectItem
   },
 

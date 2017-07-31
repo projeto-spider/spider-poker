@@ -45,25 +45,24 @@
 
       <transition-group name="card-story" tag="div">
         <template v-for="(story, position) in backlog">
-          <div v-bind:key="story">
-            <project-story
-              :story="story"
-              :isChild="false"
-              :promptNewPosition="() => promptNewPosition(story, position)"
-              :promptStoryUpdate="() => promptStoryUpdate(story)"
-              :confirmStoryDeletion="() => confirmStoryDeletion(story)"
-              ></project-story>
-          </div>
+          <project-story
+            :story="story"
+            :key="story.id"
+            :isChild="false"
+            :promptNewPosition="() => promptNewPosition(story, position)"
+            :promptStoryUpdate="() => promptStoryUpdate(story)"
+            :confirmStoryDeletion="() => confirmStoryDeletion(story)"
+            ></project-story>
 
           <project-story
+            v-for="(child, child_position) in story.children"
+            v-if="child"
+            :key="`child.id`"
             :story="child"
             :isChild="true"
             :promptNewPosition="() => promptNewPosition(child, child_position, story)"
             :promptStoryUpdate="() => promptStoryUpdate(child)"
             :confirmStoryDeletion="() => confirmStoryDeletion(child)"
-            v-for="(child, child_position) in story.children"
-            v-if="child"
-            :key="`id-${child.id}`"
           >
           </project-story>
         </template>
@@ -72,5 +71,5 @@
   </div>
 </template>
 
-<script src="./backlog.js"></script>
-<style lang="sass" src="./backlog.sass"></style>
+<script src="./stories.js"></script>
+<style lang="sass" src="./stories.sass"></style>

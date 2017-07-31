@@ -84,7 +84,7 @@
     </q-drawer>
 
     <div class="layout-view">
-      <backlog></backlog>
+      <stories></stories>
     </div>
   </q-layout>
 </template>
