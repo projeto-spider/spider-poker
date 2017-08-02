@@ -38,6 +38,22 @@
       <p>
         <div class="floating-label">
           <input
+            type="password" required class="full-width"
+            :class="{'has-errors': errors.password_confirmation.length}"
+            v-model="password_confirmation"
+          >
+          <label>Password confirmation</label>
+        </div>
+        <ul>
+          <li v-for="error in errors.password_confirmation" class="text-negative">
+            {{error}}
+          </li>
+        </ul>
+      </p>
+
+      <p>
+        <div class="floating-label">
+          <input
             type="Email" required class="full-width"
             :class="{'has-errors': errors.email.length}"
             v-model="email"
