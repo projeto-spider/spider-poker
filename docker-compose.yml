@@ -1,0 +1,46 @@
+version: "2"
+
+services:
+  front:
+    build: assets
+    volumes:
+      - ./assets:/code
+      - node-modules:/code/node_modules
+    ports:
+      - "8080:8080"
+    networks:
+      - frontend
+    depends_on:
+      - api
+
+  api:
+    build: .
+    volumes:
+      - .:/code
+    ports:
+      - "4000:4000"
+    networks:
+      - backend
+      - frontend
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: app_#{MIX_ENV | dev}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+networks:
+  frontend:
+  backend:
+
+volumes:
+  node-modules:
+  db-data:
+  

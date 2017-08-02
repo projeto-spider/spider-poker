@@ -1,4 +1,4 @@
-defmodule Poker.Web.ChannelCase do
+defmodule App.Web.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -21,15 +21,15 @@ defmodule Poker.Web.ChannelCase do
       use Phoenix.ChannelTest
 
       # The default endpoint for testing
-      @endpoint Poker.Web.Endpoint
+      @endpoint App.Web.Endpoint
     end
   end
 
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Poker.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(App.Repo)
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Poker.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(App.Repo, {:shared, self()})
     end
     :ok
   end

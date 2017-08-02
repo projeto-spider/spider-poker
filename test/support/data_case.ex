@@ -1,4 +1,4 @@
-defmodule Poker.DataCase do
+defmodule App.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
   access to the application's data layer.
@@ -16,20 +16,20 @@ defmodule Poker.DataCase do
 
   using do
     quote do
-      alias Poker.Repo
+      alias App.Repo
 
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import Poker.DataCase
+      import App.DataCase
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Poker.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(App.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Poker.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(App.Repo, {:shared, self()})
     end
 
     :ok
@@ -38,7 +38,7 @@ defmodule Poker.DataCase do
   @doc """
   A helper that transform changeset errors to a map of messages.
 
-      changeset = Accounts.create_user(%{password: "short"})
+      assert {:error, changeset} = Accounts.create_user(%{password: "short"})
       assert "password is too short" in errors_on(changeset).password
       assert %{password: ["password is too short"]} = errors_on(changeset)
 

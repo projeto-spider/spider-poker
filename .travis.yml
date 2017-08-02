@@ -1,11 +1,22 @@
+sudo: required
+
 language: elixir
-elixir:
-  - 1.3.1
+
 services:
-  - postgresql
-before_script:
-  - psql -c 'create database poker_test;' -U postgres
+  - docker
+
 cache:
   directories:
-    - _build
-    - deps
+  - deps
+  - _build
+
+env:
+  - MIX_ENV=test
+
+install:
+  - docker-compose up -d db
+  - docker-compose run api mix deps.get
+
+script:
+  - docker-compose run api mix credo --strict
+  - docker-compose run api mix test

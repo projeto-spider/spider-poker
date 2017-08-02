@@ -1,4 +1,4 @@
-defmodule Poker.Web.ConnCase do
+defmodule App.Web.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -19,18 +19,18 @@ defmodule Poker.Web.ConnCase do
     quote do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
-      import Poker.Web.Router.Helpers
+      import App.Web.Router.Helpers
 
       # The default endpoint for testing
-      @endpoint Poker.Web.Endpoint
+      @endpoint App.Web.Endpoint
     end
   end
 
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Poker.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(App.Repo)
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Poker.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(App.Repo, {:shared, self()})
     end
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end

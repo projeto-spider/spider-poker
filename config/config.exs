@@ -6,28 +6,21 @@
 use Mix.Config
 
 # General application configuration
-config :poker,
-  ecto_repos: [Poker.Repo]
+config :app,
+  ecto_repos: [App.Repo]
 
 # Configures the endpoint
-config :poker, Poker.Web.Endpoint,
+config :app, App.Web.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "PtZux+4wH0tbKSqKRcMNHUhNd4K1IADslG5lnUTTlNeDLr0LWuebNJWjfA9uPWfF",
-  render_errors: [view: Poker.Web.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Poker.PubSub,
+  secret_key_base: "XMD9DVKnLPOs+fOXsS26evyVMjnWSHR3mo2emOVBjigOwl1krZLt6Ha9PHKXyN+a",
+  render_errors: [view: App.Web.ErrorView, accepts: ~w(html json)],
+  pubsub: [name: App.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
-
-# Guardian
-config :guardian, Guardian,
-  issuer: "Poker",
-  ttl: {30, :days},
-  verify_issuer: true,
-  serializer: Poker.Web.Helpers.GuardianSerializer
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

@@ -6,13 +6,12 @@ use Mix.Config
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with brunch.io to recompile .js and .css sources.
-config :poker, Poker.Web.Endpoint,
+config :app, App.Web.Endpoint,
   http: [port: 4000],
   debug_errors: false,
   code_reloader: true,
-  check_origin: false
-  # watchers: [bash: ["./server",
-  #                  cd: Path.expand("../assets", __DIR__)]]
+  check_origin: false,
+  watchers: []
 
 # ## SSL Support
 #
@@ -31,13 +30,13 @@ config :poker, Poker.Web.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :poker, Poker.Web.Endpoint,
+config :app, App.Web.Endpoint,
   live_reload: [
     patterns: [
       ~r{priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$},
       ~r{priv/gettext/.*(po)$},
-      ~r{lib/poker/web/views/.*(ex)$},
-      ~r{lib/poker/web/templates/.*(eex)$}
+      ~r{lib/app/web/views/.*(ex)$},
+      ~r{lib/app/web/templates/.*(eex)$}
     ]
   ]
 
@@ -49,14 +48,10 @@ config :logger, :console, format: "[$level] $message\n"
 config :phoenix, :stacktrace_depth, 20
 
 # Configure your database
-config :poker, Poker.Repo,
+config :app, App.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "postgres",
   password: "postgres",
-  database: "poker_dev",
-  hostname: "localhost",
+  database: "app_dev",
+  hostname: "db",
   pool_size: 10
-
-# Guardian
-config :guardian, Guardian,
-  secret_key: "2K/%r$0d]wdwv6A9h938"
