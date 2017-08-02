@@ -10,8 +10,6 @@ services:
       - "8080:8080"
     networks:
       - frontend
-    depends_on:
-      - api
 
   api:
     build: .
