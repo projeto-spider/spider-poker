@@ -1,6 +1,7 @@
 import {Toast, Loading} from 'quasar'
 import axios from 'utils/axios'
 import {mapGetters} from 'vuex'
+import {Presence} from 'phoenix'
 
 export default {
   name: 'BacklogChannel',
@@ -8,6 +9,7 @@ export default {
   data: () => ({
     /* Socket */
     channel: false,
+    presence: {},
 
     /*
      * Story local DB
@@ -16,7 +18,9 @@ export default {
      */
     stories: {},
     /* Backlog */
-    backlog: []
+    backlog: [],
+    /* Members */
+    members: {}
   }),
 
   /*
@@ -39,7 +43,24 @@ export default {
     ...mapGetters(['loggedUser', 'socket']),
     ...mapGetters({
       project: 'selectedProject'
-    })
+    }),
+
+    onlineMembers() {
+      return Object.keys(this.presence)
+        .map(id => {
+          if (!this.members[id]) {
+            this.syncMembers()
+          }
+
+          return this.members[id] || null
+        })
+    },
+
+    offlineMembers() {
+      const onlineIds = Object.keys(this.presence)
+      return Object.values(this.members)
+        .filter(({id}) => !onlineIds.includes(id))
+    }
   },
 
   methods: {
@@ -84,6 +105,16 @@ export default {
         })
     },
 
+    syncMembers() {
+      axios.get(`/projects/${this.project.id}/members`)
+        .then(({data: members}) => {
+          this.members = members.reduce((acc, member) => {
+            acc[member.id] = member
+            return acc
+          }, {})
+        })
+    },
+
     channelConnect() {
       const projectId = this.project.id
       const topic = `project:${projectId}`
@@ -111,6 +142,8 @@ export default {
       this.channel.on('story:deleted', this.channelStoryDeleted)
       this.channel.on('story:moved', this.channelOrderChange)
       this.channel.on('order:change', this.channelOrderChange)
+      this.channel.on('presence_state', this.channelPresenceState)
+      this.channel.on('presence_diff', this.channelPresenceDiff)
       this.channel.on('error', this.channelError)
 
       this.channel
@@ -118,6 +151,7 @@ export default {
         .receive('ok', () => {
           Loading.hide()
           this.syncBacklog()
+          this.syncMembers()
         })
         .receive('error', ({reason}) => {
           Loading.hide()
@@ -160,6 +194,14 @@ export default {
 
     channelOrderChange({order}) {
       this.backlog = order.map(id => this.stories[id])
+    },
+
+    channelPresenceState(state) {
+      this.presence = Presence.syncState(this.presence, state)
+    },
+
+    channelPresenceDiff(diff) {
+      this.presence = Presence.syncDiff(this.presence, diff)
     },
 
     channelError({reason}) {
