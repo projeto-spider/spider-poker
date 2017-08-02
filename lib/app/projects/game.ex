@@ -40,7 +40,7 @@ defmodule App.Projects.Game do
 
       prepared =
         attrs
-        |> Map.take(~w(state voting_start voting_end)a)
+        |> Map.take(~w(story_id state voting_start voting_end)a)
         |> Map.put(:votes, votes)
 
       Poison.Encoder.Map.encode(prepared, options)
