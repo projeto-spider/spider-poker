@@ -47,15 +47,15 @@ module.exports = {
     // Also see /build/script.dev.js and search for "proxy api requests"
     // https://github.com/chimurai/http-proxy-middleware
     proxyTable: {
-      '/api': {
-        target: 'http://localhost:4000'
-      },
+    //   '/api': {
+    //     target: 'http://api:4000'
+    //   },
 
-      '/socket': {
-        target: 'http://localhost:4000',
-        ws: true
-      }
-    }
+    //   '/socket': {
+    //     target: 'http://api:4000',
+    //     ws: true
+    //   }
+   }
   }
 }
 
