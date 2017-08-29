@@ -6,11 +6,7 @@ export default {
   name: 'Timer',
 
   props: {
-    state: Number,
-    time: {
-      type: [Number, Boolean],
-      default: false
-    }
+    game: [Boolean, Object]
   },
 
   data: () => ({
@@ -19,6 +15,14 @@ export default {
   }),
 
   computed: {
+    start() {
+      return this.game.voting_start && (new Date(this.game.voting_start)).getTime() / 1000
+    },
+
+    end() {
+      return this.game.voting_end && (new Date(this.game.voting_end)).getTime() / 1000
+    },
+
     /* Timer */
     timer() {
       /*
@@ -26,7 +30,11 @@ export default {
        * If the game was just created, we don't need a timer.
        * If it's idle we don't need it too.
        */
-      if (!this.time || this.state === CREATED || this.state === IDLE) {
+      if (!this.start
+          || !this.end
+          || this.game.state === CREATED
+          || this.game.state === IDLE
+      ) {
         return false
       }
 
@@ -35,12 +43,12 @@ export default {
        * this.time will hold the end.
        * this.time - this.now shows our time
        */
-      if (this.state === VOTING) {
-        if (this.time < this.now) {
+      if (this.game.state === VOTING) {
+        if (this.end < this.now) {
           return false
         }
 
-        const difference = this.time - this.now
+        const difference = this.end - this.now
         return {
           minutes: Math.trunc(difference / 60) % 60,
           seconds: difference % 60
@@ -52,7 +60,7 @@ export default {
        * this.time holds the start.
        * this.now - this.time shows our time
        */
-      const difference = this.now - this.time
+      const difference = this.now - this.end
       return {
         minutes: Math.max(0, Math.trunc(difference / 60) % 60),
         seconds: Math.max(0, difference % 60)

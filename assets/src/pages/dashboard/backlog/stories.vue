@@ -58,14 +58,13 @@
           <project-story
             v-for="(child, child_position) in story.children"
             v-if="child"
-            :key="`child.id`"
+            :key="child.id"
             :story="child"
             :isChild="true"
             :promptNewPosition="() => promptNewPosition(child, child_position, story)"
             :promptStoryUpdate="() => promptStoryUpdate(child)"
-            :confirmStoryDeletion="() => confirmStoryDeletion(child)"
-          >
-          </project-story>
+            :confirmStoryDeletion="() => confirmStoryDeletion(child, story)"
+          ></project-story>
         </template>
       </transition-group>
     </template>

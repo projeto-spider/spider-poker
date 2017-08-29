@@ -7,8 +7,7 @@ export default {
   components: {Gravatar},
 
   props: {
-    message: Object,
-    user: Object
+    message: Object
   },
 
   computed: {
@@ -16,6 +15,10 @@ export default {
 
     anonymous() {
       return this.message.user_id === 0
+    },
+
+    user() {
+      return this.message.user
     }
   }
 }

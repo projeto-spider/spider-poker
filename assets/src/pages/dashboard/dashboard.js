@@ -5,7 +5,9 @@ import ProjectItem from './main-drawer/project-item.vue'
 import Stories from './backlog/stories.vue'
 import BacklogChannel from './backlog/channel.js'
 import GameLayout from './game/layout.vue'
-import Timer from '../game/timer.vue'
+import Timer from './game/timer.vue'
+import Presence from './game/presence.vue'
+import {STATE} from 'utils/enums'
 
 export default {
   name: 'Dashboard',
@@ -17,7 +19,8 @@ export default {
     Stories,
     ProjectItem,
     GameLayout,
-    Timer
+    Timer,
+    Presence
   },
 
   data: () => ({
@@ -40,6 +43,23 @@ export default {
       }
 
       return this.project.manager_id === this.loggedUser.id
+    },
+
+    currentGameStateLabel() {
+      if (!this.game) {
+        return false
+      }
+
+      switch(this.game.state) {
+        case STATE.CREATED:
+          return 'Game started'
+        case STATE.IDLE:
+          return 'Game idle'
+        case STATE.VOTING:
+          return 'Game in vote'
+        case STATE.DISCUSSION:
+          return 'Game in discussion'
+      }
     }
   },
 
@@ -77,6 +97,162 @@ export default {
       'connectNotificationsChannel'
     ]),
 
+    promptStoryUpdate(story) {
+      Dialog.create({
+        title: 'Updating Story',
+
+        form: {
+          title: {
+            type: 'textbox',
+            label: 'Title',
+            model: story.title
+          },
+
+          description: {
+            type: 'textarea',
+            label: 'Description',
+            model: story.description
+          }
+        },
+
+        buttons: [
+          'Cancel',
+          {
+            label: 'Update',
+            handler: ({title, description}) =>
+              this.channel.push('story:update', {story_id: story.id, title, description})
+          }
+        ]
+      })
+    },
+
+    promptNewPosition(story, position, parent = false) {
+      Dialog.create({
+        title: 'Changing Story Position',
+
+        form: {
+          position: {
+            type: 'numeric',
+            label: 'Next Position',
+            model: position + 1, // Do not show 0 index
+            min: 1,
+            max: parent ? parent.children.length : this.backlog.length
+          }
+        },
+
+        buttons: [
+          'Cancel',
+          {
+            label: 'Move',
+            // Position is downed by one since
+            // the user pick a position starting from 1, not 0
+            handler: ({position}) =>
+              parent
+               ? this.channel.push('substory:move', {
+                 story_id: story.id,
+                 position: position - 1,
+                 parent_id: parent.id
+               })
+               : this.channel.push('story:move', {
+                 story_id: story.id,
+                 position: position - 1
+               })
+          }
+        ]
+      })
+    },
+
+    promptStoryUpdate(story) {
+      Dialog.create({
+        title: 'Updating Story',
+
+        form: {
+          title: {
+            type: 'textbox',
+            label: 'Title',
+            model: story.title
+          },
+
+          description: {
+            type: 'textarea',
+            label: 'Description',
+            model: story.description
+          }
+        },
+
+        buttons: [
+          'Cancel',
+          {
+            label: 'Update',
+            handler: ({title, description}) =>
+              this.channel.push('story:update', {story_id: story.id, title, description})
+          }
+        ]
+      })
+    },
+
+    confirmStoryDeletion(story, parent = false) {
+      Dialog.create({
+        title: 'Danger',
+        message: "You can't undo a deletion!",
+        buttons: [
+          {
+            label: 'Confirm',
+            classes: 'negative',
+            handler: () => {
+              if (parent) {
+                return this.channel.push('substory:delete', {parent_id: parent.id, story_id: story.id})
+              }
+
+              this.channel.push('story:delete', {story_id: story.id})
+            }
+          },
+
+          {
+            label: 'Cancel',
+            classes: 'positive clear'
+          }
+        ]
+      })
+    },
+
+    promptNewPosition(story, position, parent = false) {
+      Dialog.create({
+        title: 'Changing Story Position',
+
+        form: {
+          position: {
+            type: 'numeric',
+            label: 'Next Position',
+            model: position + 1, // Do not show 0 index
+            min: 1,
+            max: parent ? parent.children.length : this.backlog.length
+          }
+        },
+
+        buttons: [
+          'Cancel',
+          {
+            label: 'Move',
+            // Position is downed by one since
+            // the user pick a position starting from 1, not 0
+            handler: ({position}) =>
+              parent
+               ? this.channel.push('substory:move', {
+                 story_id: story.id,
+                 position: position - 1,
+                 parent_id: parent.id
+               })
+               : this.channel.push('story:move', {
+                 story_id: story.id,
+                 position: position - 1
+               })
+          }
+        ]
+      })
+    },
+
+
     promptCreateProject() {
       Dialog.create({
         title: 'Creating Project',
@@ -109,12 +285,137 @@ export default {
       })
     },
 
+    sendMessage(body) {
+      this.channel.push('game:message', {body})
+    },
+
     stopGame() {
       if (!this.inGame) {
         return
       }
 
       this.channel.push('game:stop')
+    },
+
+    startVoting() {
+      this.channel.push('game:voting:start')
+    },
+
+    stopVoting() {
+      this.channel.push('game:voting:stop')
+    },
+
+    vote() {
+      const labelFor = estimation => {
+        if (estimation === 'time') {
+          return 'Ask for a break'
+        }
+
+        if (estimation === '?') {
+          return "I'm not sure"
+        }
+
+        return estimation
+      }
+
+      Dialog.create({
+        title: 'Voting',
+
+        form: {
+          estimation: {
+            label: 'Estimation',
+            type: 'radio',
+            items: ['?', 'time', 1, '1/2', 2, 3, 5, 8, 13, 20, 40, 100]
+              .map(estimation => ({
+                label: labelFor(estimation),
+                value: estimation
+              }))
+          }
+        },
+
+        buttons: [
+          {
+            label: 'Submit',
+            handler: ({estimation}) => {
+              this.channel.push('game:voting:vote', {estimation})
+            }
+          }
+        ]
+      })
+    },
+
+    score() {
+      Dialog.create({
+        title: 'Final estimation',
+
+        form: {
+          estimation: {
+            label: 'Estimation',
+            type: 'radio',
+            items: [1, 2, 3, 5, 8, 13, 20, 40, 100]
+              .map(estimation => ({
+                label: estimation,
+                value: estimation
+              }))
+          }
+        },
+
+        buttons: [
+          {
+            label: 'Submit',
+            handler: ({estimation}) => {
+              this.channel.push('game:discussion:score', {estimation})
+            }
+          }
+        ]
+      })
+    },
+
+    createSubstory() {
+      Dialog.create({
+        title: 'Creating substory',
+
+        form: {
+          title: {
+            type: 'textbox',
+            label: 'Title',
+            model: ''
+          },
+
+          description: {
+            type: 'textbox',
+            label: 'Description (optional)',
+            model: ''
+          },
+
+          estimation: {
+            label: 'Estimation',
+            type: 'radio',
+            items: [1, 2, 3, 5, 8, 13, 20, 40, 100]
+              .map(estimation => ({
+                label: estimation,
+                value: estimation
+              }))
+          }
+        },
+
+        buttons: [
+          {
+            label: 'Create',
+            handler: attrs => {
+              if (!attrs.title) {
+                return Toast.create.warning('Title required to create story')
+              }
+
+              if (!attrs.estimation) {
+                return Toast.create.warning('Estimation required to create story')
+              }
+
+              this.channel.push('game:discussion:create_substory', attrs)
+            }
+          }
+        ]
+      })
     },
 
     /* Full Screen */

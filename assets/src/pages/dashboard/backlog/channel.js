@@ -1,5 +1,6 @@
 import {Toast, Loading} from 'quasar'
 import axios from 'utils/axios'
+import {STATE} from 'utils/enums'
 import {mapGetters, mapMutations} from 'vuex'
 import {Presence} from 'phoenix'
 
@@ -13,6 +14,9 @@ export default {
 
     /* Game state */
     game: false,
+
+    /* Messages */
+    chat: [],
 
     /*
      * Story local DB
@@ -63,6 +67,18 @@ export default {
       const onlineIds = Object.keys(this.presence)
       return Object.values(this.members)
         .filter(({id}) => !onlineIds.includes(id))
+    },
+
+    created() {
+      return this.game && this.game.state === STATE.CREATED
+    },
+
+    voting() {
+      return this.game && this.game.state === STATE.VOTING
+    },
+
+    discussion() {
+      return this.game && this.game.state === STATE.DISCUSSION
     }
   },
 
@@ -158,12 +174,22 @@ export default {
       this.channel.on('story:updated', this.channelStoryUpdated)
       this.channel.on('story:deleted', this.channelStoryDeleted)
       this.channel.on('story:moved', this.channelOrderChange)
+
       this.channel.on('order:change', this.channelOrderChange)
+
+      this.channel.on('substory:created', this.channelSubstoryCreated)
+      this.channel.on('substory:deleted', this.channelSubstoryDeleted)
+      this.channel.on('substory:moved', this.channelSubstoryMoved)
+
+      this.channel.on('game:state', this.channelGameState)
       this.channel.on('game:start', this.channelGameStart)
       this.channel.on('game:stop', this.channelGameStop)
       this.channel.on('game:state', this.channelGameState)
+      this.channel.on('game:message', this.channelGameMessage)
+
       this.channel.on('presence_state', this.channelPresenceState)
       this.channel.on('presence_diff', this.channelPresenceDiff)
+
       this.channel.on('error', this.channelError)
 
       this.channel
@@ -217,6 +243,20 @@ export default {
       this.backlog = order.map(id => this.stories[id])
     },
 
+    channelSubstoryCreated({parent_id, story, order}) {
+      this.stories[story.id] = story
+      this.stories[parent_id].children = order.map(id => this.stories[id])
+    },
+
+    channelSubstoryDeleted({parent_id, story_id, order}) {
+      this.stories[parent_id].children = order.map(id => this.stories[id])
+      this.stories[story_id] = null
+    },
+
+    channelSubstoryMoved({parent_id, order}) {
+      this.stories[parent_id].children = order.map(id => this.stories[id])
+    },
+
     channelGameStart({project, game}) {
       this.updateProject({projectId: project.id, updatedData: project})
       this.game = game
@@ -229,6 +269,12 @@ export default {
 
     channelGameState({game}) {
       this.game = game
+    },
+
+    channelGameMessage({message: {body, user_id}}) {
+      this.chat.unshift({
+        body, user: this.members[user_id]
+      })
     },
 
     channelPresenceState(state) {

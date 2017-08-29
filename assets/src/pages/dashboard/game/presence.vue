@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="list-label">Online</div>
+    <div class="list-label">Presence</div>
 
     <transition-group name="user-presence">
-      <div v-for="user in online" :key="user" class="item">
+      <div v-for="user in online" v-if="user" :key="user.id" class="item">
         <gravatar :email="user.email" :circle="true" class="item-primary"></gravatar>
-        <div class="item-content has-secondary">{{user.display_name}}</div>
+        <div class="item-content has-secondary">{{user.name}}</div>
 
         <template>
           <i
@@ -28,17 +28,14 @@
       </div>
     </transition-group>
 
-    <hr>
-
-    <div class="list-label">Offline</div>
-
     <transition-group name="user-presence">
-      <div v-for="user in offline" :key="user" class="item">
+      <div v-for="user in offline" v-if="user" :key="user.id" class="item item-offline">
         <gravatar :email="user.email" :circle="true" class="item-primary"></gravatar>
-        <div class="item-content has-secondary">{{user.display_name}}</div>
+        <div class="item-content has-secondary">{{user.name}}</div>
       </div>
     </transition-group>
   </div>
 </template>
 
-<script src="./user-presence.js"></script>
+<script src="./presence.js"></script>
+<style lang="sass" src="./presence.sass"></style>

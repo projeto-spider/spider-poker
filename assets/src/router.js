@@ -21,13 +21,6 @@ export default new VueRouter({
     },
 
     {
-      name: 'Game',
-      path: '/game/:projectId',
-      component: page('game/game'),
-      beforeEnter: requireAuth
-    },
-
-    {
       name: 'Login',
       path: '/auth/login',
       component: page('auth/login'),

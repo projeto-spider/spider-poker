@@ -1,7 +1,8 @@
 import Gravatar from 'components/gravatar.vue'
+import {STATE} from 'utils/enums'
 
 export default {
-  name: 'UserPresence',
+  name: 'Presence',
 
   components: {Gravatar},
 
@@ -12,8 +13,16 @@ export default {
     votes: {
       type: [Object, Array],
       default: Object
+    }
+  },
+
+  computed: {
+    voting() {
+      return this.state == STATE.VOTING
     },
-    voting: Boolean,
-    discussion: Boolean
+
+    discussion() {
+      return this.state == STATE.DISCUSSION
+    }
   }
 }

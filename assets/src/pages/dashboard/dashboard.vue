@@ -54,14 +54,60 @@
 
     <q-drawer ref="leftDrawer">
       <div v-if="inGame" class="list platform-delimiter">
-        <timer :time="game.time" :state="game.state"></timer>
+        <div v-if="currentGameStateLabel" class="toolbar bg-secondary">
+          <q-toolbar-title style="text-align: center">
+            {{currentGameStateLabel}}
+          </q-toolbar-title>
+        </div>
+
+        <timer :game="game"></timer>
 
         <template v-if="isManager">
           <div @click="stopGame" class="item item-link">
             <i class="item-primary">stop</i>
             <div class="item-content">End game</div>
           </div>
+
+          <template>
+            <div v-if="!voting" @click="startVoting" class="item item-link">
+              <i class="item-primary">star</i>
+
+              <template>
+                <div v-if="created" class="item-content">Start voting</div>
+                <div v-else class="item-content">Restart voting</div>
+              </template>
+            </div>
+
+            <div v-else @click="stopVoting" class="item item-link">
+              <i class="item-primary">stop</i>
+              <div class="item-content">Stop voting</div>
+            </div>
+          </template>
+
+          <div v-if="discussion" @click="score" class="item item-link">
+            <i class="item-primary">stars</i>
+            <div class="item-content">Final estimation</div>
+          </div>
+
+          <div v-if="discussion" @click="createSubstory" class="item item-link">
+            <i class="item-primary">add</i>
+            <div class="item-content">Create Substory</div>
+          </div>
         </template>
+
+        <div v-if="voting" @click="vote" class="item item-link">
+          <i class="item-primary">thumbs_up_down</i>
+          <div class="item-content">Vote</div>
+        </div>
+      </div>
+
+      <div v-if="inGame" class="list platform-delimiter">
+        <presence
+          :online="onlineMembers"
+          :offline="offlineMembers"
+          :state="game.state"
+          :votes="game.votes"
+        ></presence>
       </div>
 
       <div class="list platform-delimiter">
@@ -83,12 +129,20 @@
         v-if="inGame"
         :game="game"
         :story="backlog.find(s => s.id === game.story_id)"
+        :chat="chat"
+        :sendMessage="sendMessage"
+        :promptNewPosition="promptNewPosition"
+        :promptStoryUpdate="promptStoryUpdate"
+        :confirmStoryDeletion="confirmStoryDeletion"
       ></game-layout>
 
       <stories
         v-else
         :channel="channel"
         :backlog="backlog"
+        :promptNewPosition="promptNewPosition"
+        :promptStoryUpdate="promptStoryUpdate"
+        :confirmStoryDeletion="confirmStoryDeletion"
       ></stories>
     </div>
   </q-layout>
