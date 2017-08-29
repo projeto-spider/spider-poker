@@ -117,6 +117,17 @@
           <div class="item-secondary"><i @click="promptCreateProject" style="cursor: pointer">add</i></div>
         </div>
 
+        <div
+          v-if="selectedProject"
+          class="item item-link"
+          @click="$refs.importationModal.open()"
+        >
+          <i class="item-primary">import_export</i>
+          <div class="item-content">
+            Import stories
+          </div>
+        </div>
+
         <project-item
           v-for="project in projects"
           :key="project.id"
@@ -146,6 +157,15 @@
         :confirmStoryDeletion="confirmStoryDeletion"
       ></stories>
     </div>
+
+    <q-modal ref="importationModal" content-classes="modal-edition">
+      <import-modal
+        :modal="$refs.importationModal"
+        :projects="projects"
+        :currentProject="selectedProject"
+        :importStories="importStories"
+      ></import-modal>
+    </q-modal>
   </q-layout>
 </template>
 

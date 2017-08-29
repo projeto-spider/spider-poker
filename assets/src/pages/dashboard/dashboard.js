@@ -7,6 +7,7 @@ import BacklogChannel from './backlog/channel.js'
 import GameLayout from './game/layout.vue'
 import Timer from './game/timer.vue'
 import Presence from './game/presence.vue'
+import ImportModal from './import-modal/modal.vue'
 import {STATE} from 'utils/enums'
 
 export default {
@@ -20,7 +21,8 @@ export default {
     ProjectItem,
     GameLayout,
     Timer,
-    Presence
+    Presence,
+    ImportModal
   },
 
   data: () => ({
@@ -252,6 +254,12 @@ export default {
       })
     },
 
+    importStories(stories) {
+      stories.reverse()
+        .forEach(({title, description}) => {
+          this.channel.push('story:unshift', {title, description})
+        })
+    },
 
     promptCreateProject() {
       Dialog.create({
