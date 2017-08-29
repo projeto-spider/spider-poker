@@ -1,22 +1,29 @@
 version: "2"
 
 services:
-  front:
+  proxy:
+    build: ./nginx/
+    ports:
+      - "4000:4000"
+    networks:
+      - backend
+      - frontend
+    depends_on:
+      - phoenix
+      - webpack
+
+  webpack:
     build: assets
     volumes:
       - ./assets:/code
       - node-modules:/code/node_modules
-    ports:
-      - "8080:8080"
     networks:
       - frontend
 
-  api:
+  phoenix:
     build: .
     volumes:
       - .:/code
-    ports:
-      - "4000:4000"
     networks:
       - backend
       - frontend

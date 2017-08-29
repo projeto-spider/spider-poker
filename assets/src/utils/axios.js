@@ -1,10 +1,8 @@
 import axios from 'axios'
 import store from 'store'
 
-const baseURL = DEV ? 'http://0.0.0.0:4000/api' : '/api'
-
 const instance = axios.create({
-  baseURL,
+  baseURL: '/api',
 
   validateStatus(status) {
     return status >= 200 && status < 300

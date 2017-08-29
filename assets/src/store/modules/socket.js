@@ -34,7 +34,7 @@ export const actions = {
       _socket.disconnect()
     }
 
-    _socket = new Socket('ws://localhost:4000/socket', {params: {token}})
+    _socket = new Socket('/socket', {params: {token}})
     _socket.connect()
     commit('setSocket', _socket)
   },
