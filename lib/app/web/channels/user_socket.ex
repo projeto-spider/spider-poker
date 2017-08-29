@@ -7,8 +7,8 @@ defmodule App.Web.UserSocket do
   channel "project:*", App.Web.ProjectChannel
   channel "notifications:*", App.Web.NotificationsChannel
 
-  transport :websocket, Phoenix.Transports.WebSocket
-  transport :longpoll, Phoenix.Transports.LongPoll
+  transport :websocket, Phoenix.Transports.WebSocket, timeout: 45_000
+  transport :longpoll, Phoenix.Transports.LongPoll, timeout: 45_000
 
   # Only accept valid tokens when connecting to the socket
   def connect(%{"token" => token}, socket) do
