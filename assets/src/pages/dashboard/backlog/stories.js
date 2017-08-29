@@ -1,19 +1,32 @@
 import {Dialog} from 'quasar'
-import BacklogChannel from './channel.js'
+import {mapGetters} from 'vuex'
 import ProjectStory from 'components/story/project-story.vue'
 
 export default {
   name: 'Stories',
 
-  extends: BacklogChannel,
+  // extends: BacklogChannel,
 
   components: {ProjectStory},
+
+  props: {
+    channel: [Boolean, Object],
+    backlog: Array,
+    isManager: Boolean
+  },
 
   data: () => ({
     /* Adding Story */
     title: '',
     description: ''
   }),
+
+  computed: {
+    ...mapGetters(['loggedUser', 'socketConnected', 'inGame']),
+    ...mapGetters({
+      project: 'selectedProject'
+    }),
+  },
 
   methods: {
     unshiftStory() {
@@ -111,6 +124,10 @@ export default {
           }
         ]
       })
+    },
+
+    startGame(story) {
+      this.channel.push('game:create', {story_id: story.id})
     }
   }
 }

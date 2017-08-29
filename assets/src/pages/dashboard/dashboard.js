@@ -3,14 +3,21 @@ import {mapGetters, mapActions} from 'vuex'
 import Gravatar from 'components/gravatar.vue'
 import ProjectItem from './main-drawer/project-item.vue'
 import Stories from './backlog/stories.vue'
+import BacklogChannel from './backlog/channel.js'
+import GameLayout from './game/layout.vue'
+import Timer from '../game/timer.vue'
 
 export default {
   name: 'Dashboard',
 
+  extends: BacklogChannel,
+
   components: {
     Gravatar,
     Stories,
-    ProjectItem
+    ProjectItem,
+    GameLayout,
+    Timer
   },
 
   data: () => ({
@@ -23,8 +30,17 @@ export default {
       'selectedProject',
       'socketConnected',
       'socket',
-      'notificationsChannel'
-    ])
+      'notificationsChannel',
+      'inGame'
+    ]),
+
+    isManager() {
+      if (!this.project) {
+        return false
+      }
+
+      return this.project.manager_id === this.loggedUser.id
+    }
   },
 
   async created() {
@@ -91,6 +107,14 @@ export default {
           }
         ]
       })
+    },
+
+    stopGame() {
+      if (!this.inGame) {
+        return
+      }
+
+      this.channel.push('game:stop')
     },
 
     /* Full Screen */

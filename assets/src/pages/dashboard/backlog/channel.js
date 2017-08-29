@@ -1,6 +1,6 @@
 import {Toast, Loading} from 'quasar'
 import axios from 'utils/axios'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapMutations} from 'vuex'
 import {Presence} from 'phoenix'
 
 export default {
@@ -10,6 +10,9 @@ export default {
     /* Socket */
     channel: false,
     presence: {},
+
+    /* Game state */
+    game: false,
 
     /*
      * Story local DB
@@ -40,7 +43,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['loggedUser', 'socket']),
+    ...mapGetters(['loggedUser', 'socketConnected', 'socket', 'inGame']),
     ...mapGetters({
       project: 'selectedProject'
     }),
@@ -64,6 +67,8 @@ export default {
   },
 
   methods: {
+    ...mapMutations(['updateProject']),
+
     projectChanged() {
       this.channelConnect()
     },
@@ -115,7 +120,19 @@ export default {
         })
     },
 
+    syncGame() {
+      if (!this.inGame) {
+        return
+      }
+
+      this.channel.push('game:get')
+    },
+
     channelConnect() {
+      if (!this.socketConnected) {
+        return setTimeout(this.channelConnect, 500)
+      }
+
       const projectId = this.project.id
       const topic = `project:${projectId}`
       const params = {}
@@ -142,6 +159,9 @@ export default {
       this.channel.on('story:deleted', this.channelStoryDeleted)
       this.channel.on('story:moved', this.channelOrderChange)
       this.channel.on('order:change', this.channelOrderChange)
+      this.channel.on('game:start', this.channelGameStart)
+      this.channel.on('game:stop', this.channelGameStop)
+      this.channel.on('game:state', this.channelGameState)
       this.channel.on('presence_state', this.channelPresenceState)
       this.channel.on('presence_diff', this.channelPresenceDiff)
       this.channel.on('error', this.channelError)
@@ -152,6 +172,7 @@ export default {
           Loading.hide()
           this.syncBacklog()
           this.syncMembers()
+          this.syncGame()
         })
         .receive('error', ({reason}) => {
           Loading.hide()
@@ -194,6 +215,20 @@ export default {
 
     channelOrderChange({order}) {
       this.backlog = order.map(id => this.stories[id])
+    },
+
+    channelGameStart({project, game}) {
+      this.updateProject({projectId: project.id, updatedData: project})
+      this.game = game
+    },
+
+    channelGameStop() {
+      const updatedData = Object.assign({}, this.project, {current_game: false})
+      this.updateProject({projectId: this.project.id, updatedData})
+    },
+
+    channelGameState({game}) {
+      this.game = game
     },
 
     channelPresenceState(state) {

@@ -52,21 +52,16 @@
       </div>
     </div>
 
-    <!-- Left-side Drawer -->
     <q-drawer ref="leftDrawer">
-      <div class="list no-border platform-delimiter">
-        <router-link
-          v-if="selectedProject"
-          tag="div"
-          class="item item-link"
-          :to="{name: 'Game', params: {projectId: selectedProject.id}}"
-        >
-          <i class="item-primary">games</i>
+      <div v-if="inGame" class="list platform-delimiter">
+        <timer :time="game.time" :state="game.state"></timer>
 
-          <div class="item-content">
-            Start Game
+        <template v-if="isManager">
+          <div @click="stopGame" class="item item-link">
+            <i class="item-primary">stop</i>
+            <div class="item-content">End game</div>
           </div>
-        </router-link>
+        </template>
       </div>
 
       <div class="list platform-delimiter">
@@ -84,7 +79,17 @@
     </q-drawer>
 
     <div class="layout-view">
-      <stories></stories>
+      <game-layout
+        v-if="inGame"
+        :game="game"
+        :story="backlog.find(s => s.id === game.story_id)"
+      ></game-layout>
+
+      <stories
+        v-else
+        :channel="channel"
+        :backlog="backlog"
+      ></stories>
     </div>
   </q-layout>
 </template>

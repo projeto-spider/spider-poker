@@ -4,7 +4,7 @@
       Select a project to start
     </template>
 
-    <template v-else-if="!socket">
+    <template v-else-if="!socketConnected">
       Not connected to server
     </template>
 
@@ -52,6 +52,7 @@
             :promptNewPosition="() => promptNewPosition(story, position)"
             :promptStoryUpdate="() => promptStoryUpdate(story)"
             :confirmStoryDeletion="() => confirmStoryDeletion(story)"
+            :startGame="() => startGame(story)"
             ></project-story>
 
           <project-story
