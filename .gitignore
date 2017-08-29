@@ -28,3 +28,5 @@ npm-debug.log
 
 # Front end
 /assets/node_modules
+
+/oauth.env

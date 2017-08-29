@@ -4,6 +4,7 @@ defmodule App.Accounts do
   """
 
   import Ecto.Query, warn: false
+  import Ecto.Changeset, warn: false
   alias App.Repo
 
   alias App.Accounts.User
@@ -52,6 +53,20 @@ defmodule App.Accounts do
   def create_user(attrs \\ %{}) do
     %User{}
     |> User.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Same as above but with social fields
+  """
+  def create_user_by_social_auth(auth_provider, auth_id, attrs \\ %{}) do
+    params = %{
+      auth_provider: auth_provider,
+      auth_id: auth_id
+    }
+    %User{}
+    |> User.changeset(attrs)
+    |> cast(params, ~w(auth_provider auth_id)a)
     |> Repo.insert()
   end
 

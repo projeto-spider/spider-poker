@@ -1,6 +1,6 @@
 defmodule App.Accounts.User do
   @moduledoc false
-  @derive {Poison.Encoder, only: ~w(id email name)a}
+  @derive {Poison.Encoder, only: ~w(id email name avatar)a}
   use Ecto.Schema
   import Ecto.Changeset
   alias Ecto.Changeset
@@ -13,7 +13,10 @@ defmodule App.Accounts.User do
     field :admin?, :boolean, default: false
     field :email, :string
     field :name, :string
+    field :avatar, :string, default: ""
     field :password_hash, :string
+    field :auth_provider, :integer
+    field :auth_id, :string
     has_many :po_roles, App.Projects.Project, foreign_key: :po_id,
                                               on_delete: :nilify_all
     has_many :manager_roles, App.Projects.Project, foreign_key: :manager_id,
@@ -26,7 +29,7 @@ defmodule App.Accounts.User do
   # Creation changeset
   def changeset(%User{id: nil} = user, attrs) do
     user
-    |> cast(attrs, ~w(email name)a)
+    |> cast(attrs, ~w(email name avatar)a)
     |> require_password(attrs)
     |> put_password_hash(attrs)
     |> validate_required(~w(email name admin?)a)
@@ -35,7 +38,7 @@ defmodule App.Accounts.User do
   # Update changeset
   def changeset(%User{} = user, attrs) do
     user
-    |> cast(attrs, ~w(email name)a)
+    |> cast(attrs, ~w(email name avatar)a)
     |> put_password_hash(attrs)
     |> validate_required(~w(email name password_hash admin?)a)
     |> unique_constraint(:email)

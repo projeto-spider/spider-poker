@@ -44,4 +44,11 @@ defmodule App.Web.Router do
       resources "/members", Admin.ProjectMemberController, only: [:index, :create, :delete], as: "member"
     end
   end
+
+  scope "/auth", App.Web do
+    pipe_through :browser
+
+    get "/:provider", AuthController, :index
+    get "/:provider/callback", AuthController, :callback
+  end
 end

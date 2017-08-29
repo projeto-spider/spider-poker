@@ -59,6 +59,7 @@ config :logger, level: :info
 #     config :app, App.Web.Endpoint, server: true
 #
 
+import_config "oauth.exs"
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
 import_config "prod.secret.exs"

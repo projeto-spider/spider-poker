@@ -41,6 +41,7 @@ defmodule App.Mixfile do
      {:scrivener_ecto, "~> 1.0"},
      {:scrivener_headers, "~> 3.1"},
      {:cors_plug, "~> 1.4"},
+     {:oauth2, "~> 0.9"},
      {:cowboy, "~> 1.0"}]
   end
 

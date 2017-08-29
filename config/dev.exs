@@ -55,3 +55,5 @@ config :app, App.Repo,
   database: "app_dev",
   hostname: "db",
   pool_size: 10
+
+import_config "oauth.exs"

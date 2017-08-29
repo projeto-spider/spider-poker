@@ -310,7 +310,6 @@ defmodule App.ProjectsTest do
 
       assert {:ok, father, %Story{} = child} = Projects.unshift_story(father, %{title: "Bar"})
       assert [child.id] == father.backlog
-      IO.inspect child.parent_id
 
       assert {:ok, project, %Story{} = father} = Projects.delete_story(project, father)
       assert [] == project.backlog

@@ -3,6 +3,12 @@ defmodule App.Web.Session do
   Abstraction for handling API sessions easily.
   """
 
+  @provider %{
+    github: 1,
+    google: 2,
+    facebook: 3
+  }
+
   alias Comeonin.Bcrypt
   alias Plug.Conn
   alias Phoenix.Token
@@ -26,7 +32,7 @@ defmodule App.Web.Session do
   Verify credentials then generate a Phoenix.Token
   """
   def create_session(%{"email" => email, "password" => password}) do
-    case Repo.get_by(User, email: email) do
+    case Repo.get_by(User, email: email, auth_provider: 0) do
       %User{id: user_id, password_hash: hash} ->
         if check_password(password, hash) do
           {:ok, generate_token(user_id)}
@@ -37,6 +43,81 @@ defmodule App.Web.Session do
       _ ->
         Bcrypt.dummy_checkpw()
         :error
+    end
+  end
+
+  @doc """
+  Social auth
+  """
+  def social_auth("github", %{"id" => id, "name" => name,
+                                      "email" => email, "avatar_url" => avatar}) do
+    auth_id = Integer.to_string(id)
+
+    case Repo.get_by(User, auth_provider: @provider.github, auth_id: auth_id) do
+      %User{} = user ->
+        with {:ok, user} <- Accounts.update_user(user, %{avatar: avatar}) do
+          {:ok, generate_token(user.id)}
+        end
+      
+      _ ->
+        params = %{
+          name: name,
+          email: email,
+          avatar: avatar,
+          password: "dummypass :D",
+          auth_provider: @provider.github,
+          auth_id: auth_id
+        }
+        operation = Accounts.create_user_by_social_auth(@provider.github, auth_id, params)
+        with {:ok, %User{id: user_id}} <- operation do
+          {:ok, generate_token(user_id)}
+        end
+    end
+  end
+  def social_auth("google", %{"sub" => auth_id, "name" => name,
+                                      "email" => email, "picture" => avatar}) do
+    case Repo.get_by(User, auth_provider: @provider.google, auth_id: auth_id) do
+      %User{} = user ->
+        with {:ok, user} <- Accounts.update_user(user, %{avatar: avatar}) do
+          {:ok, generate_token(user.id)}
+        end
+      
+      _ ->
+        params = %{
+          name: name,
+          email: email,
+          avatar: avatar,
+          password: "dummypass :D",
+          auth_provider: @provider.google,
+          auth_id: auth_id
+        }
+        operation = Accounts.create_user_by_social_auth(@provider.google, auth_id, params)
+        with {:ok, %User{id: user_id}} <- operation do
+          {:ok, generate_token(user_id)}
+        end
+    end
+  end
+  def social_auth("facebook", %{"id" => auth_id, "name" => name,
+                                        "email" => email, "picture" => picture} = foo) do
+    case Repo.get_by(User, auth_provider: @provider.facebook, auth_id: auth_id) do
+      %User{} = user ->
+        with {:ok, user} <- Accounts.update_user(user, %{avatar: picture["data"]["url"]}) do
+          {:ok, generate_token(user.id)}
+        end
+      
+      _ ->
+        params = %{
+          name: name,
+          email: email,
+          avatar: picture["data"]["url"],
+          password: "dummypass :D",
+          auth_provider: @provider.facebook,
+          auth_id: auth_id
+        }
+        operation = Accounts.create_user_by_social_auth(@provider.facebook, auth_id, params)
+        with {:ok, %User{id: user_id}} <- operation do
+          {:ok, generate_token(user_id)}
+        end
     end
   end
 
