@@ -2,6 +2,7 @@ defmodule App.Web.ProjectChannel do
   @moduledoc false
   use Phoenix.Channel
 
+  alias App.Web.Notify
   alias App.Presence
   alias App.Projects
   alias App.Projects.Project
@@ -68,6 +69,37 @@ defmodule App.Web.ProjectChannel do
     
     {:noreply, socket}
   end
+  def handle_in("game:create", %{"story_id" => story_id}, socket) do
+    project = Projects.get_project!(project_id(socket))
+
+    with :ok <- being_manager(project, socket) do
+      story = Projects.get_story!(story_id)
+      {:ok, game} = Projects.create_game(story)
+      {:ok, project} = Projects.update_project(project, %{current_game: game.id})
+      broadcast!(socket, "game:start", %{game: game, project: project})
+      {:noreply, socket}
+    end
+  end
+  def handle_in("game:get", _params, socket) do
+    project = Projects.get_project!(project_id(socket))
+    
+    if project.current_game do
+      game = Projects.get_game!(project.current_game)
+      push(socket, "game:state", %{game: game})
+    end
+
+    {:noreply, socket}
+  end
+  def handle_in("game:stop", _params, socket) do
+    project = Projects.get_project!(project_id(socket))
+    
+    if project.current_game do
+      {:ok, _project} = Projects.update_project(project, %{current_game: nil})
+      broadcast!(socket, "game:stop", %{})
+    end
+
+    {:noreply, socket}
+  end
 
   defp user(socket), do: socket.assigns.user
 
@@ -76,4 +108,12 @@ defmodule App.Web.ProjectChannel do
   defp project!(socket), do: Projects.get_project!(project_id(socket))
 
   defp backlog(%Project{backlog: backlog}), do: backlog
+
+  defp being_manager(project, socket) do
+    if project.manager_id == user(socket).id do
+      :ok
+    else
+      {:noreply, socket}
+    end
+  end
 end
