@@ -1,0 +1,94 @@
+{
+  "name": "Spider Poker",
+
+  "description": "Online self-hosted Planning Poker tool for task effort estimation",
+
+  "keywords": [
+    "productivity",
+    "scrum",
+    "planning",
+    "poker",
+    "projeto-spider"
+  ],
+
+  "website": "https://github.com/projeto-spider/spider-poker",
+
+  "repository": "https://github.com/projeto-spider/spider-poker",
+
+  "logo": "https://camo.githubusercontent.com/2dcd12fd5af7308587c303c1b2494ff13ad5bcfb/687474703a2f2f692e696d6775722e636f6d2f7a4563365065462e706e67",
+
+  "success_url": "/",
+
+  "scripts": {
+    "postdeploy": "MIX_ENV=prod mix postdeploy"
+  },
+
+  "env": {
+    "HOST": {
+      "description": "Host URL",
+      "value": "my-app.herokuapp.com",
+      "required": true
+    },
+
+    "SECRET_KEY_BASE": {
+      "description": "A secret key for verifying the integrity of signed cookies",
+      "generator": "secret"
+    },
+
+    "POOL_SIZE": {
+      "description": "The number of connections to the database",
+      "value": "10"
+    },
+    
+    "GITHUB_CLIENT_ID": {
+      "required": false,
+      "description": "GitHub Oauth Client ID for social auth"
+    },
+    
+    "GITHUB_CLIENT_SECRET": {
+      "required": false,
+      "description": "GitHub Oauth Client Secret for social auth"
+    },
+
+    "GOOGLE_CLIENT_ID": {
+      "required": false,
+      "description": "Google Oauth Client ID for social auth"
+    },
+
+    "GOOGLE_CLIENT_SECRET": {
+      "required": false,
+      "description": "Google Oauth Client Secret for social auth"
+    },
+
+    "FACEBOOK_CLIENT_ID": {
+      "required": false,
+      "description": "Facebook Oauth Client ID for social auth"
+    },
+
+    "FACEBOOK_CLIENT_SECRET": {
+      "required": false,
+      "description": "Facebook Oauth Client Secret for social auth"
+    }
+  },
+
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    }
+  },
+
+  "addons": [
+    {
+      "plan": "heroku-postgresql",
+      "options": {
+        "version": "9.6"
+      }
+    }
+  ],
+
+  "buildpacks": [
+    {"url": "https://github.com/gjaldon/heroku-buildpack-phoenix-static.git"},
+    {"url": "https://github.com/HashNuke/heroku-buildpack-elixir.git"}
+  ]
+}
