@@ -91,8 +91,7 @@ export default {
 
     syncBacklog() {
       Loading.show({
-        message: 'Loading backlog',
-        delay: 0
+        message: 'Loading backlog'
       })
 
       axios.get(`/projects/${this.project.id}/backlog`)
@@ -164,8 +163,7 @@ export default {
       }
 
       Loading.show({
-        message: 'Connecting to project server',
-        delay: 0
+        message: 'Connecting to project server'
       })
 
       this.channel = this.socket.channel(topic, params)
