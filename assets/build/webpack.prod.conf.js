@@ -7,7 +7,9 @@ var
   baseWebpackConfig = require('./webpack.base.conf'),
   ExtractTextPlugin = require('extract-text-webpack-plugin'),
   HtmlWebpackPlugin = require('html-webpack-plugin'),
-  OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
+  OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin'),
+  ManifestPlugin = require('webpack-manifest-plugin'),
+  CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = merge(baseWebpackConfig, {
   module: {
@@ -35,7 +37,7 @@ module.exports = merge(baseWebpackConfig, {
     }),
     // extract css into its own file
     new ExtractTextPlugin({
-      filename: '[name].[contenthash].css'
+      filename: 'css/[name].[contenthash].css'
     }),
     new HtmlWebpackPlugin({
       filename: config.build.index,
@@ -70,6 +72,10 @@ module.exports = merge(baseWebpackConfig, {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'manifest',
       chunks: ['vendor']
-    })
+    }),
+    new ManifestPlugin(),
+    new CopyWebpackPlugin([{
+      from: path.resolve(__dirname, "../src/statics/favicon.ico")
+    }])
   ]
 })

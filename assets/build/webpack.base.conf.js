@@ -20,7 +20,7 @@ module.exports = {
     app: './src/main.js'
   },
   output: {
-    path: path.resolve(__dirname, '../dist'),
+    path: env.prod ? path.resolve(__dirname, '../../priv/static') : path.resolve(__dirname, '../dist'),
     publicPath: config[env.prod ? 'build' : 'dev'].publicPath,
     filename: 'js/[name].js',
     chunkFilename: 'js/[id].[chunkhash].js'
@@ -79,7 +79,8 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: 'fonts/[name].[hash:7].[ext]'
+          name: 'fonts/[name].[hash:7].[ext]',
+          publicPath: '../'
         }
       }
     ]
