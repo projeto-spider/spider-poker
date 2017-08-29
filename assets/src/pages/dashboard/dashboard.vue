@@ -80,7 +80,7 @@
 
         <div
           class="item item-link"
-          @click="askProjectName"
+          @click="$refs.CreateProjectModal.open()"
         >
           <i class="item-primary">playlist_add</i>
           <div class="item-content">
@@ -107,6 +107,17 @@
             Edit Project
           </div>
         </div>
+
+        <div
+          v-if="selectedProject"
+          class="item item-link"
+          @click="$refs.importationModal.open()"
+        >
+          <i class="item-primary">import_export</i>
+          <div class="item-content">
+            Import stories
+          </div>
+        </div>
       </div>
 
       <div class="list platform-delimiter">
@@ -125,6 +136,7 @@
 
     <div class="layout-view">
       <project
+        ref="project"
         :socket="socket"
         :organization="selectedOrganization"
         :project="selectedProject"
@@ -143,6 +155,48 @@
         :modal="$refs.editProjectModal"
         :projects="projects"
       ></edit-project-modal>
+    </q-modal>
+
+    <q-modal ref="importationModal" content-classes="modal-edition">
+      <import-modal
+        :modal="$refs.importationModal"
+        :projects="projects"
+        :currentProject="selectedProject"
+        :importStories="importStories"
+      ></import-modal>
+    </q-modal>
+
+    <q-modal ref="CreateProjectModal" :content-css="{minWidth: '30vw', minHeight: '50vh'}">
+      <q-layout>
+        <div slot="header" class="toolbar">
+          <q-toolbar-title :padding="1">
+            Creating project
+          </q-toolbar-title>
+        </div>
+
+        <div slot="header" class="toolbar bg-white">
+          <q-autocomplete
+            class="full-width text-dark"
+            v-model="selectedOrg"
+            :delay="0"
+            @search="searchOrganization"
+            @selected=""
+          >
+            <q-search
+              v-model="selectedOrg"
+              :debounce="600"
+              placeholder="Choose a organization"
+            ></q-search>
+          </q-autocomplete>
+        </div>
+
+        <div class="layout-padding">
+          <div class="floating-label">
+            <input required class="full-width">
+            <label>Project name</label>
+          </div>
+        </div>
+      </q-layout>
     </q-modal>
   </q-layout>
 </template>

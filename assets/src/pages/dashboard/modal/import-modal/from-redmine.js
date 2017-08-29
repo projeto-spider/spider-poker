@@ -1,0 +1,215 @@
+import {Dialog, Toast} from 'quasar'
+import axios from 'axios'
+
+export default {
+  name: 'ImportFromRedmine',
+
+  props: {
+    currentProject: [Object, Boolean],
+    importStories: Function
+  },
+
+  data: () => ({
+    authenticated: false,
+    projectList: false,
+    issuesMenu: false,
+    issuesList: false,
+    projects: [],
+    hostname: '',
+    selected: {
+      stories: []
+    }
+  }),
+
+  computed: {
+    selectedStories() {
+      return this.selected.stories.length > 0
+    }
+  },
+
+  methods: {
+    askLoginInformations() {
+      Dialog.create({
+        title: 'Basic login',
+        form: {
+          url: {
+            type: 'textbox',
+            label: 'Url',
+            model: ''
+          },
+
+          username: {
+            type: 'textbox',
+            label: 'Username',
+            model: ''
+          },
+
+          password: {
+            type: 'password',
+            label: 'Password',
+            model: ''
+          },
+
+          id: {
+            type: 'textbox',
+            label: 'Project identificator',
+            model: ''
+          }
+        },
+        buttons: [
+          'Cancel',
+          {
+            label: 'Login',
+            classes: 'positive',
+            handler: this.basicProjectsLoad
+          }
+        ]
+      })
+    },
+
+    askApiInformations() {
+      Dialog.create({
+        title: 'API authentication',
+        form: {
+          url: {
+            type: 'textbox',
+            label: 'Url',
+            model: ''
+          },
+
+          key: {
+            type: 'textbox',
+            label: 'Api key',
+            model: ''
+          },
+
+          id: {
+            type: 'textbox',
+            label: 'Project identificator',
+            model: ''
+          }
+        },
+        buttons: [
+          'Cancel',
+          {
+            label: 'Login',
+            classes: 'positive',
+            handler: this.apiProjectsLoad
+          }
+        ]
+      })
+    },
+
+    basicProjectsLoad({url, username, password, id}) {
+      this.hostname = url
+
+      const projectUrl = url + `/projects/${id}/memberships.json`
+
+      axios({
+        method: 'get',
+        baseURL: projectUrl,
+        header: {Authorization: `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`}
+      })
+      .then(this.handleSucess)
+      .catch(this.handleFail)
+    },
+
+    apiProjectsLoad({url, key, id}) {
+      this.hostname = url
+
+      const queryString = key !== '' ? `?key=${key}` : ''
+
+      const projectsUrl = url + `/projects/${id}/memberships.json`
+
+      axios.get(`${projectsUrl}${queryString}`)
+        .then(this.handleSucess)
+        .catch(this.handleFail)
+    },
+
+    handleSucess(response) {
+      Toast.create.positive('Logged successfully')
+      this.projects = response.data
+      this.authenticated = true
+      this.loadProjectIssues()
+    },
+
+    handleFail() {
+      Toast.create.negative('Failed on loggin. Check your data')
+    },
+
+    handleMoreProjectsLoadedFail() {
+      Toast.create.negative('Fail on load more projects')
+    },
+
+    loadProjectIssues() {
+      const queryString = `?project_id=${this.projects.memberships[0].project.id}`
+
+      const issuesUrl = this.hostname + '/issues.json'
+
+      axios.get(`${issuesUrl}${queryString}`)
+        .then(this.handleIssuesLoaded)
+        .catch(this.handleIssuesLoadedFail)
+    },
+
+    handleIssuesLoaded(response) {
+      this.issuesList = response.data.issues
+      this.projectMenu = false
+      this.issuesMenu = true
+    },
+
+    handleIssuesLoadedFail() {
+      Toast.create.negative('Failed on load issues')
+    },
+
+    loadMoreIssues() {
+      const queryString = `?project_id=${this.projects.memberships[0].project.id}&offset=${this.issuesList.length}`
+
+      const issuesUrl = this.hostname + `/issues.json`
+
+      axios.get(`${issuesUrl}${queryString}`)
+        .then(this.handleMoreIssuesLoaded)
+        .catch(this.handleMoreIssuesLoadedFail)
+    },
+
+    handleMoreIssuesLoaded(response) {
+      if (response.data.total_count === this.issuesList.length) {
+        Toast.create('All issues were loaded')
+      }
+      else {
+        this.issuesList = this.issuesList.concat(response.data.issues)
+      }
+    },
+
+    handleMoreIssuesLoadedFail() {
+      Toast.create.negative('Failed on load more issues')
+    },
+
+    goBack() {
+      if (this.issuesMenu) {
+        this.issuesMenu = false
+        this.issuesList = []
+        this.authenticated = false
+      }
+    },
+
+    selectAll() {
+      this.selected.stories = this.issuesList
+    },
+
+    deselectAll() {
+      this.selected.stories = []
+    },
+
+    doImport() {
+      if (this.selected.stories.length === 0) {
+        Toast.create.negative('Please, select some story to be imported')
+      }
+      else {
+        this.importStories(
+          this.selected.stories
+            .map(({subject: title, description}) => ({title, description}))
+        )
+      }
+    }
+  }
+}

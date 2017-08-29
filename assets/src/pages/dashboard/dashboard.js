@@ -7,6 +7,7 @@ import ProjectPicker from 'components/project-picker.vue'
 import Project from './project.vue'
 import EditOrganizationModal from './modal/edit-organization.vue'
 import EditProjectModal from './modal/edit-project.vue'
+import ImportModal from './modal/import-modal/modal.vue'
 
 export default {
   name: 'Dashboard',
@@ -16,7 +17,8 @@ export default {
     Project,
     EditOrganizationModal,
     EditProjectModal,
-    ProjectPicker
+    ProjectPicker,
+    ImportModal
   },
 
   data: () => ({
@@ -27,7 +29,8 @@ export default {
     /* Sidebar */
     organizations: [],
     projects: [],
-    selectedProjectId: false
+    selectedProjectId: false,
+    selectedOrg: ''
   }),
 
   computed: {
@@ -200,6 +203,18 @@ export default {
           .join('\n'))
     },
 
+    searchOrganization(query, done) {
+      setTimeout(() => {
+        done(this.organizations
+              .filter(organization =>
+                organization && organization.name.indexOf(query) !== -1
+            ).map(organization => ({
+              value: organization.name,
+              label: organization.display_name,
+              secondLabel: organization.name}))
+        )}, 10)
+    },
+
     askProjectName() {
       Dialog.create({
         title: 'Creating Project',
@@ -339,6 +354,13 @@ export default {
 
     handleProjectJoinedFail(error) {
       Toast.create.negative('Failed to load a project you just joined. Please refresh the page.')
+    },
+
+    importStories(stories) {
+      stories.reverse()
+        .forEach(({title, description}) => {
+          this.$refs.project.channel.push('unshift_story', {title, description})
+        })
     },
 
     /* Full Screen */

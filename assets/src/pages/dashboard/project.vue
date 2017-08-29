@@ -64,7 +64,7 @@
             :confirmStoryDeletion="() => confirmStoryDeletion(child)"
             v-for="(child, child_position) in story.children"
             v-if="child"
-            :key="`id-${child.id}`"
+            :key="child"
           >
           </project-story>
         </template>
