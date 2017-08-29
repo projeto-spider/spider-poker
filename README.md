@@ -10,6 +10,12 @@
 
 <h4 align="center">Self hosted <a href="https://en.wikipedia.org/wiki/Planning_poker" target="_blank">Planning Poker</a> WebApp</h4>
 
+<h4 align="center">
+  <a href="https://heroku.com/deploy?template=https://github.com/projeto-spider/spider-poker">
+    <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
+  </a>
+</h4>
+
 Basic feature list:
 
   * See **live updates** between your team members while you make changes **to your backlog**
@@ -49,6 +55,23 @@ And if you want to lint the code:
 ```sh
 docker-compose run api mix credo --strict
 ```
+
+## Deploy
+
+Production envyronment is **prepared to be hosted by Heroku** with just one click on the purple button above.
+
+On the first setup **you can skip Oauth variables** but if you want to the
+social auth work you'll need Google's, GitHub's and Facebook's OAUTH client id and secrect.
+
+Indeed it takes some time to get them but it's worth it. Here's how:
+
+* [Google - Obtaining authorization credentials](https://developers.google.com/youtube/analytics/registering_an_application).
+* [GitHub - Registering OAuth Apps](https://developer.github.com/apps/building-integrations/setting-up-and-registering-oauth-apps/registering-oauth-apps/).
+* [Facebook - Connect your app to Facebook](https://auth0.com/docs/connections/social/facebook).
+
+In all those three a **callback URL** will be asked.
+
+The format is: `https://my-app.herokuapp.com/auth/PROVIDER/callback`. `PROVIDER` can be either `google`, `github` or `facebook`.
 
 <div>
   <h2>
