@@ -1,12 +1,12 @@
 import {Toast, Dialog, Loading} from 'quasar'
 import {mapGetters, mapActions} from 'vuex'
 import axios from 'utils/axios'
-import Gravatar from 'components/gravatar.vue'
+import Avatar from 'components/avatar.vue'
 
 export default {
   name: 'ProjecMemberstModal',
 
-  components: {Gravatar},
+  components: {Avatar},
 
   props: {
     modal: Object,

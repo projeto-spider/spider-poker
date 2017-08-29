@@ -41,6 +41,13 @@ export default new VueRouter({
     },
 
     {
+      name: 'SocialAuthCallback',
+      path: '/auth/social',
+      component: page('auth/social'),
+      beforeEnter: notAuthenticated
+    },
+
+    {
       name: 'Profile',
       path: '/user/profile/:username',
       component: page('user/profile')

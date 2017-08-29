@@ -6,7 +6,7 @@
     <div v-if="anonymous" class="chat-date">Anonymous</div>
 
     <div class="chat-user">
-      <gravatar v-if="user" :email="user.email"></gravatar>
+      <avatar v-if="user" :user="user"></avatar>
     </div>
 
     <div class="chat-message">

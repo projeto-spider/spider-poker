@@ -1,11 +1,12 @@
 import {Toast, Loading} from 'quasar'
 import {mapActions} from 'vuex'
 import OneBoxLayout from 'components/layout/one-box-layout.vue'
+import SocialButtons from './social-buttons.vue'
 
 export default {
   name: 'Login',
 
-  components: {OneBoxLayout},
+  components: {OneBoxLayout, SocialButtons},
 
   data: () => ({
     loading: false,

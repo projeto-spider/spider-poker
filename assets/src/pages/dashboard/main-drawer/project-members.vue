@@ -24,7 +24,7 @@
 
         <div class="list">
           <div v-for="(member, index) in members" :key="member" class="item two-lines">
-            <gravatar :email="member.email" :circle="true" :size="48" class="item-primary"></gravatar>
+            <avatar :user="member" :circle="true" :size="48" class="item-primary"></avatar>
 
             <div class="item-content has-secondary">
               <div>{{member.name}}</div>

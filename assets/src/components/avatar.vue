@@ -9,10 +9,14 @@ export default {
   name: 'Gravatar',
 
   props: {
-    email: {
-      type: String,
+    user: {
+      type: Object,
       required: true
     },
+    // email: {
+    //   type: String,
+    //   required: true
+    // },
 
     size: {
       type: Number,
@@ -27,7 +31,11 @@ export default {
 
   computed: {
     url() {
-      return gravatar.url(this.email, {size: this.size})
+      if (this.user.avatar) {
+        return this.user.avatar
+      }
+
+      return gravatar.url(this.user.email, {size: this.size})
     },
 
     imageClass() {

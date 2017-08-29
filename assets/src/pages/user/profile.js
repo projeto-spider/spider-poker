@@ -1,13 +1,13 @@
 import {Toast, Loading} from 'quasar'
 import {mapGetters} from 'vuex'
 import axios from 'utils/axios'
-import Gravatar from 'components/gravatar.vue'
+import Avatar from 'components/avatar.vue'
 import OneBoxLayout from 'components/layout/one-box-layout.vue'
 
 export default {
   name: 'Profile',
 
-  components: {OneBoxLayout, Gravatar},
+  components: {OneBoxLayout, Avatar},
 
   data() {
     return {

@@ -32,6 +32,12 @@ export const actions = {
     commit('setUser', user)
   },
 
+  async loginWithToken({commit}, token) {
+    commit('setToken', token)
+    const {data: user} = await axios.get('/sessions')
+    commit('setUser', user)
+  },
+
   logout({commit}) {
     commit('setToken', '')
     commit('setUser', null)

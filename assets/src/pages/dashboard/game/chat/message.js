@@ -1,10 +1,10 @@
 import {mapGetters} from 'vuex'
-import Gravatar from 'components/gravatar.vue'
+import Avatar from 'components/avatar.vue'
 
 export default {
   name: 'Message',
 
-  components: {Gravatar},
+  components: {Avatar},
 
   props: {
     message: Object

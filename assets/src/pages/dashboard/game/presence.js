@@ -1,10 +1,10 @@
-import Gravatar from 'components/gravatar.vue'
+import Avatar from 'components/avatar.vue'
 import {STATE} from 'utils/enums'
 
 export default {
   name: 'Presence',
 
-  components: {Gravatar},
+  components: {Avatar},
 
   props: {
     online: Array,

@@ -30,7 +30,7 @@
 
     <transition-group name="user-presence">
       <div v-for="user in offline" v-if="user" :key="user.id" class="item item-offline">
-        <gravatar :email="user.email" :circle="true" class="item-primary"></gravatar>
+        <avatar :user="user" :circle="true" class="item-primary"></avatar>
         <div class="item-content has-secondary">{{user.name}}</div>
       </div>
     </transition-group>

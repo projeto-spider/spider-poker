@@ -1,13 +1,13 @@
 <template>
   <one-box-layout>
     <span slot="title">Profile</span>
-      <gravatar
-        v-if="user.email"
+      <avatar
+        v-if="user"
         class="avatar-center"
-        :email="user.email"
+        :user="user"
         :size="112"
         :circle="true"
-      ></gravatar>
+      ></avatar>
 
       <h5 class="centered">@{{user.display_name}}</h5>
       <h6 class="centered">{{user.username}}</h6>

@@ -29,6 +29,8 @@
         </div>
       </p>
     </form>
+
+    <social-buttons></social-buttons>
   </one-box-layout>
 </template>
 

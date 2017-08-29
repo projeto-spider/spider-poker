@@ -1,6 +1,6 @@
 import {Toast, Loading, AppFullscreen, Dialog} from 'quasar'
 import {mapGetters, mapActions} from 'vuex'
-import Gravatar from 'components/gravatar.vue'
+import Avatar from 'components/avatar.vue'
 import ProjectItem from './main-drawer/project-item.vue'
 import Stories from './backlog/stories.vue'
 import BacklogChannel from './backlog/channel.js'
@@ -15,7 +15,7 @@ export default {
   extends: BacklogChannel,
 
   components: {
-    Gravatar,
+    Avatar,
     Stories,
     ProjectItem,
     GameLayout,

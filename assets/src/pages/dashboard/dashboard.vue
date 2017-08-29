@@ -17,11 +17,12 @@
       </button>
 
       <div ref="user-popover-target" class="primary">
-        <gravatar
-          :email="loggedUser.email"
+        <avatar
+          :user="loggedUser"
           :size="32"
           :circle="true"
-        ></gravatar>
+          style="max-width: 36px"
+        ></avatar>
 
         <q-popover ref="userPopover" anchor="bottom left" self="top right">
           <div class="list item-delimiter highlight">
