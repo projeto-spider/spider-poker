@@ -40,7 +40,14 @@ export const getters = {
     const index = state.projects
       .findIndex(proj => proj.id === state.selectedProjectId)
 
-    return index !== -1 ? state.projects[index] : false
+    return index !== -1
+      ? state.projects[index]
+      : false
+  },
+
+  inGame(state) {
+    return state.projects
+      .some(proj => proj.id === state.selectedProjectId && proj.current_game)
   }
 }
 
