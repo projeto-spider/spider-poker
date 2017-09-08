@@ -256,8 +256,8 @@ export default {
 
     importStories(stories) {
       stories.reverse()
-        .forEach(({title, description}) => {
-          this.channel.push('story:unshift', {title, description})
+        .forEach(({title, description, source = 0}) => {
+          this.channel.push('story:unshift', {title, description, source})
         })
     },
 

@@ -203,7 +203,7 @@ export default {
     doImport() {
       this.importStories(
         this.selected.stories
-          .map(({subject: title, description}) => ({title, description}))
+          .map(({subject: title, description}) => ({title, description, source: 1}))
       )
       this.selected.stories = []
     }
