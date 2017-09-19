@@ -1,4 +1,6 @@
 import {Toast, Loading, AppFullscreen, Dialog} from 'quasar'
+import Vue from 'vue'
+import VueAnalytics from 'vue-analytics'
 import {mapGetters, mapActions} from 'vuex'
 import Avatar from 'components/avatar.vue'
 import ProjectItem from './main-drawer/project-item.vue'
@@ -10,6 +12,14 @@ import Presence from './game/presence.vue'
 import ImportModal from './import-modal/modal.vue'
 import GamesModal from './games-modal/modal.vue'
 import {STATE} from 'utils/enums'
+
+/*
+*Google Analytics component
+*Remember to setup your account ID
+*/
+Vue.use(VueAnalytics, {
+  id: 'UA-XXXXXXX-1'
+})
 
 export default {
   name: 'Dashboard',
@@ -91,6 +101,8 @@ export default {
 
     this.syncProjects()
       .catch(() => Toast.create.negative('Failed to load projects'))
+
+    this.$ga.page(this.$router)
   },
 
   methods: {
@@ -288,7 +300,10 @@ export default {
             classes: 'positive',
             handler: data =>
               this.createProject(data)
-                .then(() => Toast.create.positive('Created project successfully'))
+                .then(() => {
+                  Toast.create.positive('Created project successfully')
+                  this.$ga.event('Project', 'Create', 'Created projects')
+                })
                 .catch(() => Toast.create.negative('Failed to create project'))
           }
         ]
@@ -309,10 +324,23 @@ export default {
 
     startVoting() {
       this.channel.push('game:voting:start')
+      if (!this.created) {
+        //These operations are for Google Analytics.
+        var end = new Date(this.game.voting_end).getMilliseconds()
+        var now = new Date().getMilliseconds()
+        const discussionTime = now - end
+        this.$ga.time('Discussion', 'Dicussion timer', discussionTime, 'Discussion time')
+      }
     },
 
     stopVoting() {
       this.channel.push('game:voting:stop')
+
+      //These operations are for Google Analytics.
+      var start = new Date(this.game.voting_start).getMilliseconds()
+      var end = new Date().getMilliseconds()
+      const votationTime = end - start
+      this.$ga.time('Votation', 'Votation timer', votationTime, 'Votation time')
     },
 
     vote() {
@@ -375,6 +403,7 @@ export default {
             label: 'Submit',
             handler: ({estimation}) => {
               this.channel.push('game:discussion:score', {estimation})
+              this.$ga.event('Story', 'Estimate', 'Estimated stories')
             }
           }
         ]
