@@ -36,6 +36,8 @@ export default {
   },
 
   data: () => ({
+    selectedOrg: '',
+    projectName: ''
   }),
 
   computed: {
@@ -273,39 +275,28 @@ export default {
         })
     },
 
-    promptCreateProject() {
-      Dialog.create({
-        title: 'Creating Project',
+    searchOrganization(query, done) {
+      const organizations =
+        this.projects
+          .map(project => project.organization)
+          .filter(organization => organization && organization.indexOf(query) !== -1)
+          .filter((org, i, organizations) =>
+            !organizations.slice(i + 1).includes(org))
+          .map(organization => ({
+            value: organization,
+            label: organization
+          }))
 
-        form: {
-          name: {
-            type: 'textbox',
-            label: 'Name',
-            model: ''
-          },
+      done(organizations)
+    },
 
-          organization: {
-            type: 'textbox',
-            label: 'Organization name (optional)',
-            model: ''
-          }
-        },
-
-        buttons: [
-          'Cancel',
-          {
-            label: 'Create',
-            classes: 'positive',
-            handler: data =>
-              this.createProject(data)
-                .then(() => {
-                  Toast.create.positive('Created project successfully')
-                  this.$ga.event('Project', 'Create', 'Created projects')
-                })
-                .catch(() => Toast.create.negative('Failed to create project'))
-          }
-        ]
-      })
+    startProject(name, organization) {
+      this.createProject({name, organization})
+        .then(() => {
+          Toast.create.positive('Created project successfully')
+          this.$ga.event('Project', 'Create', 'Created projects')
+        })
+        .catch(() => Toast.create.negative('Failed to create project'))
     },
 
     sendMessage(body) {
@@ -462,6 +453,11 @@ export default {
       }
 
       AppFullscreen.request()
+    },
+
+    modalCloser() {
+      this.selectedOrg = ''
+      this.projectName = ''
     }
   }
 }
