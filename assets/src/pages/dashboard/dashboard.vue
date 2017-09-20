@@ -118,7 +118,18 @@
         </div>
 
         <div
-          v-if="selectedProject"
+          v-if="selectedProject && !inGame"
+          class="item item-link"
+          @click="$refs.gamesModal.open()"
+        >
+          <i class="item-primary">history</i>
+          <div class="item-content">
+            Games History
+          </div>
+        </div>
+
+        <div
+          v-if="selectedProject && !inGame"
           class="item item-link"
           @click="$refs.importationModal.open()"
         >
@@ -165,6 +176,13 @@
         :currentProject="selectedProject"
         :importStories="importStories"
       ></import-modal>
+    </q-modal>
+
+    <q-modal ref="gamesModal" class="maximized">
+      <games-modal
+        v-if="$refs.gamesModal && $refs.gamesModal.active"
+        :modal="$refs.gamesModal"
+      ></games-modal>
     </q-modal>
   </q-layout>
 </template>

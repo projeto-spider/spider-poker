@@ -8,6 +8,7 @@ import GameLayout from './game/layout.vue'
 import Timer from './game/timer.vue'
 import Presence from './game/presence.vue'
 import ImportModal from './import-modal/modal.vue'
+import GamesModal from './games-modal/modal.vue'
 import {STATE} from 'utils/enums'
 
 export default {
@@ -22,7 +23,8 @@ export default {
     GameLayout,
     Timer,
     Presence,
-    ImportModal
+    ImportModal,
+    GamesModal
   },
 
   data: () => ({
