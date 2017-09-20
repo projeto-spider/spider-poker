@@ -114,7 +114,7 @@
       <div class="list platform-delimiter">
         <div class="item">
           <div class="item-content"><small class="text-faded">Projects</small></div>
-          <div class="item-secondary"><i @click="promptCreateProject" style="cursor: pointer">add</i></div>
+          <div class="item-secondary"><i @click="$refs.CreateProjectModal.open()" style="cursor: pointer">add</i></div>
         </div>
 
         <div
@@ -183,6 +183,56 @@
         v-if="$refs.gamesModal && $refs.gamesModal.active"
         :modal="$refs.gamesModal"
       ></games-modal>
+    </q-modal>
+
+    <q-modal 
+      ref="CreateProjectModal" 
+      :content-css="{minWidth: '30vw', minHeight: '50vh'}" 
+      @close="modalCloser()"
+    >
+      <q-layout>
+        <div slot="header" class="toolbar">
+          <q-toolbar-title :padding="1">
+            Creating project
+          </q-toolbar-title>
+        </div>
+
+        <div slot="header" class="toolbar bg-white">
+          <q-autocomplete
+            class="full-width text-dark"
+            v-model="selectedOrg"
+            :delay="0"
+            @search="searchOrganization"
+            @selected=""
+          >
+            <q-search
+              v-model="selectedOrg"
+              :debounce="600"
+              placeholder="Organization name (optional)"
+            ></q-search>
+          </q-autocomplete>
+        </div>
+
+        <div class="layout-padding">
+          <div class="floating-label">
+            <input required class="full-width" v-model="projectName">
+            <label>Project name</label>
+          </div>
+        </div>
+
+        <div slot="footer" class="item multiple-lines">
+          <div class="item-content">
+            <button 
+              type="submit" 
+              @click="startProject(projectName, selectedOrg), $refs.CreateProjectModal.close()" 
+              class="primary"
+            >
+              Create
+            </button>
+            <button type="button" @click="$refs.CreateProjectModal.close()" class="negative">Cancel</button>
+          </div>
+        </div>
+      </q-layout>
     </q-modal>
   </q-layout>
 </template>
