@@ -12,6 +12,7 @@ defmodule App.Projects do
   alias App.Projects.Member
   alias App.Projects.Story
   alias App.Projects.Game
+  alias App.Projects.Game.Message
 
   @doc """
   Returns the list of projects.
@@ -419,6 +420,20 @@ defmodule App.Projects do
     game
     |> Game.changeset(attrs)
     |> Repo.update()
+  end
+
+  @doc """
+  Creates a message.
+
+  ## Examples
+
+      iex> create_message(game_id, user_id, body)
+      {:ok, %Message{}}
+  """
+  def create_message(game_id, user_id, body) do
+    %Message{game_id: game_id, user_id: user_id, body: body}
+    |> Message.changeset(%{})
+    |> Repo.insert()
   end
 
   # You can't mix key types for ecto attrs so we should

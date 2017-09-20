@@ -29,6 +29,8 @@ defmodule App.Web.Router do
     resources "/users", UserController, except: [:new, :edit]
     resources "/sessions", SessionController, only: [:create, :show], singleton: true
     resources "/projects", ProjectController, except: [:new, :edit] do
+      get "/games", ProjectController, :games, as: "games"
+      get "/games/:game_id/messages", ProjectController, :game_messages, as: "game_messages"
       get "/backlog", ProjectController, :backlog, as: "backlog"
       resources "/members", ProjectMemberController, only: [:index, :create, :delete],
                                                      as: "member"

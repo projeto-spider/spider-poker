@@ -1,9 +1,14 @@
 defmodule App.Web.ProjectController do
   use App.Web, :controller
 
+  alias App.Repo
+  import Ecto.Query, warn: false
   alias App.Accounts.User
   alias App.Projects
   alias App.Projects.Project
+  alias App.Projects.Story
+  alias App.Projects.Game
+  alias App.Projects.Game.Message
   alias App.Web.Session
   alias App.Web.Notify
 
@@ -63,6 +68,48 @@ defmodule App.Web.ProjectController do
          :ok <- member?(project, current_user) do
       backlog = Projects.backlog(project)
       render(conn, App.Web.StoryView, "index.json", backlog: backlog)
+    end
+  end
+
+  def games(conn, %{"project_id" => project_id} = params) do
+    project = Projects.get_project!(project_id)
+
+    with {:ok, current_user} <- Session.current_user(conn),
+         :ok <- member?(project, current_user) do
+      query =
+        from g in Game,
+          join: s in assoc(g, :story),
+          where: g.story_id == s.id,
+          where: s.project_id == ^project_id,
+          order_by: [desc: g.inserted_at],
+          preload: [story: s]
+
+      page = Repo.paginate(query, params)
+
+      conn
+      |> Scrivener.Headers.paginate(page)
+      |> render(App.Web.GameView, "index.json", games: page)
+    end
+  end
+
+  def game_messages(conn, %{"project_id" => project_id, "game_id" => game_id} = params) do
+    project = Projects.get_project!(project_id)
+
+    with {:ok, current_user} <- Session.current_user(conn),
+         :ok <- member?(project, current_user) do
+      query =
+        from m in Message,
+          join: g in assoc(m, :game),
+          join: u in assoc(m, :user),
+          where: g.id == ^game_id,
+          order_by: [desc: m.inserted_at],
+          preload: [user: u]
+
+      page = Repo.paginate(query, params)
+
+      conn
+      |> Scrivener.Headers.paginate(page)
+      |> render(App.Web.MessageView, "index.json", messages: page)
     end
   end
 
