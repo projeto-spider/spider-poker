@@ -263,6 +263,7 @@ export default {
     channelGameStop() {
       const updatedData = Object.assign({}, this.project, {current_game: false})
       this.updateProject({projectId: this.project.id, updatedData})
+      this.chat = []
     },
 
     channelGameState({game}) {
