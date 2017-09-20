@@ -394,16 +394,6 @@ export default {
             type: 'textbox',
             label: 'Description (optional)',
             model: ''
-          },
-
-          estimation: {
-            label: 'Estimation',
-            type: 'radio',
-            items: [1, 2, 3, 5, 8, 13, 20, 40, 100]
-              .map(estimation => ({
-                label: estimation,
-                value: estimation
-              }))
           }
         },
 
