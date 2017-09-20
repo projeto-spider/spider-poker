@@ -135,9 +135,16 @@ defmodule App.Web.ProjectChannel do
     {:noreply, socket}
   end
   def handle_in("game:message", %{"body" => body}, socket) do
-    message = %{user_id: user(socket).id, body: body}
+    project = Projects.get_project!(project_id(socket))
+    user_id = user(socket).id
+    
+    if project.current_game do
+      message = %{user_id: user_id, body: body}
+      broadcast! socket, "game:message", %{message: message}
 
-    broadcast! socket, "game:message", %{message: message}
+      {:ok, _message} = Projects.create_message(project.current_game, user_id, body)
+    end
+
     {:noreply, socket}
   end
   def handle_in("game:voting:start", _, socket) do
