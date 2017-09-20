@@ -64,6 +64,7 @@
             :promptNewPosition="() => promptNewPosition(child, child_position, story)"
             :promptStoryUpdate="() => promptStoryUpdate(child)"
             :confirmStoryDeletion="() => confirmStoryDeletion(child, story)"
+            :startGame="() => startGame(child)"
           ></project-story>
         </template>
       </transition-group>

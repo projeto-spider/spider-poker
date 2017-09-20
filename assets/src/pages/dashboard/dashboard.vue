@@ -140,7 +140,7 @@
       <game-layout
         v-if="inGame"
         :game="game"
-        :story="backlog.find(s => s.id === game.story_id)"
+        :story="stories[game.story_id]"
         :chat="chat"
         :sendMessage="sendMessage"
         :promptNewPosition="promptNewPosition"
