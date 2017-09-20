@@ -90,7 +90,7 @@
             <div class="item-content">Final estimation</div>
           </div>
 
-          <div v-if="discussion" @click="createSubstory" class="item item-link">
+          <div v-if="discussion && backlog.find(s => s.id === game.story_id)" @click="createSubstory" class="item item-link">
             <i class="item-primary">add</i>
             <div class="item-content">Create Substory</div>
           </div>
