@@ -107,9 +107,9 @@ export default {
     },
 
     basicProjectsLoad({url, username, password, id}) {
-      this.hostname = url
+      this.hostname = `https://cors-anywhere.herokuapp.com/` + url
 
-      const projectUrl = url + `/projects/${id}/memberships.json`
+      const projectUrl = this.hostname + `/projects/${id}/memberships.json`
 
       axios({
         method: 'get',
@@ -121,11 +121,11 @@ export default {
     },
 
     apiProjectsLoad({url, key, id}) {
-      this.hostname = url
+      this.hostname = `https://cors-anywhere.herokuapp.com/` + url
 
       const queryString = key !== '' ? `?key=${key}` : ''
 
-      const projectsUrl = url + `/projects/${id}/memberships.json`
+      const projectsUrl = this.hostname + `/projects/${id}/memberships.json`
 
       axios.get(`${projectsUrl}${queryString}`)
         .then(this.handleSucess)
