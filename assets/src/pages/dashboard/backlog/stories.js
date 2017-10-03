@@ -25,7 +25,8 @@ export default {
     isManager: Boolean,
     promptNewPosition: Function,
     promptStoryUpdate: Function,
-    confirmStoryDeletion: Function
+    confirmStoryDeletion: Function,
+    startGame: Function
   },
 
   data: () => ({
@@ -52,11 +53,6 @@ export default {
       this.description = ''
 
       this.channel.push('story:unshift', {title, description})
-    },
-
-    startGame(story) {
-      this.channel.push('game:create', {story_id: story.id})
-      this.$ga.event('Game', 'Play', 'Played games')
     }
   }
 }

@@ -166,6 +166,7 @@
         :promptNewPosition="promptNewPosition"
         :promptStoryUpdate="promptStoryUpdate"
         :confirmStoryDeletion="confirmStoryDeletion"
+        :startGame="startGame"
       ></stories>
     </div>
 

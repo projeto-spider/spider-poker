@@ -39,7 +39,8 @@ export default {
 
   data: () => ({
     selectedOrg: '',
-    projectName: ''
+    projectName: '',
+    gameStart: null
   }),
 
   computed: {
@@ -305,12 +306,21 @@ export default {
       this.channel.push('game:message', {body})
     },
 
+    startGame(story) {
+      this.channel.push('game:create', {story_id: story.id})
+      this.$ga.event('Game', 'Play', 'Played games')
+      this.gameStart = Math.trunc((new Date().getTime()) / 1000) * 1000
+    },
+
     stopGame() {
       if (!this.inGame) {
         return
       }
 
       this.channel.push('game:stop')
+      const gameFinish = Math.trunc((new Date()).getTime() / 1000) * 1000
+      const gameTime = gameFinish - this.gameStart
+      this.$ga.time('Game', 'Game timer', gameTime, 'Game time')
     },
 
     startVoting() {
