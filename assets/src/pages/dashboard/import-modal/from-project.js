@@ -1,5 +1,14 @@
 import {Toast} from 'quasar'
+import Vue from 'vue'
+import VueAnalytics from 'vue-analytics'
 import axios from 'utils/axios'
+
+/*
+*Google Analytics component
+*/
+Vue.use(VueAnalytics, {
+  id: 'UA-XXXXXX-1'
+})
 
 export default {
   name: 'ImportFromProject',
@@ -96,6 +105,7 @@ export default {
 
     doImport() {
       this.importStories(this.selected.stories)
+      this.$ga.event('Story', 'Imported', 'Imported from other project')
       this.selected.stories = []
     }
   }

@@ -1,4 +1,10 @@
 import {Toast} from 'quasar'
+import Vue from 'vue'
+import VueAnalytics from 'vue-analytics'
+
+Vue.use(VueAnalytics, {
+  id: 'UA-XXXXXX-1'
+})
 
 const trello = window.Trello
 
@@ -121,6 +127,7 @@ export default {
         this.selected.stories
           .map(({name: title, desc: description}) => ({title, description, source: 2}))
       )
+      this.$ga.event('Story', 'Imported', 'Imported from Trello')
       this.selected.stories = []
     }
   }

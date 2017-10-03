@@ -1,5 +1,11 @@
 import {Dialog, Toast} from 'quasar'
+import Vue from 'vue'
+import VueAnalytics from 'vue-analytics'
 import axios from 'axios'
+
+Vue.use(VueAnalytics, {
+  id: 'UA-XXXXXX-1'
+})
 
 export default {
   name: 'ImportFromRedmine',
@@ -205,6 +211,7 @@ export default {
         this.selected.stories
           .map(({subject: title, description}) => ({title, description, source: 1}))
       )
+      this.$ga.event('Story', 'Imported', 'Imported from Redmine')
       this.selected.stories = []
     }
   }
