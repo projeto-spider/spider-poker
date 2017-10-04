@@ -37,7 +37,7 @@
 
     "GA_ID": {
       "required": false,
-      "description": "Your Google Analytics ID in the format UA-XXXXXX-X",
+      "description": "Your Google Analytics ID in the format UA-XXXXXX-X"
     },
 
     "POOL_SIZE": {
