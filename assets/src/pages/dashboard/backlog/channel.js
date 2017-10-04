@@ -11,7 +11,7 @@ import {Presence} from 'phoenix'
 *Remember to setup your account ID
 */
 Vue.use(VueAnalytics, {
-  id: 'UA-XXXXXX-1'
+  id: window.GA_ID
 })
 
 export default {

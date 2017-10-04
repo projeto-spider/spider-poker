@@ -6,4 +6,8 @@ defmodule App.Web.LayoutView do
   def manifest(key) do
     @manifest[key]
   end
+
+  def google_analytics_id do
+    System.get_env("GA_ID") || ""
+  end
 end

@@ -4,7 +4,7 @@ import VueAnalytics from 'vue-analytics'
 import axios from 'axios'
 
 Vue.use(VueAnalytics, {
-  id: 'UA-XXXXXX-1'
+  id: window.GA_ID
 })
 
 export default {

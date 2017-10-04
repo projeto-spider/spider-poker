@@ -35,6 +35,11 @@
       "generator": "secret"
     },
 
+    "GA_ID": {
+      "required": false,
+      "description": "Your Google Analytics ID in the format UA-XXXXXX-X",
+    },
+
     "POOL_SIZE": {
       "description": "The number of connections to the database",
       "value": "10"

@@ -3,7 +3,7 @@ import Vue from 'vue'
 import VueAnalytics from 'vue-analytics'
 
 Vue.use(VueAnalytics, {
-  id: 'UA-XXXXXX-1'
+  id: window.GA_ID
 })
 
 const trello = window.Trello

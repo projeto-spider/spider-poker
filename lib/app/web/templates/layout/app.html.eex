@@ -11,6 +11,9 @@
   </head>
   <body>
     <div id="q-app"></div>
+    <script>
+      window.GA_ID = "<%= google_analytics_id() %>"
+    </script>
     <script src="<%= static_path(@conn, "/#{manifest("manifest.js")}") %>"></script>
     <script src="<%= static_path(@conn, "/#{manifest("vendor.js")}") %>"></script>
     <script src="<%= static_path(@conn, "/#{manifest("app.js")}") %>"></script>

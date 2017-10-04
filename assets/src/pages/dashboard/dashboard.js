@@ -18,7 +18,7 @@ import {STATE} from 'utils/enums'
 *Remember to setup your account ID
 */
 Vue.use(VueAnalytics, {
-  id: 'UA-XXXXXXX-1'
+  id: window.GA_ID
 })
 
 export default {

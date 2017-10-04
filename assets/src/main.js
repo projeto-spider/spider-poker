@@ -6,6 +6,11 @@
 require(`quasar/dist/quasar.${__THEME}.css`)
 // ==============================
 
+if (!window.GA_ID) {
+  // The library will error if none is defined :/
+  window.GA_ID = 'UA-XXXXXX-1'
+}
+
 import Vue from 'vue'
 import Quasar from 'quasar'
 import router from './router'

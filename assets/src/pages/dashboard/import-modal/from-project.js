@@ -7,7 +7,7 @@ import axios from 'utils/axios'
 *Google Analytics component
 */
 Vue.use(VueAnalytics, {
-  id: 'UA-XXXXXX-1'
+  id: window.GA_ID
 })
 
 export default {
