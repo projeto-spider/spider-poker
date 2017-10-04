@@ -427,10 +427,6 @@ export default {
                 return Toast.create.warning('Title required to create story')
               }
 
-              if (!attrs.estimation) {
-                return Toast.create.warning('Estimation required to create story')
-              }
-
               this.channel.push('game:discussion:create_substory', attrs)
             }
           }
