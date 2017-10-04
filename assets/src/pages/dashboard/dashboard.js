@@ -327,8 +327,8 @@ export default {
       this.channel.push('game:voting:start')
       if (!this.created) {
         //These operations are for Google Analytics.
-        var end = new Date(this.game.voting_end).getMilliseconds()
-        var now = new Date().getMilliseconds()
+        var end = Math.trunc(new Date(this.game.voting_end).getTime() / 1000) * 1000
+        var now = Math.trunc((new Date()).getTime() / 1000) * 1000
         const discussionTime = now - end
         this.$ga.time('Discussion', 'Dicussion timer', discussionTime, 'Discussion time')
       }
@@ -338,8 +338,8 @@ export default {
       this.channel.push('game:voting:stop')
 
       //These operations are for Google Analytics.
-      var start = new Date(this.game.voting_start).getMilliseconds()
-      var end = new Date().getMilliseconds()
+      var start = Math.trunc(new Date(this.game.voting_start).getTime() / 1000) * 1000
+      var end = Math.trunc((new Date()).getTime() / 1000) * 1000
       const votationTime = end - start
       this.$ga.time('Votation', 'Votation timer', votationTime, 'Votation time')
     },
