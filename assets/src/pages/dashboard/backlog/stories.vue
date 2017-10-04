@@ -9,6 +9,17 @@
     </template>
 
     <template v-else>
+      <div v-if="!hasPo" class="card">
+        <div class="card-title bg-warning text-white">
+          Missing Product Owner
+        </div>
+
+        <div class="card-content card-force-top-padding">
+          Before you can play the game your project need a Product Owner.
+          Select one on the sidebar.
+        </div>
+      </div>
+
       <h5>
         {{project.name}}
         <small v-if="project.organization" class="text-faded pull-right">{{project.organization}}</small>

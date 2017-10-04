@@ -10,7 +10,7 @@
         <q-popover ref="popover">
           <div class="list item-delimiter highlight">
             <div
-              v-if="isManager"
+              v-if="isManager && hasPo"
               class="item item-link"
               @click="startGame(), $refs.popover.close()"
             >

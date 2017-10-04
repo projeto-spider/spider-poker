@@ -20,6 +20,10 @@ export default {
 
     isManager() {
       return this.selectedProject.manager_id === this.loggedUser.id
+    },
+
+    hasPo() {
+      return !!this.selectedProject.po_id
     }
   }
 }

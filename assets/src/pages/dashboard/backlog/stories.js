@@ -40,6 +40,10 @@ export default {
     ...mapGetters({
       project: 'selectedProject'
     }),
+
+    hasPo() {
+      return !!this.project.po_id
+    }
   },
 
   methods: {
