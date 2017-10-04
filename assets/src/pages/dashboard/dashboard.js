@@ -1,6 +1,4 @@
 import {Toast, Loading, AppFullscreen, Dialog} from 'quasar'
-import Vue from 'vue'
-import VueAnalytics from 'vue-analytics'
 import {mapGetters, mapActions} from 'vuex'
 import Avatar from 'components/avatar.vue'
 import ProjectItem from './main-drawer/project-item.vue'
@@ -12,14 +10,6 @@ import Presence from './game/presence.vue'
 import ImportModal from './import-modal/modal.vue'
 import GamesModal from './games-modal/modal.vue'
 import {STATE} from 'utils/enums'
-
-/*
-*Google Analytics component
-*Remember to setup your account ID
-*/
-Vue.use(VueAnalytics, {
-  id: window.GA_ID
-})
 
 export default {
   name: 'Dashboard',

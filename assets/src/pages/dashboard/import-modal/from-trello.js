@@ -1,10 +1,4 @@
 import {Toast} from 'quasar'
-import Vue from 'vue'
-import VueAnalytics from 'vue-analytics'
-
-Vue.use(VueAnalytics, {
-  id: window.GA_ID
-})
 
 const trello = window.Trello
 

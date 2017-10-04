@@ -12,6 +12,7 @@ if (!window.GA_ID) {
 }
 
 import Vue from 'vue'
+import VueAnalytics from 'vue-analytics'
 import Quasar from 'quasar'
 import router from './router'
 import store from 'store'
@@ -19,6 +20,10 @@ import store from 'store'
 Vue.use(Quasar) // Install Quasar Framework
 
 Quasar.start(() => {
+  Vue.use(VueAnalytics, {
+    id: window.GA_ID
+  })
+
   /* eslint-disable no-new */
   new Vue({
     el: '#q-app',

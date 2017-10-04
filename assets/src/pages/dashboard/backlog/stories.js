@@ -1,16 +1,6 @@
 import {Dialog} from 'quasar'
-import Vue from 'vue'
-import VueAnalytics from 'vue-analytics'
 import {mapGetters} from 'vuex'
 import ProjectStory from 'components/story/project-story.vue'
-
-/*
-*Google Analytics component
-*Remember to setup your account ID
-*/
-Vue.use(VueAnalytics, {
-  id: window.GA_ID
-})
 
 export default {
   name: 'Stories',

@@ -1,18 +1,8 @@
 import {Toast, Loading} from 'quasar'
-import Vue from 'vue'
-import VueAnalytics from 'vue-analytics'
 import axios from 'utils/axios'
 import {STATE} from 'utils/enums'
 import {mapGetters, mapMutations} from 'vuex'
 import {Presence} from 'phoenix'
-
-/*
-*Google Analytics component
-*Remember to setup your account ID
-*/
-Vue.use(VueAnalytics, {
-  id: window.GA_ID
-})
 
 export default {
   name: 'BacklogChannel',
